@@ -22,7 +22,7 @@ class HomePage extends StatelessWidget {
         ),
         child: TextButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/product');
+            Navigator.pushNamed(context, '/check-in');
           //  print('test');
           },
           style: TextButton.styleFrom(
