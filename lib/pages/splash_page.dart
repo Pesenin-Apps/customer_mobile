@@ -68,6 +68,7 @@ class _SplashPageState extends State<SplashPage> {
       backgroundColor: backgroundColor1,
       body: content(),
     );
+
   }
   
 }
