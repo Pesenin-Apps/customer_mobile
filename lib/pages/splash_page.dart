@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'package:customer_pesenin/providers/products/category_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:customer_pesenin/theme.dart';
+import 'package:provider/provider.dart';
 
 class SplashPage extends StatefulWidget {
 
@@ -15,13 +17,19 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   void initState() {
-    Timer(
-      const Duration(
-        seconds: 3
-      ),
-      () => Navigator.pushNamed(context, '/home'),
-    );
+    getInit();
+    // Timer(
+    //   const Duration(
+    //     seconds: 3
+    //   ),
+    //   () => Navigator.pushNamed(context, '/home'),
+    // );
     super.initState();
+  }
+
+  getInit() async {
+    await Provider.of<ProductCategoryProvider>(context, listen: false).getProductCategories();
+    Navigator.pushNamed(context, '/home');
   }
 
   @override
