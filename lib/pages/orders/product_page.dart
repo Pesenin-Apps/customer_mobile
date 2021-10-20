@@ -32,12 +32,43 @@ class _ProductPageState extends State<ProductPage> {
           child: Row(
             children: [
               const SizedBox(width: 16),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    currentIndex = 0;
+                  });
+                },
+                child: Container(
+                  margin: const EdgeInsets.only(right: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: currentIndex == 0 ? primaryColor : transparentColor,
+                    border: currentIndex == 0 ? null : Border.all(
+                      color: subtitleTextColor
+                    ),
+                  ),
+                  child: Text(
+                    'Semua',
+                    style: currentIndex == 0 ? primaryTextStyle.copyWith(
+                      fontSize: 13,
+                      fontWeight: medium,
+                    ) : secondaryTextStyle.copyWith(
+                      fontSize: 13,
+                      fontWeight: medium,
+                    ),
+                  ),
+                ),
+              ),
               Row(
                 children: productCategoryProvider.productCategories.map(
                   (productCategory) => GestureDetector(
                     onTap: () {
                       setState(() {
-                        currentIndex = productCategoryProvider.productCategories.indexOf(productCategory).toInt();
+                        currentIndex = productCategoryProvider.productCategories.indexOf(productCategory).toInt()+1;
                       });
                     },
                     child: Container(
@@ -48,14 +79,14 @@ class _ProductPageState extends State<ProductPage> {
                       ),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        color: currentIndex == productCategoryProvider.productCategories.indexOf(productCategory).toInt() ? primaryColor : transparentColor,
-                        border: currentIndex == productCategoryProvider.productCategories.indexOf(productCategory).toInt() ? null : Border.all(
+                        color: currentIndex == productCategoryProvider.productCategories.indexOf(productCategory).toInt()+1 ? primaryColor : transparentColor,
+                        border: currentIndex == productCategoryProvider.productCategories.indexOf(productCategory).toInt()+1 ? null : Border.all(
                           color: subtitleTextColor
                         ),
                       ),
                       child: Text(
                         productCategory.name.toString(),
-                        style: currentIndex == productCategoryProvider.productCategories.indexOf(productCategory).toInt() ? primaryTextStyle.copyWith(
+                        style: currentIndex == productCategoryProvider.productCategories.indexOf(productCategory).toInt()+1 ? primaryTextStyle.copyWith(
                           fontSize: 13,
                           fontWeight: medium,
                         ) : secondaryTextStyle.copyWith(
