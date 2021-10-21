@@ -1,6 +1,7 @@
 import 'package:customer_pesenin/providers/products/category_provider.dart';
 import 'package:customer_pesenin/theme.dart';
 import 'package:customer_pesenin/widgets/product_tile.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -22,17 +23,59 @@ class _ProductPageState extends State<ProductPage> {
 
     ProductCategoryProvider productCategoryProvider = Provider.of<ProductCategoryProvider>(context);
 
-     Widget cartButton() {
+    //  Widget cartButton() {
+    //   return Container(
+    //     height: 45.0,
+    //     width: 45.0,
+    //     margin: EdgeInsets.zero,
+    //     child: FloatingActionButton(
+    //       onPressed: () {},
+    //       backgroundColor: primaryColor,
+    //       child: Image.asset(
+    //         'assets/icons/icon_cart.png',
+    //         width: 21,
+    //       ),
+    //     ),
+    //   );
+    // }
+
+    Widget cartButtonWithBadge() {
       return Container(
-        height: 45.0,
-        width: 45.0,
         margin: EdgeInsets.zero,
-        child: FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: primaryColor,
-          child: Image.asset(
-            'assets/icons/icon_cart.png',
-            width: 21,
+        child: FittedBox(
+          child: Stack(
+            alignment: const Alignment(1.3, -1.8),
+            children: [
+              Container(
+                height: 45.0,
+                width: 45.0,
+                margin: EdgeInsets.zero,
+                child: FloatingActionButton(
+                  onPressed: () { },
+                  backgroundColor: primaryColor,
+                  child: Image.asset(
+                    'assets/icons/icon_cart.png',
+                    width: 21,
+                  ),
+                ),
+              ),
+              Container(             
+                padding: const EdgeInsets.all(3),
+                constraints: const BoxConstraints(minHeight: 23, minWidth: 23),
+                decoration: BoxDecoration( // This controls the shadow
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.red  // This would be color of the Badge
+                ),
+                child: Center(
+                  child: Text(
+                    '0',
+                    style: primaryTextStyle.copyWith(
+                      fontSize: 10
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       );
@@ -149,7 +192,7 @@ class _ProductPageState extends State<ProductPage> {
           lists(),
         ]
       ),
-      floatingActionButton: cartButton(),
+      floatingActionButton: cartButtonWithBadge(),
       floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
     );
 
