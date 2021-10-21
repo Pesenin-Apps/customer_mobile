@@ -55,28 +55,21 @@ class ProductTile extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: 12),
-          Container(
-            margin: const EdgeInsets.symmetric(
-              horizontal: 0,
-            ),
-            child: TextButton(
-              onPressed: () {
-                // Navigator.pushNamed(context, '/product');
-                // print('tambah');
-              },
-              style: TextButton.styleFrom(
-                backgroundColor: primaryColor,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+          GestureDetector(
+            onTap: () {
+              print('add to cart!!!');
+            },
+            child: Container(
+              padding: const EdgeInsets.all(6.0),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(
+                  color: primaryColor
                 ),
               ),
-              child: Text(
-                'Pilih',
-                style: primaryTextStyle.copyWith(
-                  fontSize: 11,
-                  fontWeight: medium,
-                ),
+              child: Image.asset(
+                'assets/icons/icon_add_to_cart.png',
+                width: 16,
               ),
             ),
           ),

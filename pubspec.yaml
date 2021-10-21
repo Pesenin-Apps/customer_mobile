@@ -65,6 +65,8 @@ flutter:
     - assets/images/logo_no_text.png
     - assets/images/qr_code.png
     - assets/images/ikan_bakar_sample.jpg
+    - assets/icons/icon_cart.png
+    - assets/icons/icon_add_to_cart.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

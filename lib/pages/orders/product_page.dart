@@ -21,6 +21,22 @@ class _ProductPageState extends State<ProductPage> {
   Widget build(BuildContext context) {
 
     ProductCategoryProvider productCategoryProvider = Provider.of<ProductCategoryProvider>(context);
+
+     Widget cartButton() {
+      return Container(
+        height: 45.0,
+        width: 45.0,
+        margin: EdgeInsets.zero,
+        child: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: primaryColor,
+          child: Image.asset(
+            'assets/icons/icon_cart.png',
+            width: 21,
+          ),
+        ),
+      );
+    }
     
     Widget category() {
       return Container(
@@ -108,6 +124,7 @@ class _ProductPageState extends State<ProductPage> {
       return Container(
         margin: EdgeInsets.only(
           top: defaultMargin,
+          bottom: defaultMargin*2.3,
         ),
         child: Column(
           children: const [
@@ -132,6 +149,8 @@ class _ProductPageState extends State<ProductPage> {
           lists(),
         ]
       ),
+      floatingActionButton: cartButton(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
     );
 
   }
