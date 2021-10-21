@@ -65,6 +65,7 @@ flutter:
     - assets/images/logo_no_text.png
     - assets/images/qr_code.png
     - assets/images/ikan_bakar_sample.jpg
+    - assets/images/placeholder.jpg
     - assets/icons/icon_cart.png
     - assets/icons/icon_add_to_cart.png
 
