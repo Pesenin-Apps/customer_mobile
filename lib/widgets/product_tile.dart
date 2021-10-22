@@ -1,12 +1,38 @@
-import 'package:customer_pesenin/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:customer_pesenin/models/product_model.dart';
+import 'package:customer_pesenin/theme.dart';
+import 'package:customer_pesenin/constans.dart' as Constants;
 
 class ProductTile extends StatelessWidget {
 
-  const ProductTile({ Key? key }) : super(key: key);
+  final ProductModel product;
+  const ProductTile(
+    this.product, { 
+      Key? key 
+    }
+  ) : super(key: key);
+
 
   @override
   Widget build(BuildContext context) {
+
+    Widget imageUrl() {
+      return Image.network(
+        'https://pesenin.onggolt-dev.com/uploads/' + product.image.toString(),
+        width: 90,
+        height: 90,
+        fit: BoxFit.cover,
+      );
+    }
+
+    Widget imagePlaceholder() {
+      return  Image.asset(
+        'assets/images/placeholder.jpg',
+        width: 90,
+        height: 90,
+        fit: BoxFit.cover,
+      );
+    }
 
     return Container(
       margin: EdgeInsets.only(
@@ -18,12 +44,7 @@ class ProductTile extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.asset(
-              'assets/images/placeholder.jpg',
-              width: 90,
-              height: 90,
-              fit: BoxFit.cover,
-            ),
+            child: product.image.toString() != 'null' ? imageUrl() : imagePlaceholder(),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -31,14 +52,14 @@ class ProductTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Ikan Bakar',
+                  '${product.category?.name}',
                   style: secondaryTextStyle.copyWith(
                     fontSize: 10,
                   ),
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Ikan Bakar Ter Enak',
+                  product.name.toString(),
                   style: primaryTextStyle.copyWith(
                     fontSize: 14,
                     fontWeight: semiBold,
@@ -46,7 +67,7 @@ class ProductTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  'Rp. 55.000',
+                  Constants.formatCurrency.format(product.price),
                   style: priceTextStyle.copyWith(
                     fontWeight: medium,
                     fontSize: 12,
@@ -57,7 +78,7 @@ class ProductTile extends StatelessWidget {
           ),
           GestureDetector(
             onTap: () {
-              print('add to cart!!!');
+              print('product ${product.id} add to cart');
             },
             child: Container(
               padding: const EdgeInsets.all(6.0),

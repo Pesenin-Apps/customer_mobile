@@ -1,14 +1,14 @@
-class ProductCategoryModel {
+class ProductTypeModel {
 
   String? id;
   String? name;
 
-  ProductCategoryModel({
+  ProductTypeModel({
     this.id,
     this.name,
   });
 
-  ProductCategoryModel.fromJson(Map<String, dynamic> json) {
+  ProductTypeModel.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
     name = json['name'];
   }

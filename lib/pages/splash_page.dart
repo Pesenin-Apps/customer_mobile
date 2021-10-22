@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:customer_pesenin/models/product_model.dart';
+import 'package:customer_pesenin/providers/product_provider.dart';
 import 'package:customer_pesenin/providers/products/category_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:customer_pesenin/theme.dart';
@@ -29,6 +31,7 @@ class _SplashPageState extends State<SplashPage> {
 
   getInit() async {
     await Provider.of<ProductCategoryProvider>(context, listen: false).getProductCategories();
+    await Provider.of<ProductProvider>(context, listen: false).getProducts();
     Navigator.pushNamed(context, '/home');
   }
 

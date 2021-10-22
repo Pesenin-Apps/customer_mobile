@@ -1,6 +1,7 @@
 import 'package:customer_pesenin/pages/home_page.dart';
 import 'package:customer_pesenin/pages/orders/product_page.dart';
 import 'package:customer_pesenin/pages/splash_page.dart';
+import 'package:customer_pesenin/providers/product_provider.dart';
 import 'package:customer_pesenin/providers/products/category_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +18,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => ProductCategoryProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ProductProvider(),
         ),
       ],
       child: MaterialApp(

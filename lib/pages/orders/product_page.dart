@@ -1,3 +1,4 @@
+import 'package:customer_pesenin/providers/product_provider.dart';
 import 'package:customer_pesenin/providers/products/category_provider.dart';
 import 'package:customer_pesenin/theme.dart';
 import 'package:customer_pesenin/widgets/product_tile.dart';
@@ -22,6 +23,7 @@ class _ProductPageState extends State<ProductPage> {
   Widget build(BuildContext context) {
 
     ProductCategoryProvider productCategoryProvider = Provider.of<ProductCategoryProvider>(context);
+    ProductProvider productProvider = Provider.of<ProductProvider>(context);
 
     //  Widget cartButton() {
     //   return Container(
@@ -170,16 +172,7 @@ class _ProductPageState extends State<ProductPage> {
           bottom: defaultMargin*2.3,
         ),
         child: Column(
-          children: const [
-            ProductTile(),
-            ProductTile(),
-            ProductTile(),
-            ProductTile(),
-            ProductTile(),
-            ProductTile(),
-            ProductTile(),
-            ProductTile(),
-          ],
+          children: productProvider.products.map((product) => ProductTile(product)).toList(),
         ),
       );
     }
