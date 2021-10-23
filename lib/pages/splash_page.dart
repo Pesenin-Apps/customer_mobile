@@ -32,7 +32,7 @@ class _SplashPageState extends State<SplashPage> {
   getInit() async {
     await Provider.of<ProductCategoryProvider>(context, listen: false).getProductCategories();
     await Provider.of<ProductProvider>(context, listen: false).getProducts();
-    Navigator.pushNamed(context, '/home');
+    Navigator.pushReplacementNamed(context, '/home');
   }
 
   @override

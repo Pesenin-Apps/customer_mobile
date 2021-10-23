@@ -22,12 +22,12 @@ class HomePage extends StatelessWidget {
         ),
         child: TextButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/check-in');
+            Navigator.pushNamed(context, '/scanner');
           //  print('test');
           },
           style: TextButton.styleFrom(
             padding: const EdgeInsets.symmetric(
-              horizontal: 24,
+              horizontal: 16,
               vertical: 10,
             ),
             backgroundColor: primaryColor,
@@ -38,7 +38,7 @@ class HomePage extends StatelessWidget {
           child: Text(
             'Mulai Memesan',
             style: primaryTextStyle.copyWith(
-              fontSize: 16,
+              fontSize: 13,
               fontWeight: medium,
             ),
           ),

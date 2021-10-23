@@ -1,6 +1,7 @@
 import 'package:customer_pesenin/pages/check_in_page.dart';
 import 'package:customer_pesenin/pages/home_page.dart';
 import 'package:customer_pesenin/pages/orders/product_page.dart';
+import 'package:customer_pesenin/pages/scanner_page.dart';
 import 'package:customer_pesenin/pages/splash_page.dart';
 import 'package:customer_pesenin/providers/product_provider.dart';
 import 'package:customer_pesenin/providers/products/category_provider.dart';
@@ -29,6 +30,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) => const SplashPage(),
           '/home': (context) => const HomePage(),
+          '/scanner': (context) => const ScannerPage(),
           '/check-in': (context) => const CheckInPage(),
           '/product': (context) => const ProductPage(),
         },
