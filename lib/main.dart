@@ -1,3 +1,4 @@
+import 'package:customer_pesenin/locator.dart';
 import 'package:customer_pesenin/pages/check_in_page.dart';
 import 'package:customer_pesenin/pages/home_page.dart';
 import 'package:customer_pesenin/pages/orders/product_page.dart';
@@ -5,10 +6,15 @@ import 'package:customer_pesenin/pages/scanner_page.dart';
 import 'package:customer_pesenin/pages/splash_page.dart';
 import 'package:customer_pesenin/providers/product_provider.dart';
 import 'package:customer_pesenin/providers/products/category_provider.dart';
+import 'package:customer_pesenin/viewmodels/product_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await setupLocator();
+  runApp(const MyApp());
+} 
 
 class MyApp extends StatelessWidget {
 
@@ -24,6 +30,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) => ProductProvider(),
         ),
+        ChangeNotifierProvider<ProductVM>(create: (context) => ProductVM()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -1,0 +1,42 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'table.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+Table _$TableFromJson(Map<String, dynamic> json) {
+  return Table(
+    id: json['_id'] as String?,
+    name: json['name'] as String?,
+    number: json['number'] as int?,
+    used: json['used'] as bool?,
+    section: json['section'] == null
+        ? null
+        : TableSection.fromJson(json['section'] as Map<String, dynamic>),
+  );
+}
+
+Map<String, dynamic> _$TableToJson(Table instance) => <String, dynamic>{
+      '_id': instance.id,
+      'name': instance.name,
+      'number': instance.number,
+      'used': instance.used,
+      'section': instance.section,
+    };
+
+TableSection _$TableSectionFromJson(Map<String, dynamic> json) {
+  return TableSection(
+    id: json['_id'] as String?,
+    name: json['name'] as String?,
+    code: json['code'] as String?,
+  );
+}
+
+Map<String, dynamic> _$TableSectionToJson(TableSection instance) =>
+    <String, dynamic>{
+      '_id': instance.id,
+      'name': instance.name,
+      'code': instance.code,
+    };

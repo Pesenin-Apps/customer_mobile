@@ -141,7 +141,7 @@ class _ScannerPageState extends State<ScannerPage> {
   }
 
   Widget contentFooter() {
-    return qr != null ? buttonNext() : placeholderScanning();
+    return qr == null ? buttonNext() : placeholderScanning();
   }
 
   Widget buildQrView(BuildContext context) => QRView(

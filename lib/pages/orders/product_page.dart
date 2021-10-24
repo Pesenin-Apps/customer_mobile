@@ -1,6 +1,7 @@
 import 'package:customer_pesenin/providers/product_provider.dart';
 import 'package:customer_pesenin/providers/products/category_provider.dart';
 import 'package:customer_pesenin/theme.dart';
+import 'package:customer_pesenin/viewmodels/product_vm.dart';
 import 'package:customer_pesenin/widgets/product_tile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -18,28 +19,30 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
 
   int currentIndex = 0;
+  bool _isLoading = false;
+  String filterByCategory = '';
+
+  @override
+  void initState() {
+    setTime();
+    super.initState();
+  }
+
+  void setTime() async {
+
+    setState(() => _isLoading = true );
+
+    final ProductVM productVM = Provider.of<ProductVM>(context, listen: false);
+    await productVM.fetchProductCategories();
+
+    setState(() => _isLoading = false );
+
+  }
 
   @override
   Widget build(BuildContext context) {
 
-    ProductCategoryProvider productCategoryProvider = Provider.of<ProductCategoryProvider>(context);
     ProductProvider productProvider = Provider.of<ProductProvider>(context);
-
-    //  Widget cartButton() {
-    //   return Container(
-    //     height: 45.0,
-    //     width: 45.0,
-    //     margin: EdgeInsets.zero,
-    //     child: FloatingActionButton(
-    //       onPressed: () {},
-    //       backgroundColor: primaryColor,
-    //       child: Image.asset(
-    //         'assets/icons/icon_cart.png',
-    //         width: 21,
-    //       ),
-    //     ),
-    //   );
-    // }
 
     Widget cartButtonWithBadge() {
       return Container(
@@ -88,80 +91,92 @@ class _ProductPageState extends State<ProductPage> {
         margin: EdgeInsets.only(
           top: defaultMargin,
         ),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: [
-              const SizedBox(width: 16),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    currentIndex = 0;
-                  });
-                },
-                child: Container(
-                  margin: const EdgeInsets.only(right: 16),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(12),
-                    color: currentIndex == 0 ? primaryColor : transparentColor,
-                    border: currentIndex == 0 ? null : Border.all(
-                      color: subtitleTextColor
+        child: Consumer<ProductVM>(
+          builder: (context, productVM, child) => _isLoading ? Center(
+            child: SizedBox(
+              height: 33,
+              width: 33,
+              child: CircularProgressIndicator(
+                color: primaryColor,
+              ),
+            ),
+          ) : SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: [
+                const SizedBox(width: 16),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      filterByCategory = '';
+                      currentIndex = 0;
+                    });
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 16),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 10,
                     ),
-                  ),
-                  child: Text(
-                    'Semua',
-                    style: currentIndex == 0 ? primaryTextStyle.copyWith(
-                      fontSize: 13,
-                      fontWeight: medium,
-                    ) : secondaryTextStyle.copyWith(
-                      fontSize: 13,
-                      fontWeight: medium,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: currentIndex == 0 ? primaryColor : transparentColor,
+                      border: currentIndex == 0 ? null : Border.all(
+                        color: subtitleTextColor
+                      ),
                     ),
+                    child: Text(
+                      'Semua',
+                      style: currentIndex == 0 ? primaryTextStyle.copyWith(
+                        fontSize: 13,
+                        fontWeight: medium,
+                      ) : secondaryTextStyle.copyWith(
+                        fontSize: 13,
+                        fontWeight: medium,
+                      ),
+                    ), 
                   ),
                 ),
-              ),
-              Row(
-                children: productCategoryProvider.productCategories.map(
-                  (productCategory) => GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        currentIndex = productCategoryProvider.productCategories.indexOf(productCategory).toInt()+1;
-                      });
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.only(right: 16),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: currentIndex == productCategoryProvider.productCategories.indexOf(productCategory).toInt()+1 ? primaryColor : transparentColor,
-                        border: currentIndex == productCategoryProvider.productCategories.indexOf(productCategory).toInt()+1 ? null : Border.all(
-                          color: subtitleTextColor
+                Row(
+                  children: [
+                    for (int i = 0; i < productVM.productCategories.length; i++) GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          filterByCategory = productVM.productCategories[i].id.toString();
+                          currentIndex = i+1;
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(right: 16),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: currentIndex == i+1 ? primaryColor : transparentColor,
+                          border: currentIndex == i+1 ? null : Border.all(
+                            color: subtitleTextColor
+                          ),
+                        ),
+                        child: Text(
+                          productVM.productCategories[i].name.toString(),
+                          style: currentIndex == i+1 ? primaryTextStyle.copyWith(
+                            fontSize: 13,
+                            fontWeight: medium,
+                          ) : secondaryTextStyle.copyWith(
+                            fontSize: 13,
+                            fontWeight: medium,
+                          ),
                         ),
                       ),
-                      child: Text(
-                        productCategory.name.toString(),
-                        style: currentIndex == productCategoryProvider.productCategories.indexOf(productCategory).toInt()+1 ? primaryTextStyle.copyWith(
-                          fontSize: 13,
-                          fontWeight: medium,
-                        ) : secondaryTextStyle.copyWith(
-                          fontSize: 13,
-                          fontWeight: medium,
-                        ),
-                      ),
-                    ),
-                  ),
-                ).toList(),
-              ),
-            ],
+                    )
+                  ],    
+                ),
+              ],
+            ),
           ),
-        ),
+        )
       );
     }
 
