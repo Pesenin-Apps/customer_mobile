@@ -10,7 +10,6 @@ class Api {
   /* ========= START API PRODUCTS ========= */
 
   Future<List<ProductCategory>> getProductCategories() async {
-
     try {
       var response = await _dio.get(
         '/products/categories',
@@ -28,7 +27,26 @@ class Api {
       // print(e);
       return [];
     }
+  }
 
+  Future<List<Product>> getProducts(String category) async {
+    try {
+      var response = await _dio.get(
+        '/products?period=all&category=$category',
+        // options: Options(
+        //   headers: {
+        //     'requiresToken': true,
+        //   }
+        // ),
+      );
+      // print(response.data['data']);
+      return (response.data['data'] as List<dynamic>).map((e) {
+        return Product.fromJson(e);
+      }).toList();
+    } catch (e) {
+      // print(e);
+      return [];
+    }
   }
 
   /* ========= END API PRODUCTS ========= */

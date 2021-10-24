@@ -1,5 +1,3 @@
-import 'package:customer_pesenin/providers/product_provider.dart';
-import 'package:customer_pesenin/providers/products/category_provider.dart';
 import 'package:customer_pesenin/theme.dart';
 import 'package:customer_pesenin/viewmodels/product_vm.dart';
 import 'package:customer_pesenin/widgets/product_tile.dart';
@@ -19,30 +17,25 @@ class ProductPage extends StatefulWidget {
 class _ProductPageState extends State<ProductPage> {
 
   int currentIndex = 0;
-  bool _isLoading = false;
+  bool _isLoadingPage = false;
   String filterByCategory = '';
 
   @override
   void initState() {
-    setTime();
+    setData();
     super.initState();
   }
 
-  void setTime() async {
-
-    setState(() => _isLoading = true );
-
+  void setData() async {
+    setState(() => _isLoadingPage = true);
     final ProductVM productVM = Provider.of<ProductVM>(context, listen: false);
     await productVM.fetchProductCategories();
-
-    setState(() => _isLoading = false );
-
+    await productVM.fetchProducts(filterByCategory);
+    setState(() => _isLoadingPage = false);
   }
 
   @override
   Widget build(BuildContext context) {
-
-    ProductProvider productProvider = Provider.of<ProductProvider>(context);
 
     Widget cartButtonWithBadge() {
       return Container(
@@ -92,15 +85,7 @@ class _ProductPageState extends State<ProductPage> {
           top: defaultMargin,
         ),
         child: Consumer<ProductVM>(
-          builder: (context, productVM, child) => _isLoading ? Center(
-            child: SizedBox(
-              height: 33,
-              width: 33,
-              child: CircularProgressIndicator(
-                color: primaryColor,
-              ),
-            ),
-          ) : SingleChildScrollView(
+          builder: (context, productVM, child) => SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Row(
               children: [
@@ -110,6 +95,7 @@ class _ProductPageState extends State<ProductPage> {
                     setState(() {
                       filterByCategory = '';
                       currentIndex = 0;
+                      Provider.of<ProductVM>(context, listen: false).fetchProducts(filterByCategory);
                     });
                   },
                   child: Container(
@@ -144,6 +130,7 @@ class _ProductPageState extends State<ProductPage> {
                         setState(() {
                           filterByCategory = productVM.productCategories[i].id.toString();
                           currentIndex = i+1;
+                          Provider.of<ProductVM>(context, listen: false).fetchProducts(filterByCategory);
                         });
                       },
                       child: Container(
@@ -186,15 +173,27 @@ class _ProductPageState extends State<ProductPage> {
           top: defaultMargin,
           bottom: defaultMargin*2.3,
         ),
-        child: Column(
-          children: productProvider.products.map((product) => ProductTile(product)).toList(),
+        child: Consumer<ProductVM>(
+          builder: (context, productVM, child) => Column(
+            children: [
+              for (var i = 0; i < productVM.product.length; i++) ProductTile(productVM.product[i])
+            ],
+          ),
         ),
       );
     }
 
     return Scaffold(
       backgroundColor: backgroundColor1,
-      body: ListView(
+      body: _isLoadingPage ? Center(
+        child: SizedBox(
+          height: 33,
+          width: 33,
+          child: CircularProgressIndicator(
+            color: primaryColor,
+          ),
+        ),
+      ) : ListView(
         children: [
           category(),
           lists(),

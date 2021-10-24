@@ -1,11 +1,11 @@
+import 'package:customer_pesenin/models/product.dart';
 import 'package:flutter/material.dart';
-import 'package:customer_pesenin/models/product_model.dart';
 import 'package:customer_pesenin/theme.dart';
 import 'package:customer_pesenin/constans.dart' as Constants;
 
 class ProductTile extends StatelessWidget {
 
-  final ProductModel product;
+  final Product product;
   const ProductTile(
     this.product, { 
       Key? key 
