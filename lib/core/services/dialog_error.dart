@@ -1,5 +1,5 @@
-import 'package:customer_pesenin/locator.dart';
-import 'package:customer_pesenin/services/navigation_custom.dart';
+import 'package:customer_pesenin/core/helpers/locator.dart';
+import 'package:customer_pesenin/core/services/navigation_custom.dart';
 import 'package:flutter/material.dart';
 
 class DialogError {

@@ -1,13 +1,20 @@
-import 'package:customer_pesenin/theme.dart';
+import 'package:customer_pesenin/core/utils/constans.dart';
+import 'package:customer_pesenin/core/utils/theme.dart';
+import 'package:customer_pesenin/ui/views/home_screen.dart';
 import 'package:flutter/material.dart';
 
-class CheckInPage extends StatelessWidget {
-
-  const CheckInPage({ Key? key }) : super(key: key);
+class CheckInForm extends StatefulWidget {
+  static const routeName = '/checkin-form';
+  const CheckInForm({ Key? key }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  _CheckInFormState createState() => _CheckInFormState();
+}
 
+class _CheckInFormState extends State<CheckInForm> {
+  @override
+  Widget build(BuildContext context) {
+    
     Widget header() {
       return Container(
         margin: const EdgeInsets.only(top: 30),
@@ -87,7 +94,7 @@ class CheckInPage extends StatelessWidget {
         margin: const EdgeInsets.only(top: 30, bottom: 30),
         child: TextButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/product');
+            Navigator.pushNamed(context, HomeScreen.routeName);
           },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,

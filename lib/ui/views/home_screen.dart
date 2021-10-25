@@ -1,20 +1,19 @@
-import 'package:customer_pesenin/theme.dart';
-import 'package:customer_pesenin/viewmodels/product_vm.dart';
-import 'package:customer_pesenin/widgets/product_tile.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:customer_pesenin/core/utils/constans.dart';
+import 'package:customer_pesenin/core/utils/theme.dart';
+import 'package:customer_pesenin/core/viewmodels/product_vm.dart';
+import 'package:customer_pesenin/ui/widgets/product/product_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class ProductPage extends StatefulWidget {
-
-  const ProductPage({ Key? key }) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  static const routeName = '/home';
+  const HomeScreen({ Key? key }) : super(key: key);
 
   @override
-  State<ProductPage> createState() => _ProductPageState();
-
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _ProductPageState extends State<ProductPage> {
+class _HomeScreenState extends State<HomeScreen> {
 
   int currentIndex = 0;
   bool _isLoadingPage = false;

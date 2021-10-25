@@ -1,7 +1,7 @@
-import 'package:customer_pesenin/models/product.dart';
 import 'package:flutter/material.dart';
-import 'package:customer_pesenin/theme.dart';
-import 'package:customer_pesenin/constans.dart' as Constants;
+import 'package:customer_pesenin/core/utils/theme.dart';
+import 'package:customer_pesenin/core/utils/constans.dart';
+import 'package:customer_pesenin/core/models/product.dart';
 
 class ProductTile extends StatelessWidget {
 
@@ -32,6 +32,66 @@ class ProductTile extends StatelessWidget {
         height: 90,
         fit: BoxFit.cover,
       );
+    }
+
+    Widget productReady() {
+      return GestureDetector(
+        onTap: () {
+          print('product ${product.id} add to cart');
+        },
+        child: Container(
+          padding: const EdgeInsets.all(6.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(
+              color: primaryColor
+            ),
+          ),
+          child: Image.asset(
+            'assets/icons/icon_add_to_cart.png',
+            width: 16,
+          ),
+        ),
+      );
+    }
+
+    Widget productNotReady() {
+      return  GestureDetector(
+        onTap: () {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: alertColor,
+              content: RichText(
+                text: TextSpan(
+                  children: <TextSpan>[
+                    const TextSpan(text: 'Maaf, '),
+                    TextSpan(text: '${product.name} ', style: const TextStyle(fontWeight: FontWeight.w700)),
+                    const TextSpan(text: 'tidak tersedia saat ini!'),
+                  ],
+                ),
+              )
+            ),
+          );
+        },
+        child: Container(
+          padding: const EdgeInsets.all(6.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(
+              color: alertColor
+            ),
+          ),
+          child: Icon(
+            Icons.block,
+            color: alertColor,
+            size: 16,
+          ),
+        ),
+      );
+    }
+
+    Widget isReady() {
+      return product.isReady.toString() == 'true' ? productReady() : productNotReady();
     }
 
     return Container(
@@ -67,7 +127,7 @@ class ProductTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  Constants.formatCurrency.format(product.price),
+                  formatCurrency.format(product.price),
                   style: priceTextStyle.copyWith(
                     fontWeight: medium,
                     fontSize: 12,
@@ -76,24 +136,7 @@ class ProductTile extends StatelessWidget {
               ],
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              print('product ${product.id} add to cart');
-            },
-            child: Container(
-              padding: const EdgeInsets.all(6.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(
-                  color: primaryColor
-                ),
-              ),
-              child: Image.asset(
-                'assets/icons/icon_add_to_cart.png',
-                width: 16,
-              ),
-            ),
-          ),
+          isReady(),
         ],
       ),
     );

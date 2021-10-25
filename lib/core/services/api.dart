@@ -1,7 +1,7 @@
-import 'package:customer_pesenin/models/product.dart';
-import 'package:customer_pesenin/services/http_interceptor.dart';
-import 'package:customer_pesenin/services/http_option.dart';
 import 'package:dio/dio.dart';
+import 'package:customer_pesenin/core/models/product.dart';
+import 'package:customer_pesenin/core/services/http_interceptor.dart';
+import 'package:customer_pesenin/core/services/http_option.dart';
 
 class Api {
   

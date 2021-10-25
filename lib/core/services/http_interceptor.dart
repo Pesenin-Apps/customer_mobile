@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:customer_pesenin/locator.dart';
-import 'package:customer_pesenin/services/dialog_error.dart';
-import 'package:customer_pesenin/services/dio_exceptions.dart';
-import 'package:customer_pesenin/services/navigation_custom.dart';
+import 'package:customer_pesenin/core/helpers/locator.dart';
+import 'package:customer_pesenin/core/services/dialog_error.dart';
+import 'package:customer_pesenin/core/services/dio_exceptions.dart';
+import 'package:customer_pesenin/core/services/navigation_custom.dart';
 
 class HttpInterceptors extends Interceptor {
 

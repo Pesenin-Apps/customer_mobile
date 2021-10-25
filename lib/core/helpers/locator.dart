@@ -1,6 +1,6 @@
 import 'package:get_it/get_it.dart';
-import 'package:customer_pesenin/services/api.dart';
-import 'package:customer_pesenin/services/navigation_custom.dart';
+import 'package:customer_pesenin/core/services/api.dart';
+import 'package:customer_pesenin/core/services/navigation_custom.dart';
 
 GetIt locator = GetIt.instance;
 

@@ -1,26 +1,23 @@
-import 'package:customer_pesenin/theme.dart';
+import 'package:customer_pesenin/core/utils/constans.dart';
+import 'package:customer_pesenin/core/utils/theme.dart';
+import 'package:customer_pesenin/ui/views/checkin/form.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'dart:io' show Platform;
 
-class ScannerPage extends StatefulWidget {
-  const ScannerPage({ Key? key }) : super(key: key);
+class ScanTable extends StatefulWidget {
+  static const routeName = '/scan-table';
+  const ScanTable({ Key? key }) : super(key: key);
 
   @override
-  _ScannerPageState createState() => _ScannerPageState();
+  _ScanTableState createState() => _ScanTableState();
 }
 
-class _ScannerPageState extends State<ScannerPage> {
+class _ScanTableState extends State<ScanTable> {
 
   Barcode? qr;
   QRViewController? controller;
   final qrKey = GlobalKey(debugLabel: 'QR');
-
-  // @override
-  // void initState() {
-  //   getQRCode();
-  //   super.initState();
-  // }
 
   @override
   void dispose() {
@@ -36,10 +33,6 @@ class _ScannerPageState extends State<ScannerPage> {
     }
     controller!.resumeCamera();
   }
-
-  // getQRCode() {
-  //   print(qr);
-  // }
   
   @override
   Widget build(BuildContext context) {
@@ -122,7 +115,7 @@ class _ScannerPageState extends State<ScannerPage> {
       child: TextButton(
         onPressed: () {
           // Navigator.pushNamed(context, '/check-in');
-          Navigator.popAndPushNamed(context, '/check-in');
+          Navigator.popAndPushNamed(context, CheckInForm.routeName);
           // Navigator.pushNamedAndRemoveUntil(context, '/check-in', (route) => false);
         },
         style: TextButton.styleFrom(

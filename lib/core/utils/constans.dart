@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
+
+final formatCurrency = NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);
 
 double defaultMargin = 30.0;
 
@@ -16,22 +18,6 @@ Color primaryTextColor = const Color(0xffF1F0F2);
 Color secondaryTextColor = const Color(0xff9B9B9A);
 Color subtitleTextColor = const Color(0xff3C3833);
 Color transparentColor = Colors.transparent;
-
-TextStyle primaryTextStyle = GoogleFonts.poppins(
-  color: primaryTextColor
-);
-
-TextStyle secondaryTextStyle = GoogleFonts.poppins(
-  color: secondaryTextColor
-);
-
-TextStyle priceTextStyle = GoogleFonts.poppins(
-  color: priceColor
-);
-
-TextStyle subtitleTextStyle = GoogleFonts.poppins(
-  color: subtitleTextColor
-);
 
 FontWeight light = FontWeight.w300;
 FontWeight regular = FontWeight.w400;

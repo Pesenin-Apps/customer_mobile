@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:customer_pesenin/models/product.dart';
-import 'package:customer_pesenin/services/api.dart';
-import 'package:customer_pesenin/locator.dart';
+import 'package:customer_pesenin/core/models/product.dart';
+import 'package:customer_pesenin/core/services/api.dart';
+import 'package:customer_pesenin/core/helpers/locator.dart';
 
 class ProductVM extends ChangeNotifier {
   
