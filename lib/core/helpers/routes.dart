@@ -9,6 +9,6 @@ final Map<String, Widget Function(BuildContext)> routesCustom = {
   SplashScreen.routeName: (context) => const SplashScreen(),
   OnBoardingScreen.routeName: (context) => const OnBoardingScreen(),
   ScanTable.routeName: (context) => const ScanTable(),
-  CheckInForm.routeName: (context) => const CheckInForm(),
+  // CheckInForm.routeName: (context) => const CheckInForm(),
   HomeScreen.routeName: (context) => const HomeScreen(),
 };

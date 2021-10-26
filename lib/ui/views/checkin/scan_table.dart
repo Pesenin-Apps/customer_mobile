@@ -138,7 +138,13 @@ class _ScanTableState extends State<ScanTable> {
         margin: EdgeInsets.zero,
         child: TextButton(
           onPressed: () {
-            Navigator.popAndPushNamed(context, CheckInForm.routeName);
+            // Navigator.popAndPushNamed(context, CheckInForm.routeName, arguments: { customerVM.tableDetail.id },);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => CheckInForm(table: customerVM.tableDetail.id.toString())
+              ),
+            );
           },
           style: TextButton.styleFrom(
             padding: const EdgeInsets.all(12),

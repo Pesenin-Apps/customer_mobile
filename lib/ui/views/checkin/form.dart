@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 
 class CheckInForm extends StatefulWidget {
   static const routeName = '/checkin-form';
-  final String? table;
+  final String table;
 
   const CheckInForm({
     Key? key,
-    this.table
+    required this.table
   }) : super(key: key);
 
   @override
