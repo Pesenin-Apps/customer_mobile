@@ -1,9 +1,11 @@
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
+import 'package:customer_pesenin/core/viewmodels/customer_vm.dart';
 import 'package:customer_pesenin/ui/views/checkin/form.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
-import 'dart:io' show Platform;
+// import 'dart:io' show Platform;
 
 class ScanTable extends StatefulWidget {
   static const routeName = '/scan-table';
@@ -18,6 +20,17 @@ class _ScanTableState extends State<ScanTable> {
   Barcode? qr;
   QRViewController? controller;
   final qrKey = GlobalKey(debugLabel: 'QR');
+  bool findCode = false;
+
+   @override
+  void initState() {
+    getTable();
+    super.initState();
+  }  
+
+  getTable() async {
+    await Provider.of<CustomerVM>(context, listen: false).fetchTableDetail('');
+  }
 
   @override
   void dispose() {
@@ -25,14 +38,14 @@ class _ScanTableState extends State<ScanTable> {
     super.dispose();
   }
 
-  @override
-  void reassemble() async {
-    super.reassemble();
-    if (Platform.isAndroid) {
-      await controller!.pauseCamera();
-    }
-    controller!.resumeCamera();
-  }
+  // @override
+  // void reassemble() async {
+  //   super.reassemble();
+  //   if (Platform.isAndroid) {
+  //     await controller!.pauseCamera();
+  //   }
+  //   controller!.resumeCamera();
+  // }
   
   @override
   Widget build(BuildContext context) {
@@ -66,36 +79,91 @@ class _ScanTableState extends State<ScanTable> {
     );
   }
 
-  Widget tableInfo() {
+  Widget contentHeader() {
     return Container(
-      padding: const EdgeInsets.all(12),
-       decoration: BoxDecoration(
+       padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: backgroundColor2,
       ),
-      child: Column(
-        children: [
-          Text(
-            'Photobooth Baru No. 14',
-            maxLines: 3,
-            style: primaryTextStyle,
-          ),
-          Text(
-            'Status : Meja Kosong',
-            maxLines: 3,
-            style: primaryTextStyle,
-          ),
-        ],
+      child: findCode ? Consumer<CustomerVM>(
+        builder: (context, customerVM, child) => customerVM.tableDetail.name != null ? Column(
+          children: [
+            Text(
+              '${customerVM.tableDetail.section?.name} No. ${customerVM.tableDetail.number}',
+              maxLines: 2,
+              style: primaryTextStyle,
+            ),
+            Text(
+              customerVM.tableDetail.used == true ? 'Status : Meja Telah Terisi' : 'Status : Meja Kosong',
+              style: primaryTextStyle,
+            ),
+          ],
+        ) : Text(
+          'QR CODE FAILED',
+          style: primaryTextStyle,
+        ),
+      ) : Text(
+       'SCAN QR CODE',
+        style: primaryTextStyle,
       ),
     );
   }
 
-  Widget contentHeader() {
-    return qr != null ? tableInfo() : const Text('');
-  }
-
-  Widget placeholderScanning() {
-    return Container(
+  Widget contentFooter() {
+    return findCode ? Consumer<CustomerVM>(
+      builder: (context, customerVM, child) => customerVM.tableDetail.used == true ? Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: backgroundColor2,
+        ),
+        child: Column(
+          children: [
+            Text(
+              'Mohon maaf,',
+              style: primaryTextStyle,
+            ),
+            Text(
+              'meja telah diisi oleh pelanggan lain.',
+              style: primaryTextStyle,
+            ),
+            Text(
+              'Silahkan pilih meja yang lain.',
+              style: primaryTextStyle,
+            ),
+          ],
+        ),
+      ) : customerVM.tableDetail.name != null ? Container(
+        margin: EdgeInsets.zero,
+        child: TextButton(
+          onPressed: () {
+            Navigator.popAndPushNamed(context, CheckInForm.routeName);
+          },
+          style: TextButton.styleFrom(
+            padding: const EdgeInsets.all(12),
+            backgroundColor: primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+          child: Text(
+            'Lanjut',
+            style: primaryTextStyle,
+          ),
+        ),
+      ) : Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: backgroundColor2,
+        ),
+        child: Text(
+          'Kode bukan bagian dari Pesenin Apps.',
+          style: primaryTextStyle,
+        ),
+      )
+    ) : Container(
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
@@ -103,38 +171,9 @@ class _ScanTableState extends State<ScanTable> {
       ),
       child: Text(
        'Pindai kode yang terletak dimeja Anda.',
-        maxLines: 3,
         style: primaryTextStyle,
       ),
     );
-  }
-
-  Widget buttonNext() {
-    return Container(
-      margin: EdgeInsets.zero,
-      child: TextButton(
-        onPressed: () {
-          // Navigator.pushNamed(context, '/check-in');
-          Navigator.popAndPushNamed(context, CheckInForm.routeName);
-          // Navigator.pushNamedAndRemoveUntil(context, '/check-in', (route) => false);
-        },
-        style: TextButton.styleFrom(
-          padding: const EdgeInsets.all(12),
-          backgroundColor: primaryColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-        child: Text(
-          'Lanjut',
-          style: primaryTextStyle,
-        ),
-      ),
-    );
-  }
-
-  Widget contentFooter() {
-    return qr == null ? buttonNext() : placeholderScanning();
   }
 
   Widget buildQrView(BuildContext context) => QRView(
@@ -156,6 +195,9 @@ class _ScanTableState extends State<ScanTable> {
     controller.scannedDataStream.listen((qr) { 
       setState(() {
         this.qr = qr;
+        Provider.of<CustomerVM>(context, listen: false).fetchTableDetail(this.qr!.code);
+        controller.stopCamera();
+        findCode = true;
       }); 
     });
   }

@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'table.g.dart';
 
 @JsonSerializable()
-class Table {
+class TableModel {
   
   @JsonKey(name: '_id')
   String? id;
@@ -12,7 +12,7 @@ class Table {
   bool? used;
   TableSection? section;
 
-  Table({
+  TableModel({
     required this.id,
     required this.name,
     required this.number,
@@ -20,10 +20,9 @@ class Table {
     required this.section,
   });
 
-  factory Table.fromJson(Map<String, dynamic> json) => _$TableFromJson(json);
+  factory TableModel.fromJson(Map<String, dynamic> json) => _$TableModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$TableToJson(this);
-
+  Map<String, dynamic> toJson() => _$TableModelToJson(this);
 
 }
 

@@ -6,8 +6,8 @@ part of 'table.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Table _$TableFromJson(Map<String, dynamic> json) {
-  return Table(
+TableModel _$TableModelFromJson(Map<String, dynamic> json) {
+  return TableModel(
     id: json['_id'] as String?,
     name: json['name'] as String?,
     number: json['number'] as int?,
@@ -18,7 +18,8 @@ Table _$TableFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$TableToJson(Table instance) => <String, dynamic>{
+Map<String, dynamic> _$TableModelToJson(TableModel instance) =>
+    <String, dynamic>{
       '_id': instance.id,
       'name': instance.name,
       'number': instance.number,

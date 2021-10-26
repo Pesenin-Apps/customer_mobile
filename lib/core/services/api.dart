@@ -1,3 +1,4 @@
+import 'package:customer_pesenin/core/models/table.dart';
 import 'package:dio/dio.dart';
 import 'package:customer_pesenin/core/models/product.dart';
 import 'package:customer_pesenin/core/services/http_interceptor.dart';
@@ -50,5 +51,40 @@ class Api {
   }
 
   /* ========= END API PRODUCTS ========= */
+
+
+  /* ========= START API TABLE ========= */
+  
+  Future<TableModel?> getTable(String id) async {
+    try {
+      var response = await _dio.get(
+        '/tables/$id',
+      );
+      return TableModel.fromJson({
+        ...response.data['data']
+      });
+    } catch (e) {
+      // print(e);
+      // print('tidak didapatkan');
+      // print('======================');
+      // print('error : $e');
+      // return null;
+      return TableModel.fromJson({
+        'data': {
+          'id': null,
+          'name': null,
+          'number': null,
+          'used': null,
+          'section': TableSection.fromJson({
+            'id': null,
+            'name': null,
+            'code': null,
+          }),
+        }
+      });
+    }
+  }
+
+  /* ========= END API TABLE ========= */
 
 }

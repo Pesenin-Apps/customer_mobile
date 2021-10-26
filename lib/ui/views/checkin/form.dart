@@ -5,7 +5,12 @@ import 'package:flutter/material.dart';
 
 class CheckInForm extends StatefulWidget {
   static const routeName = '/checkin-form';
-  const CheckInForm({ Key? key }) : super(key: key);
+  final String? table;
+
+  const CheckInForm({
+    Key? key,
+    this.table
+  }) : super(key: key);
 
   @override
   _CheckInFormState createState() => _CheckInFormState();
@@ -14,7 +19,7 @@ class CheckInForm extends StatefulWidget {
 class _CheckInFormState extends State<CheckInForm> {
   @override
   Widget build(BuildContext context) {
-    
+
     Widget header() {
       return Container(
         margin: const EdgeInsets.only(top: 30),
