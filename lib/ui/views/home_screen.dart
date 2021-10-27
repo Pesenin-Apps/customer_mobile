@@ -110,7 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         backgroundColor: backgroundColor1,
         appBar: PreferredSize(
-          preferredSize: const Size(71, 71),
+          preferredSize: const Size.fromHeight(80.0),
           child: Container(
             margin: const EdgeInsets.only(top: 15.0, bottom: 15.0),
             child: Consumer<ProductVM>(
