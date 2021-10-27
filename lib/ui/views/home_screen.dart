@@ -1,8 +1,8 @@
 import 'dart:convert';
-
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/product_vm.dart';
+import 'package:customer_pesenin/ui/views/orders/cart.dart';
 import 'package:customer_pesenin/ui/widgets/product/product_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -58,7 +58,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 45.0,
                 margin: EdgeInsets.zero,
                 child: FloatingActionButton(
-                  onPressed: () { },
+                  onPressed: () {
+                    Navigator.pushNamed(context, Cart.routeName);
+                  },
                   backgroundColor: primaryColor,
                   child: Image.asset(
                     'assets/icons/icon_cart.png',
@@ -87,99 +89,11 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       );
     }
-    
-    Widget category() {
-      return Container(
-        margin: EdgeInsets.only(
-          top: defaultMargin,
-        ),
-        child: Consumer<ProductVM>(
-          builder: (context, productVM, child) => SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                const SizedBox(width: 16),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      filterByCategory = '';
-                      currentIndex = 0;
-                      Provider.of<ProductVM>(context, listen: false).fetchProducts(filterByCategory);
-                    });
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(right: 16),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      color: currentIndex == 0 ? primaryColor : transparentColor,
-                      border: currentIndex == 0 ? null : Border.all(
-                        color: subtitleTextColor
-                      ),
-                    ),
-                    child: Text(
-                      'Semua',
-                      style: currentIndex == 0 ? primaryTextStyle.copyWith(
-                        fontSize: 13,
-                        fontWeight: medium,
-                      ) : secondaryTextStyle.copyWith(
-                        fontSize: 13,
-                        fontWeight: medium,
-                      ),
-                    ), 
-                  ),
-                ),
-                Row(
-                  children: [
-                    for (int i = 0; i < productVM.productCategories.length; i++) GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          filterByCategory = productVM.productCategories[i].id.toString();
-                          currentIndex = i+1;
-                          Provider.of<ProductVM>(context, listen: false).fetchProducts(filterByCategory);
-                        });
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.only(right: 16),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 10,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: currentIndex == i+1 ? primaryColor : transparentColor,
-                          border: currentIndex == i+1 ? null : Border.all(
-                            color: subtitleTextColor
-                          ),
-                        ),
-                        child: Text(
-                          productVM.productCategories[i].name.toString(),
-                          style: currentIndex == i+1 ? primaryTextStyle.copyWith(
-                            fontSize: 13,
-                            fontWeight: medium,
-                          ) : secondaryTextStyle.copyWith(
-                            fontSize: 13,
-                            fontWeight: medium,
-                          ),
-                        ),
-                      ),
-                    )
-                  ],    
-                ),
-              ],
-            ),
-          ),
-        )
-      );
-    }
 
     Widget lists() {
       return Container(
         margin: EdgeInsets.only(
-          top: defaultMargin,
+          top: 20.0,
           bottom: defaultMargin*2.3,
         ),
         child: Consumer<ProductVM>(
@@ -192,24 +106,111 @@ class _HomeScreenState extends State<HomeScreen> {
       );
     }
 
-    return Scaffold(
-      backgroundColor: backgroundColor1,
-      body: _isLoadingPage ? Center(
-        child: SizedBox(
-          height: 33,
-          width: 33,
-          child: CircularProgressIndicator(
-            color: primaryColor,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: backgroundColor1,
+        appBar: PreferredSize(
+          preferredSize: const Size(71, 71),
+          child: Container(
+            margin: const EdgeInsets.only(top: 15.0, bottom: 15.0),
+            child: Consumer<ProductVM>(
+              builder: (context, productVM, child) => SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    const SizedBox(width: 16),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          filterByCategory = '';
+                          currentIndex = 0;
+                          Provider.of<ProductVM>(context, listen: false).fetchProducts(filterByCategory);
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(right: 16),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: currentIndex == 0 ? primaryColor : transparentColor,
+                          border: currentIndex == 0 ? null : Border.all(
+                            color: subtitleTextColor
+                          ),
+                        ),
+                        child: Text(
+                          'Semua',
+                          style: currentIndex == 0 ? primaryTextStyle.copyWith(
+                            fontSize: 13,
+                            fontWeight: medium,
+                          ) : secondaryTextStyle.copyWith(
+                            fontSize: 13,
+                            fontWeight: medium,
+                          ),
+                        ), 
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        for (int i = 0; i < productVM.productCategories.length; i++) GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              filterByCategory = productVM.productCategories[i].id.toString();
+                              currentIndex = i+1;
+                              Provider.of<ProductVM>(context, listen: false).fetchProducts(filterByCategory);
+                            });
+                          },
+                          child: Container(
+                            margin: const EdgeInsets.only(right: 16),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 10,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              color: currentIndex == i+1 ? primaryColor : transparentColor,
+                              border: currentIndex == i+1 ? null : Border.all(
+                                color: subtitleTextColor
+                              ),
+                            ),
+                            child: Text(
+                              productVM.productCategories[i].name.toString(),
+                              style: currentIndex == i+1 ? primaryTextStyle.copyWith(
+                                fontSize: 13,
+                                fontWeight: medium,
+                              ) : secondaryTextStyle.copyWith(
+                                fontSize: 13,
+                                fontWeight: medium,
+                              ),
+                            ),
+                          ),
+                        )
+                      ],    
+                    ),
+                  ],
+                ),
+              ),
+            )
           ),
         ),
-      ) : ListView(
-        children: [
-          category(),
-          lists(),
-        ]
+        body: _isLoadingPage ? Center(
+          child: SizedBox(
+            height: 33,
+            width: 33,
+            child: CircularProgressIndicator(
+              color: primaryColor,
+            ),
+          ),
+        ) : ListView(
+          children: [
+            lists(),
+          ]
+        ),
+        floatingActionButton: cartButtonWithBadge(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
       ),
-      floatingActionButton: cartButtonWithBadge(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
     );
 
   }
