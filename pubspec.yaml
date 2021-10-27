@@ -43,6 +43,7 @@ dependencies:
   json_annotation: ^4.0.1
   get_it: ^7.2.0
   shared_preferences: ^2.0.6
+  device_info: ^2.0.1
   
 dev_dependencies:
   flutter_test:

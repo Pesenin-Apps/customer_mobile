@@ -22,7 +22,7 @@ class _ScanTableState extends State<ScanTable> {
   final qrKey = GlobalKey(debugLabel: 'QR');
   bool findCode = false;
 
-   @override
+  @override
   void initState() {
     getTable();
     super.initState();
@@ -154,7 +154,7 @@ class _ScanTableState extends State<ScanTable> {
             ),
           ),
           child: Text(
-            'Lanjut',
+            'Gunakan Meja Ini',
             style: primaryTextStyle,
           ),
         ),

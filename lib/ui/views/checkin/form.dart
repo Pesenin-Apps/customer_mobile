@@ -1,6 +1,8 @@
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/ui/views/home_screen.dart';
+import 'package:device_info/device_info.dart';
+import 'dart:io';
 import 'package:flutter/material.dart';
 
 class CheckInForm extends StatefulWidget {
@@ -17,6 +19,25 @@ class CheckInForm extends StatefulWidget {
 }
 
 class _CheckInFormState extends State<CheckInForm> {
+
+  String deviceDetection = '';
+
+  @override
+  void initState() {
+    getDeviceInfo();
+    super.initState();
+  }  
+
+  getDeviceInfo() async {
+    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      AndroidDeviceInfo build = await deviceInfo.androidInfo;
+      setState(() {
+        deviceDetection = build.model + ' ' +  build.androidId;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
 
@@ -108,7 +129,7 @@ class _CheckInFormState extends State<CheckInForm> {
             )
           ),
           child: Text(
-            'Lanjut',
+            'Check In',
             style: primaryTextStyle.copyWith(
               fontSize: 16,
               fontWeight: medium
