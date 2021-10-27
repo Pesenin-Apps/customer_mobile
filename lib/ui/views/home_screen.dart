@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/product_vm.dart';
 import 'package:customer_pesenin/ui/widgets/product/product_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/home';
@@ -18,19 +21,26 @@ class _HomeScreenState extends State<HomeScreen> {
   int currentIndex = 0;
   bool _isLoadingPage = false;
   String filterByCategory = '';
+  String name = '';
 
   @override
   void initState() {
     setData();
+    refreshData();
     super.initState();
   }
 
   void setData() async {
-    setState(() => _isLoadingPage = true);
+    if (mounted) setState(() => _isLoadingPage = true);
     final ProductVM productVM = Provider.of<ProductVM>(context, listen: false);
     await productVM.fetchProductCategories();
     await productVM.fetchProducts(filterByCategory);
-    setState(() => _isLoadingPage = false);
+    if (mounted) setState(() => _isLoadingPage = false);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -202,6 +212,14 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
     );
 
+  }
+
+  Future refreshData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final extractData = jsonDecode(prefs.getString('customerNewData')!);
+    setState(() {
+      name = extractData['name'];
+    });
   }
 
 }

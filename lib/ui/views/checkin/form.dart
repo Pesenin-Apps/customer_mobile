@@ -1,9 +1,13 @@
+import 'package:customer_pesenin/core/helpers/locator.dart';
+import 'package:customer_pesenin/core/services/navigation_custom.dart';
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
-import 'package:customer_pesenin/ui/views/home_screen.dart';
+import 'package:customer_pesenin/core/viewmodels/customer_vm.dart';
+import 'package:customer_pesenin/ui/widgets/components/loading_button.dart';
 import 'package:device_info/device_info.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CheckInForm extends StatefulWidget {
   static const routeName = '/checkin-form';
@@ -21,6 +25,8 @@ class CheckInForm extends StatefulWidget {
 class _CheckInFormState extends State<CheckInForm> {
 
   String deviceDetection = '';
+  final TextEditingController nameController = TextEditingController(text: '');
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -36,6 +42,40 @@ class _CheckInFormState extends State<CheckInForm> {
         deviceDetection = build.model + ' ' +  build.androidId;
       });
     }
+  }
+
+  void submitForm() async {
+    
+    setState(() {
+      _isLoading = true;
+    });
+
+    final Map<String, dynamic> checkInForm = {
+      'table' : widget.table,
+      'device_detection': deviceDetection,
+      'name' : nameController.text
+    };
+
+    bool response = await Provider.of<CustomerVM>(context, listen: false).checkIn(checkInForm);
+
+    if(response) {
+      locator<NavigationCustom>().navigateReplace('/');
+    } else {
+       ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: alertColor,
+            content: const Text(
+              'Gagal Login!',
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+
   }
 
   @override
@@ -97,7 +137,14 @@ class _CheckInFormState extends State<CheckInForm> {
                     const SizedBox(width: 16),
                     Expanded(
                       child: TextFormField(
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Masukkan Nama Anda';
+                          }
+                          return null;
+                        },
                         style: primaryTextStyle,
+                        controller: nameController,
                         decoration: InputDecoration.collapsed(
                           hintText: 'Masukkan Nama',
                           hintStyle: secondaryTextStyle,
@@ -119,9 +166,7 @@ class _CheckInFormState extends State<CheckInForm> {
         width: double.infinity,
         margin: const EdgeInsets.only(top: 30, bottom: 30),
         child: TextButton(
-          onPressed: () {
-            Navigator.pushNamed(context, HomeScreen.routeName);
-          },
+          onPressed: submitForm,
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(
@@ -152,7 +197,7 @@ class _CheckInFormState extends State<CheckInForm> {
             children: [
               header(),
               inputName(),
-              buttonSubmit(),
+              _isLoading ? const LoadingButton() : buttonSubmit(),
             ],
           ),
         ),

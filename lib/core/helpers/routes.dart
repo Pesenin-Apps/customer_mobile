@@ -6,7 +6,7 @@ import 'package:customer_pesenin/ui/views/onboarding_screen.dart';
 import 'package:customer_pesenin/ui/views/checkin/scan_table.dart';
 
 final Map<String, Widget Function(BuildContext)> routesCustom = {
-  SplashScreen.routeName: (context) => const SplashScreen(),
+  // SplashScreen.routeName: (context) => const SplashScreen(),
   OnBoardingScreen.routeName: (context) => const OnBoardingScreen(),
   ScanTable.routeName: (context) => const ScanTable(),
   // CheckInForm.routeName: (context) => const CheckInForm(),

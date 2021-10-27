@@ -1,3 +1,7 @@
+import 'package:customer_pesenin/core/services/navigation_custom.dart';
+import 'package:customer_pesenin/core/viewmodels/customer_vm.dart';
+import 'package:customer_pesenin/ui/views/home_screen.dart';
+import 'package:customer_pesenin/ui/views/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:customer_pesenin/core/helpers/providers.dart';
@@ -18,10 +22,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: providers,
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        routes: routesCustom,
-      ),
+      child: Consumer<CustomerVM>(
+        builder: (context, customerVM, _) => MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: customerVM.isAuth ? const HomeScreen() : FutureBuilder(
+            future: customerVM.tryAutoCheckIn(),
+            builder: (context, snapshot) {
+              return snapshot.connectionState == ConnectionState.waiting ? const HomeScreen() : const SplashScreen();
+            },
+          ),
+          navigatorKey: locator<NavigationCustom>().navigatorKey,
+          routes: routesCustom,
+        )
+      )
     );
   }
 }

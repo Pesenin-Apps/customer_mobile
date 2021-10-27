@@ -1,3 +1,4 @@
+import 'package:customer_pesenin/core/models/customer.dart';
 import 'package:customer_pesenin/core/models/table.dart';
 import 'package:dio/dio.dart';
 import 'package:customer_pesenin/core/models/product.dart';
@@ -8,17 +9,39 @@ class Api {
   
   final Dio _dio = Dio(baseOptions)..interceptors.add(HttpInterceptors());
 
+  /* ========= START API CUSTOMER ========= */
+
+  Future<Customer?> getCustomer() async {
+    try {
+      var response = await _dio.get(
+        '/customers/me',
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          },
+        ),
+      );
+      return Customer.fromJson(response.data['customer']);
+    } on DioError catch (e) {
+      // print('error: $e');
+      return null;
+    }
+  }
+
+  /* ========= START API CUSTOMER ========= */
+
+
   /* ========= START API PRODUCTS ========= */
 
   Future<List<ProductCategory>> getProductCategories() async {
     try {
       var response = await _dio.get(
         '/products/categories',
-        // options: Options(
-        //   headers: {
-        //     'requiresToken': true,
-        //   }
-        // ),
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          }
+        ),
       );
       // print(response.data['data']);
       return (response.data['data'] as List<dynamic>).map((e) {
@@ -34,11 +57,11 @@ class Api {
     try {
       var response = await _dio.get(
         '/products?period=all&category=$category',
-        // options: Options(
-        //   headers: {
-        //     'requiresToken': true,
-        //   }
-        // ),
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          }
+        ),
       );
       // print(response.data['data']);
       return (response.data['data'] as List<dynamic>).map((e) {
@@ -64,11 +87,6 @@ class Api {
         ...response.data['data']
       });
     } catch (e) {
-      // print(e);
-      // print('tidak didapatkan');
-      // print('======================');
-      // print('error : $e');
-      // return null;
       return TableModel.fromJson({
         'data': {
           'id': null,
