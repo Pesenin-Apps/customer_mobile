@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/product_vm.dart';
@@ -6,7 +5,6 @@ import 'package:customer_pesenin/ui/views/orders/cart.dart';
 import 'package:customer_pesenin/ui/widgets/product/product_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/home';
@@ -26,7 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     setData();
-    refreshData();
     super.initState();
   }
 
@@ -213,14 +210,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
 
-  }
-
-  Future refreshData() async {
-    final prefs = await SharedPreferences.getInstance();
-    final extractData = jsonDecode(prefs.getString('customerNewData')!);
-    setState(() {
-      name = extractData['name'];
-    });
   }
 
 }

@@ -38,6 +38,11 @@ class CustomerVM extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future fetchCustomer() async {
+    customer = await api.getCustomer();
+    notifyListeners();
+  }
+
   Future<bool> checkIn(Map<String, dynamic> checkInForm) async {
     try {
       var response = await _dio.post(
