@@ -79,6 +79,7 @@ flutter:
     - assets/icons/icon_add_to_cart.png
     - assets/icons/icon_user.png
     - assets/icons/icon_avatar.png
+    - assets/icons/icon_empty_cart.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
