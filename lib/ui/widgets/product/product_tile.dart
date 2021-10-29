@@ -1,7 +1,9 @@
+import 'package:customer_pesenin/core/viewmodels/cart_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/models/product.dart';
+import 'package:provider/provider.dart';
 
 class ProductTile extends StatelessWidget {
 
@@ -15,6 +17,8 @@ class ProductTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    CartVM cartVM = Provider.of<CartVM>(context);
 
     Widget imageUrl() {
       return Image.network(
@@ -37,7 +41,38 @@ class ProductTile extends StatelessWidget {
     Widget productReady() {
       return GestureDetector(
         onTap: () {
-          print('product ${product.id} add to cart');
+          final fetchProductInCart = cartVM.productExist(product);
+          if (fetchProductInCart) {
+             ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: warningColor,
+                content: RichText(
+                  text: TextSpan(
+                    children: <TextSpan>[
+                      TextSpan(text: '${product.name} ', style: const TextStyle(fontWeight: FontWeight.w700)),
+                      const TextSpan(text: 'sudah ada dikeranjang Anda!'),
+                    ],
+                  ),
+                )
+              ),
+            );
+          } else {
+            cartVM.addCart(product);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                backgroundColor: secondaryColor,
+                content: RichText(
+                  text: TextSpan(
+                    children: <TextSpan>[
+                      const TextSpan(text: 'Berhasil, '),
+                      TextSpan(text: '${product.name} ', style: const TextStyle(fontWeight: FontWeight.w700)),
+                      const TextSpan(text: 'telah dimasukkan ke keranjang Anda!'),
+                    ],
+                  ),
+                )
+              ),
+            );
+          }
         },
         child: Container(
           padding: const EdgeInsets.all(6.0),
@@ -90,10 +125,6 @@ class ProductTile extends StatelessWidget {
       );
     }
 
-    Widget isReady() {
-      return product.isReady.toString() == 'true' ? productReady() : productNotReady();
-    }
-
     return Container(
       margin: EdgeInsets.only(
         left: defaultMargin,
@@ -136,7 +167,7 @@ class ProductTile extends StatelessWidget {
               ],
             ),
           ),
-          isReady(),
+          product.isReady.toString() == 'true' ? productReady() : productNotReady(),
         ],
       ),
     );

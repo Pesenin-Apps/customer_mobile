@@ -1,7 +1,8 @@
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
+import 'package:customer_pesenin/core/viewmodels/cart_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/product_vm.dart';
-import 'package:customer_pesenin/ui/views/orders/cart.dart';
+import 'package:customer_pesenin/ui/views/orders/cart_screen.dart';
 import 'package:customer_pesenin/ui/widgets/product/product_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -43,6 +44,26 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
 
+    CartVM cartVM = Provider.of<CartVM>(context);
+
+    Widget cartButton() {
+      return  Container(
+        height: 45.0,
+        width: 45.0,
+        margin: EdgeInsets.zero,
+        child: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(context, Cart.routeName);
+          },
+          backgroundColor: primaryColor,
+          child: Image.asset(
+            'assets/icons/icon_cart.png',
+            width: 21,
+          ),
+        ),
+      );
+    }
+
     Widget cartButtonWithBadge() {
       return Container(
         margin: EdgeInsets.zero,
@@ -74,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: Center(
                   child: Text(
-                    '0',
+                    cartVM.carts.length.toString(),
                     style: primaryTextStyle.copyWith(
                       fontSize: 10
                     ),
@@ -205,7 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
             lists(),
           ]
         ),
-        floatingActionButton: cartButtonWithBadge(),
+        floatingActionButton: cartVM.carts.isEmpty ? cartButton() : cartButtonWithBadge(),
         floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
       ),
     );

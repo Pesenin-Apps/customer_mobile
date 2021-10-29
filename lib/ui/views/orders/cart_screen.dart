@@ -1,6 +1,9 @@
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
+import 'package:customer_pesenin/core/viewmodels/cart_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/customer_vm.dart';
+import 'package:customer_pesenin/ui/widgets/cart/cart_card.dart';
+import 'package:customer_pesenin/ui/widgets/cart/cart_is_empty.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -28,6 +31,8 @@ class _CartState extends State<Cart> {
 
   @override
   Widget build(BuildContext context) {
+    
+    CartVM cartVM = Provider.of<CartVM>(context);
 
     Widget customerInfo() {
       return Container(
@@ -90,60 +95,56 @@ class _CartState extends State<Cart> {
       );
     }
 
-    Widget titleCartList() {
-    return Container(
-      margin: const EdgeInsets.only(top: 20.0),
-      child: Text(
-        'Daftar Item',
-        style: primaryTextStyle.copyWith(
-          fontSize: 16,
-          fontWeight: semiBold,
+    Widget buttonOrder() {
+      return Container(
+        height: 40,
+        width: double.infinity,
+        margin: const EdgeInsets.only(top: 30, bottom: 30),
+        child: TextButton(
+          onPressed: () {},
+          style: TextButton.styleFrom(
+            backgroundColor: primaryColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            )
+          ),
+          child: Text(
+            'Pesan Sekarang',
+            style: primaryTextStyle.copyWith(
+              fontSize: 13,
+              fontWeight: semiBold
+            ),
+          ),
         ),
-      ),
-    );
-  }
+      );
+    }
 
-    Widget cartIsEmpty() {
+    Widget cartLists() {
       return Container(
         margin: EdgeInsets.only(
-          top: defaultMargin*2.5,
-          right: defaultMargin,
-          left: defaultMargin,
+          top: defaultMargin,
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset(
-              'assets/icons/icon_empty_cart.png',
-              width: 80,
-            ),
-            const SizedBox(height: 20),
             Text(
-              'Opss!',
+              'Daftar Item',
               style: primaryTextStyle.copyWith(
                 fontSize: 16,
-                fontWeight: medium,
+                fontWeight: semiBold,
               ),
             ),
-            Text(
-              'Keranjang anda Kosong',
-              style: primaryTextStyle.copyWith(
-                fontSize: 16,
-                fontWeight: medium,
-              ),
+            Column(
+              children: [
+                const SizedBox(height: 10),
+                Column(
+                  children: cartVM.carts.map((e) => CartCard(e)).toList(),
+                ),
+                buttonOrder(),
+                const SizedBox(height: 20),
+              ],
             ),
-            const SizedBox(height: 10),
-            Text(
-              'Silahkan pilih menu',
-              maxLines: 2,
-              style: secondaryTextStyle,
-            ),
-            Text(
-              'yang akan anda Pesan',
-              maxLines: 2,
-              style: secondaryTextStyle,
-            ),
-          ]
+          ],
         ),
       );
     }
@@ -155,7 +156,7 @@ class _CartState extends State<Cart> {
         ),
         children: [
           customerInfo(),
-          cartIsEmpty(),
+          cartVM.carts.isEmpty ? const CartIsEmpty() : cartLists(),
         ],
       );
     }

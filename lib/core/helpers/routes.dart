@@ -1,6 +1,6 @@
 // import 'package:customer_pesenin/ui/views/checkin/form.dart';
 import 'package:customer_pesenin/ui/views/home_screen.dart';
-import 'package:customer_pesenin/ui/views/orders/cart.dart';
+import 'package:customer_pesenin/ui/views/orders/cart_screen.dart';
 import 'package:flutter/material.dart';
 // import 'package:customer_pesenin/ui/views/splash_screen.dart';
 import 'package:customer_pesenin/ui/views/onboarding_screen.dart';

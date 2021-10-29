@@ -1,22 +1,18 @@
 import 'package:customer_pesenin/core/models/product.dart';
-// import 'package:json_annotation/json_annotation.dart';
 
-// part 'cart.g.dart';
+class CartModel {
 
-// @JsonSerializable()
-class Cart {
-
-  String? id;
+  int? id;
   Product? product;
   int? qty;
 
-  Cart({
-    required this.id,
-    required this.product,
-    required this.qty,
+  CartModel({
+    this.id,
+    this.product,
+    this.qty,
   });
 
-  Cart.fromJson(Map<String, dynamic> json) {
+  CartModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     product = Product.fromJson(json['product']);
     qty = json['qty'];
