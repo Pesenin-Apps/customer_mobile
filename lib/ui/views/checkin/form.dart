@@ -61,15 +61,15 @@ class _CheckInFormState extends State<CheckInForm> {
     if(response) {
       locator<NavigationCustom>().navigateReplace('/');
     } else {
-       ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: alertColor,
-            content: const Text(
-              'Gagal Login!',
-              textAlign: TextAlign.center,
-            ),
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: alertColor,
+          content: const Text(
+            'Gagal Check In!',
+            textAlign: TextAlign.center,
           ),
-        );
+        ),
+      );
     }
 
     setState(() {
@@ -138,7 +138,7 @@ class _CheckInFormState extends State<CheckInForm> {
                     Expanded(
                       child: TextFormField(
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
+                          if (value!.isEmpty) {
                             return 'Masukkan Nama Anda';
                           }
                           return null;
