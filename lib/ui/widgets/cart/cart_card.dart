@@ -5,7 +5,7 @@ import 'package:customer_pesenin/core/viewmodels/cart_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CartCard extends StatelessWidget {
+class CartCard extends StatefulWidget {
   final CartModel? cart;
   const CartCard(
     this.cart, { 
@@ -14,7 +14,13 @@ class CartCard extends StatelessWidget {
   ) : super(key: key);
 
   @override
+  State<CartCard> createState() => _CartCardState();
+}
+
+class _CartCardState extends State<CartCard> {
+  @override
   Widget build(BuildContext context) {
+
     CartVM cartVM = Provider.of<CartVM>(context);
 
     Widget imageUrl() {
@@ -25,7 +31,7 @@ class CartCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           image: DecorationImage(
             image: NetworkImage(
-              'https://pesenin.onggolt-dev.com/uploads/' + cart!.product!.image.toString(),
+              'https://pesenin.onggolt-dev.com/uploads/' + widget.cart!.product!.image.toString(),
             ),
           ),
         ),
@@ -63,20 +69,20 @@ class CartCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              cart!.product!.image.toString() != 'null' ? imageUrl() : imagePlaceholder(),
+              widget.cart!.product!.image.toString() != 'null' ? imageUrl() : imagePlaceholder(),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      cart!.product!.name.toString(),
+                      widget.cart!.product!.name.toString(),
                       style: primaryTextStyle.copyWith(
                         fontWeight: semiBold,
                       ),
                     ),
                     Text(
-                      formatCurrency.format(cart!.product!.price),
+                      formatCurrency.format(widget.cart!.product!.price),
                       style: priceTextStyle,
                     ),
                   ],
@@ -86,16 +92,16 @@ class CartCard extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      cartVM.addQty(cart!.id!);
+                      if (mounted) cartVM.addQty(widget.cart!.id!);
                     },
                     child: Image.asset(
                       'assets/icons/icon_cart_add.png',
-                      width: 16,
+                      width: 18,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    cart!.qty.toString(),
+                    widget.cart!.qty.toString(),
                     style: primaryTextStyle.copyWith(
                       fontWeight: medium,
                     ),
@@ -103,11 +109,11 @@ class CartCard extends StatelessWidget {
                   const SizedBox(height: 2),
                   GestureDetector(
                     onTap: () {
-                      cartVM.reduceQty(cart!.id!);
+                      if (mounted) cartVM.reduceQty(widget.cart!.id!);
                     },
                     child: Image.asset(
                       'assets/icons/icon_cart_minus.png',
-                      width: 16,
+                      width: 18,
                     ),
                   ),
                 ],
@@ -117,7 +123,7 @@ class CartCard extends StatelessWidget {
           const SizedBox(height: 12),
           GestureDetector(
             onTap: () {
-              cartVM.removeCart(cart!.id!);
+              if (mounted) cartVM.removeCart(widget.cart!.id!);
             },
             child: Row(
               children: [

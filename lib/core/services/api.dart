@@ -28,6 +28,23 @@ class Api {
     }
   }
 
+  Future<bool> checkOut() async {
+    try {
+      await _dio.post(
+        '/customers/check-out',
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          },
+        ),
+      );
+      return true;
+    } catch (e) {
+      print('error: $e');
+      return false;
+    }
+  }
+
   /* ========= START API CUSTOMER ========= */
 
 
@@ -37,11 +54,11 @@ class Api {
     try {
       var response = await _dio.get(
         '/products/categories',
-        options: Options(
-          headers: {
-            'requiresToken': true,
-          }
-        ),
+        // options: Options(
+        //   headers: {
+        //     'requiresToken': true,
+        //   }
+        // ),
       );
       // print(response.data['data']);
       return (response.data['data'] as List<dynamic>).map((e) {
@@ -57,11 +74,11 @@ class Api {
     try {
       var response = await _dio.get(
         '/products?period=all&category=$category',
-        options: Options(
-          headers: {
-            'requiresToken': true,
-          }
-        ),
+        // options: Options(
+        //   headers: {
+        //     'requiresToken': true,
+        //   }
+        // ),
       );
       // print(response.data['data']);
       return (response.data['data'] as List<dynamic>).map((e) {

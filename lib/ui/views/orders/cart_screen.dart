@@ -2,11 +2,13 @@ import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/cart_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/customer_vm.dart';
+import 'package:customer_pesenin/ui/views/onboarding_screen.dart';
 import 'package:customer_pesenin/ui/widgets/cart/cart_card.dart';
 import 'package:customer_pesenin/ui/widgets/cart/cart_is_empty.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
+import 'package:flutter/rendering.dart';
 import 'package:provider/provider.dart';
 
 class Cart extends StatefulWidget {
@@ -21,7 +23,7 @@ class _CartState extends State<Cart> {
 
   @override
   void initState() {
-    getUser();
+    if (mounted) getUser();
     super.initState();
   }
 
@@ -33,6 +35,99 @@ class _CartState extends State<Cart> {
   Widget build(BuildContext context) {
     
     CartVM cartVM = Provider.of<CartVM>(context);
+
+    Future<void> showConfirmDialog() async {
+      return showDialog(
+        context: context, 
+        builder: (BuildContext context) => Container(
+          margin: EdgeInsets.zero,
+          width: MediaQuery.of(context).size.width - (2 * defaultMargin),
+          child: AlertDialog(
+            backgroundColor: backgroundColor3,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                        Icons.close,
+                        color: primaryTextColor,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    Icons.error_outline_rounded,
+                    color: primaryColor,
+                    size: 100,
+                  ),
+                  const SizedBox( height: 12),
+                  Text(
+                    'Anda ingin Check Out?',
+                    style: primaryTextStyle.copyWith(
+                      fontSize: 18,
+                      fontWeight: semiBold,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Anda harus Check In ulang',
+                    style: secondaryTextStyle.copyWith(
+                      fontSize: 13,
+                    ),
+                  ),
+                  Text(
+                    'jika ingin melakukan',
+                    style: secondaryTextStyle.copyWith(
+                      fontSize: 13,
+                    ),
+                  ),
+                  Text(
+                    'pemesanan kembali',
+                    style: secondaryTextStyle.copyWith(
+                      fontSize: 13,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () {
+                      Provider.of<CustomerVM>(context, listen: false).checkOut();
+                      Navigator.pushNamedAndRemoveUntil(context, OnBoardingScreen.routeName, (route) => false);
+                    },
+                    child: Container(
+                      width: 150,
+                      height: 40,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
+                      decoration:  BoxDecoration(
+                        borderRadius: BorderRadius.circular(12),
+                        color: alertColor,
+                      ),
+                      child: Text(
+                        'Check Out',
+                        style: primaryTextStyle.copyWith(
+                          fontSize: 13,
+                          fontWeight: semiBold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        )
+      );
+    }
 
     Widget customerInfo() {
       return Container(
@@ -60,16 +155,16 @@ class _CartState extends State<Cart> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${customerVM.customer?.name}',
-                      style: primaryTextStyle.copyWith(
-                        fontSize: 16,
+                      '${customerVM.customer?.checkInNumber}',
+                      style: secondaryTextStyle.copyWith(
+                        fontSize: 12,
                         fontWeight: bold,
                       ),
                     ),
                     Text(
-                      '${customerVM.customer?.checkInNumber}',
-                      style: secondaryTextStyle.copyWith(
-                        fontSize: 12,
+                      '${customerVM.customer?.name}',
+                      style: primaryTextStyle.copyWith(
+                        fontSize: 16,
                         fontWeight: bold,
                       ),
                     ),
@@ -106,7 +201,7 @@ class _CartState extends State<Cart> {
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
-            )
+            ),
           ),
           child: Text(
             'Pesan Sekarang',
@@ -214,6 +309,7 @@ class _CartState extends State<Cart> {
                     child: TextButton(
                       onPressed: () {
                         // Navigator.pushNamed(context, '/checkout');
+                        showConfirmDialog();
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: alertColor,

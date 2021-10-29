@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:customer_pesenin/core/utils/constans.dart';
@@ -7,7 +6,6 @@ import 'package:customer_pesenin/core/viewmodels/product_vm.dart';
 import 'package:customer_pesenin/ui/views/onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
-  // static const routeName = '/';
   const SplashScreen({ Key? key }) : super(key: key);
 
   @override

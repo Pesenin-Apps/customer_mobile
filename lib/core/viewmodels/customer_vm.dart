@@ -94,5 +94,24 @@ class CustomerVM extends ChangeNotifier {
       throw e;
     }
   }
+
+  void checkOut() async {
+    final response = await api.checkOut();
+    if (response) {
+      // print('Req Checkout On server');
+      notifyListeners();
+      _token = null;
+      // print('token destroy');
+      notifyListeners();
+      final prefs = await SharedPreferences.getInstance();
+      prefs.remove('customerNewData');
+      prefs.remove('tokenData');
+      customer = null;
+      // locator<NavigationCustom>().navigateReplace('/');
+      // print('destroy preferences');
+    } else {
+      print('Something Is Wrong');
+    }
+  }
   
 }
