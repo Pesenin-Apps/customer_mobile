@@ -1,14 +1,18 @@
+import 'dart:async';
+
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/cart_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/customer_vm.dart';
 import 'package:customer_pesenin/ui/views/onboarding_screen.dart';
+import 'package:customer_pesenin/ui/views/orders/order_screen.dart';
 import 'package:customer_pesenin/ui/widgets/cart/cart_card.dart';
 import 'package:customer_pesenin/ui/widgets/cart/cart_is_empty.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class Cart extends StatefulWidget {
@@ -21,6 +25,8 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
 
+  bool isLoadingCheckOut = false;
+
   @override
   void initState() {
     if (mounted) getUser();
@@ -29,6 +35,16 @@ class _CartState extends State<Cart> {
 
   getUser() async {
     await Provider.of<CustomerVM>(context, listen: false).fetchCustomer();
+  }
+
+  void checkOutAction() {
+    setState(() {
+      isLoadingCheckOut = true;
+    });
+    Future.delayed(const Duration(seconds: 2), () {
+      Provider.of<CustomerVM>(context, listen: false).checkOut();
+      Navigator.pushNamedAndRemoveUntil(context, OnBoardingScreen.routeName, (route) => false);
+    });
   }
 
   @override
@@ -95,21 +111,20 @@ class _CartState extends State<Cart> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  GestureDetector(
-                    onTap: () {
-                      Provider.of<CustomerVM>(context, listen: false).checkOut();
-                      Navigator.pushNamedAndRemoveUntil(context, OnBoardingScreen.routeName, (route) => false);
-                    },
-                    child: Container(
-                      width: 150,
-                      height: 40,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10,
-                      ),
-                      decoration:  BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: alertColor,
+                  Container(
+                    width: 150,
+                    height: 40,
+                    margin: EdgeInsets.zero,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        checkOutAction();
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: alertColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                       child: Text(
                         'Check Out',
@@ -117,10 +132,49 @@ class _CartState extends State<Cart> {
                           fontSize: 13,
                           fontWeight: semiBold,
                         ),
-                        textAlign: TextAlign.center,
                       ),
                     ),
-                  ),
+                  )
+                  // GestureDetector(
+                  //   onTap: checkOutAction,
+                  //   child: Container(
+                  //     width: 150,
+                  //     height: 40,
+                  //     padding: const EdgeInsets.symmetric(
+                  //       horizontal: 12,
+                  //       vertical: 10,
+                  //     ),
+                  //     decoration:  BoxDecoration(
+                  //       borderRadius: BorderRadius.circular(12),
+                  //       color: alertColor,
+                  //     ),
+                  //     child: Row(
+                  //       mainAxisAlignment: MainAxisAlignment.center,
+                  //       children: [
+                  //         isLoadingCheckOut ? Container(
+                  //           width: 16,
+                  //           height: 16,
+                  //           margin: EdgeInsets.zero,
+                  //           child: CircularProgressIndicator(
+                  //             strokeWidth: 2,
+                  //             valueColor: AlwaysStoppedAnimation(
+                  //               primaryTextColor,
+                  //             ),
+                  //           ),
+                  //         ) : const SizedBox(),
+                  //         isLoadingCheckOut ? const SizedBox(width: 8) : const SizedBox(),
+                  //         Text(
+                  //           'Check Out',
+                  //           style: primaryTextStyle.copyWith(
+                  //             fontSize: 13,
+                  //             fontWeight: semiBold,
+                  //           ),
+                  //           textAlign: TextAlign.center,
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -275,7 +329,7 @@ class _CartState extends State<Cart> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        // Navigator.pushNamed(context, '/checkout');
+                        Navigator.pushNamed(context, OrderScreen.routeName);
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: secondaryColor,
@@ -308,7 +362,6 @@ class _CartState extends State<Cart> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        // Navigator.pushNamed(context, '/checkout');
                         showConfirmDialog();
                       },
                       style: TextButton.styleFrom(
@@ -318,7 +371,17 @@ class _CartState extends State<Cart> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: Row(
+                      child: isLoadingCheckOut ? Container(
+                        width: 16,
+                        height: 16,
+                        margin: EdgeInsets.zero,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation(
+                            primaryTextColor,
+                          ),
+                        ),
+                      ) : Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Icon(
