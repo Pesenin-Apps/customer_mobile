@@ -79,15 +79,15 @@ class CustomerVM extends ChangeNotifier {
       if (!prefs.containsKey('customerNewData')) {
         return false;
       }
-      final extractDataUser = json.decode(prefs.getString('customerNewData')!);
+      final extractDataCustomer = json.decode(prefs.getString('customerNewData')!);
       final extractedToken = json.decode(prefs.getString('tokenData')!);
       final token = extractedToken['token'];
       _token = token;
 
       locator<NavigationCustom>().navigateReplace('/');
-      // print(extractDataUser);
+      // print(extractDataCustomer);
       notifyListeners();
-      customer = Customer.fromJson(extractDataUser);
+      customer = Customer.fromJson(extractDataCustomer);
       notifyListeners();
       return true;
     } catch (e) {

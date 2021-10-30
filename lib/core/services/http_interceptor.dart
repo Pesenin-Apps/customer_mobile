@@ -36,17 +36,24 @@ class HttpInterceptors extends Interceptor {
   Future<dynamic> onError(DioError err, ErrorInterceptorHandler handler) async {
     
     // print(err.response!.statusCode);
+    final errorMessage = DioExceptions.fromDioError(err).toString();
     if (DioExceptions.fromDioError(err).getStatusCode() == 401) {
       // implement logout
-      await SharedPreferences.getInstance();
-      locator<NavigationCustom>().navigateReplace('/');
+      // await SharedPreferences.getInstance();
+      final prefs = await SharedPreferences.getInstance();
+      prefs.remove('customerNewData');
+      prefs.remove('tokenData');
+      locator<NavigationCustom>().navigateReplace('/onboarding');
+    } else if ([400, 402, 403, 404].contains(DioExceptions.fromDioError(err).getStatusCode())) {
+      _dialogError!.showErrorDialog(jsonDecode(err.response!.toString())['message']);
+    } else {
+      _dialogError!.showErrorDialog(errorMessage);
     }
-    // final errorMessage = DioExceptions.fromDioError(err).toString();
     // final statusCode = DioExceptions.fromDioError(dioError).getStatusCode();
     // print('errormessage: $errorMessage');
-    if (DioExceptions.fromDioError(err).getStatusCode() != 404) {
-      _dialogError!.showErrorDialog(jsonDecode(err.response!.toString())['message']);
-    }
+    // if (DioExceptions.fromDioError(err).getStatusCode() != 404) {
+    //   _dialogError!.showErrorDialog(jsonDecode(err.response!.toString())['message']);
+    // }
     
     super.onError(err, handler);
 

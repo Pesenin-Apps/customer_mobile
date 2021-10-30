@@ -59,6 +59,10 @@ class _CartState extends State<Cart> {
         if (response) {
           Navigator.pushNamed(context, OrderScreen.routeName);
           cartVM.carts = [];
+        } else {
+          setState(() {
+            isLoadingOrder = false;
+          });
         }
       });
     } catch (e) {

@@ -125,7 +125,15 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return SafeArea(
-      child: Scaffold(
+      child:  _isLoadingPage ? Center(
+          child: SizedBox(
+            height: 33,
+            width: 33,
+            child: CircularProgressIndicator(
+              color: primaryColor,
+            ),
+          ),
+        ) : Scaffold(
         backgroundColor: backgroundColor1,
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(80.0),
@@ -213,15 +221,7 @@ class _HomeScreenState extends State<HomeScreen> {
             )
           ),
         ),
-        body: _isLoadingPage ? Center(
-          child: SizedBox(
-            height: 33,
-            width: 33,
-            child: CircularProgressIndicator(
-              color: primaryColor,
-            ),
-          ),
-        ) : ListView(
+        body: ListView(
           children: [
             lists(),
           ]
