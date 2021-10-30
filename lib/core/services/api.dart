@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:customer_pesenin/core/models/customer.dart';
+import 'package:customer_pesenin/core/models/order.dart';
 import 'package:customer_pesenin/core/models/table.dart';
 import 'package:dio/dio.dart';
 import 'package:customer_pesenin/core/models/product.dart';
@@ -127,6 +128,24 @@ class Api {
   
   
   /* ========= START API ORDER ========= */
+
+  Future<Order?> getOrder() async {
+    try {
+      var response = await _dio.get(
+        '/customers/orders',
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          },
+        ),
+      );
+      return Order.fromJson({
+        ...response.data['data']
+      });
+    } catch (e) {
+      return null;
+    }
+  }
 
   Future<bool> postOrder(List<CartModel> carts)  async {
     try {

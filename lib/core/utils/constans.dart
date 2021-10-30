@@ -25,3 +25,16 @@ FontWeight regular = FontWeight.w400;
 FontWeight medium = FontWeight.w500;
 FontWeight semiBold = FontWeight.w600;
 FontWeight bold = FontWeight.w700;
+
+String orderItemStatusStr(int orderItemStatus) {
+  switch (orderItemStatus) {
+    case 1:
+      return 'Menunggu Verifikasi Pelayan';
+    case 2:
+      return 'Dalam Antrian';
+    case 3:
+      return 'Sedang Diproses';
+    default:
+      return 'Telah Selesai';
+  }
+}
