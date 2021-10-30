@@ -20,9 +20,9 @@ class Cart extends StatefulWidget {
 
 class _CartState extends State<Cart> {
 
+  bool isLoadingPage = false;
   bool isLoadingCheckOut = false;
   bool isLoadingOrder = false;
-  bool isOrdering = false;
 
   @override
   void initState() {
@@ -31,25 +31,20 @@ class _CartState extends State<Cart> {
   }
 
   getUser() async {
+    if (mounted) setState(() => isLoadingPage = true );
     await Provider.of<CustomerVM>(context, listen: false).fetchCustomer();
-    final OrderVM orderVM = Provider.of<OrderVM>(context, listen: false);
-    if (orderVM.isExist) {
-      await orderVM.fetchOrderDetail();
-      if (orderVM.isOrdering) {
-        setState(() {
-          isOrdering = true;
-        });
-      } 
-    }
+    if (mounted) setState(() => isLoadingPage = false );
   }
 
   void checkOutAction() {
-    setState(() {
-      isLoadingCheckOut = true;
-    });
-    Future.delayed(const Duration(seconds: 2), () {
-      Provider.of<CustomerVM>(context, listen: false).checkOut();
-      Navigator.pushNamedAndRemoveUntil(context, OnBoardingScreen.routeName, (route) => false);
+    if (mounted) setState(() => isLoadingCheckOut = true );
+    Future.delayed(const Duration(seconds: 2), () async {
+      final response = await Provider.of<CustomerVM>(context, listen: false).checkOut();
+      if (response) {
+        Navigator.pushNamedAndRemoveUntil(context, OnBoardingScreen.routeName, (route) => false);
+      } else {
+        if (mounted) setState(() => isLoadingCheckOut = false );
+      }
     });
   }
 
@@ -349,7 +344,7 @@ class _CartState extends State<Cart> {
                     ),
                   ), 
                 ),
-                isOrdering ? const SizedBox() : Expanded(
+                Expanded(
                   child: Container(
                     height: 40,
                     margin: EdgeInsets.symmetric(
@@ -420,7 +415,15 @@ class _CartState extends State<Cart> {
         centerTitle: true,
         title: const Text('Keranjang'),
       ),
-      body: content(),
+      body: isLoadingPage ? Center(
+        child: SizedBox(
+          height: 33,
+          width: 33,
+          child: CircularProgressIndicator(
+            color: primaryColor,
+          ),
+        ),
+      ) : content(),
       bottomNavigationBar: customNavigationBar(),
     );
 

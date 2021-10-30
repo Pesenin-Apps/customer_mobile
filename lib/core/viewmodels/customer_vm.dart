@@ -95,7 +95,7 @@ class CustomerVM extends ChangeNotifier {
     }
   }
 
-  void checkOut() async {
+  Future<bool> checkOut() async {
     final response = await api.checkOut();
     if (response) {
       // print('Req Checkout On server');
@@ -109,8 +109,10 @@ class CustomerVM extends ChangeNotifier {
       customer = null;
       // locator<NavigationCustom>().navigateReplace('/');
       // print('destroy preferences');
+      return true;
     } else {
-      print('Something Is Wrong');
+      return false;
+      // print('Something Is Wrong');
     }
   }
   

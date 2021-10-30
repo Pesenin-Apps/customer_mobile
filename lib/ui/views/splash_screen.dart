@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   onBoarding() async {
     await Provider.of<ProductVM>(context, listen: false).fetchProducts('');
-    Navigator.pushReplacementNamed(context, OnBoardingScreen.routeName);
+    if (mounted) Navigator.pushReplacementNamed(context, OnBoardingScreen.routeName);
   }
 
   @override

@@ -41,11 +41,11 @@ class HttpInterceptors extends Interceptor {
       await SharedPreferences.getInstance();
       locator<NavigationCustom>().navigateReplace('/');
     }
-    final errorMessage = DioExceptions.fromDioError(err).toString();
+    // final errorMessage = DioExceptions.fromDioError(err).toString();
     // final statusCode = DioExceptions.fromDioError(dioError).getStatusCode();
     // print('errormessage: $errorMessage');
     if (DioExceptions.fromDioError(err).getStatusCode() != 404) {
-      _dialogError!.showErrorDialog(errorMessage);
+      _dialogError!.showErrorDialog(jsonDecode(err.response!.toString())['message']);
     }
     
     super.onError(err, handler);
