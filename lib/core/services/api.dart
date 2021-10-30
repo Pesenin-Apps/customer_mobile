@@ -40,7 +40,7 @@ class Api {
       );
       return true;
     } catch (e) {
-      print('error: $e');
+      // print('error: $e');
       return false;
     }
   }
