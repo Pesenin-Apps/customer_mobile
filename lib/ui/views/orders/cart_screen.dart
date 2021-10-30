@@ -58,8 +58,8 @@ class _CartState extends State<Cart> {
         final bool response = await orderVM.createOrder(cartVM.carts);
         if (response) {
           Navigator.pushNamed(context, OrderScreen.routeName);
+          cartVM.carts = [];
         }
-        cartVM.carts = [];
       });
     } catch (e) {
       print(e);
