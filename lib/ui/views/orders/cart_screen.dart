@@ -33,12 +33,14 @@ class _CartState extends State<Cart> {
   getUser() async {
     await Provider.of<CustomerVM>(context, listen: false).fetchCustomer();
     final OrderVM orderVM = Provider.of<OrderVM>(context, listen: false);
-    await orderVM.fetchOrderDetail();
-    if (orderVM.isOrdering) {
-      setState(() {
-        isOrdering = true;
-      });
-    } 
+    if (orderVM.isExist) {
+      await orderVM.fetchOrderDetail();
+      if (orderVM.isOrdering) {
+        setState(() {
+          isOrdering = true;
+        });
+      } 
+    }
   }
 
   void checkOutAction() {
@@ -205,10 +207,10 @@ class _CartState extends State<Cart> {
                       ),
                     ),
                     Text(
-                      '${customerVM.customer?.table?.name}',
+                      '${customerVM.customer?.table?.section?.name} No. ${customerVM.customer?.table?.number}',
                       style: secondaryTextStyle.copyWith(
                         fontSize: 14,
-                        fontWeight: semiBold
+                        fontWeight: medium
                       ),
                     ),
                     Text(
