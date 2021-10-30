@@ -23,7 +23,7 @@ class Api {
       );
       return Customer.fromJson(response.data['customer']);
     } on DioError catch (e) {
-      // print('error: $e');
+      print('error: $e');
       return null;
     }
   }
