@@ -21,3 +21,7 @@ TextStyle subtitleTextStyle = GoogleFonts.poppins(
 TextStyle dangerTextStyle = GoogleFonts.poppins(
   color: alertColor
 );
+
+TextStyle warningTextStyle = GoogleFonts.poppins(
+  color: warningColor
+);
