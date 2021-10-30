@@ -16,6 +16,34 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   Widget build(BuildContext context) {
 
+    Widget emptyCart() {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.error_outline_rounded,
+              color: primaryColor,
+              size: 100,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'Tidak Ada Pesanan',
+              style: primaryTextStyle.copyWith(
+                fontSize: 16,
+                fontWeight: medium,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              'Anda belum melakukan Pemesanan',
+              style: secondaryTextStyle,
+            ),
+          ],
+        ),
+      );
+    }
+
     Widget listOrders() {
       return Container(
         margin: EdgeInsetsDirectional.only(
@@ -144,7 +172,7 @@ class _OrderScreenState extends State<OrderScreen> {
         centerTitle: true,
         title: const Text('Pesanan Saya')
       ),
-      body: content(),
+      body: 1 == 1 ? emptyCart() : content(),
     );
 
   }
