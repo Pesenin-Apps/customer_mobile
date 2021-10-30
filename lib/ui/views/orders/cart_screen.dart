@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/cart_vm.dart';
@@ -23,6 +22,7 @@ class _CartState extends State<Cart> {
 
   bool isLoadingCheckOut = false;
   bool isLoadingOrder = false;
+  bool isOrdering = false;
 
   @override
   void initState() {
@@ -32,6 +32,13 @@ class _CartState extends State<Cart> {
 
   getUser() async {
     await Provider.of<CustomerVM>(context, listen: false).fetchCustomer();
+    final OrderVM orderVM = Provider.of<OrderVM>(context, listen: false);
+    await orderVM.fetchOrderDetail();
+    if (orderVM.isOrdering) {
+      setState(() {
+        isOrdering = true;
+      });
+    } 
   }
 
   void checkOutAction() {
@@ -340,8 +347,7 @@ class _CartState extends State<Cart> {
                     ),
                   ), 
                 ),
-                // it hidden if is a order processed
-                Expanded(
+                isOrdering ? const SizedBox() : Expanded(
                   child: Container(
                     height: 40,
                     margin: EdgeInsets.symmetric(

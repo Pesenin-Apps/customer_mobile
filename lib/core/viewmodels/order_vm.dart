@@ -17,6 +17,11 @@ class OrderVM extends ChangeNotifier {
     return _orderDetail != null;
   }
 
+  bool get isOrdering {
+    var statusOrder = [ 2, 3, 4 ];
+    return statusOrder.contains(_orderDetail!.status);
+  }
+
   Future fetchOrderDetail() async {
     _orderDetail = await api.getOrder();
     notifyListeners();
