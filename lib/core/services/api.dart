@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:customer_pesenin/core/models/customer.dart';
 import 'package:customer_pesenin/core/models/table.dart';
 import 'package:dio/dio.dart';
 import 'package:customer_pesenin/core/models/product.dart';
+import 'package:customer_pesenin/core/models/cart.dart';
 import 'package:customer_pesenin/core/services/http_interceptor.dart';
 import 'package:customer_pesenin/core/services/http_option.dart';
 
@@ -121,5 +124,33 @@ class Api {
   }
 
   /* ========= END API TABLE ========= */
+  
+  
+  /* ========= START API ORDER ========= */
+
+  Future<bool> postOrder(List<CartModel> carts)  async {
+    try {
+      var body = jsonEncode({
+        'orders': carts.map((cart) => {
+          'item': cart.product!.id,
+          'qty': cart.qty,
+        }).toList(),
+      });
+      await _dio.post(
+        '/customers/orders',
+        data: body,
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          },
+        ),
+      );
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /* ========= END API ORDER ========= */
 
 }

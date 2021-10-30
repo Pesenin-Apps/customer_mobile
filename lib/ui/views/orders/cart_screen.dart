@@ -1,18 +1,14 @@
 import 'dart:async';
-
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/cart_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/customer_vm.dart';
+import 'package:customer_pesenin/core/viewmodels/order_vm.dart';
 import 'package:customer_pesenin/ui/views/onboarding_screen.dart';
 import 'package:customer_pesenin/ui/views/orders/order_screen.dart';
 import 'package:customer_pesenin/ui/widgets/cart/cart_card.dart';
 import 'package:customer_pesenin/ui/widgets/cart/cart_is_empty.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 class Cart extends StatefulWidget {
@@ -26,6 +22,7 @@ class Cart extends StatefulWidget {
 class _CartState extends State<Cart> {
 
   bool isLoadingCheckOut = false;
+  bool isLoadingOrder = false;
 
   @override
   void initState() {
@@ -45,6 +42,24 @@ class _CartState extends State<Cart> {
       Provider.of<CustomerVM>(context, listen: false).checkOut();
       Navigator.pushNamedAndRemoveUntil(context, OnBoardingScreen.routeName, (route) => false);
     });
+  }
+
+  void submitOrder(CartVM cartVM) async {
+    setState(() {
+      isLoadingOrder = true;
+    });
+    final OrderVM orderVM = Provider.of<OrderVM>(context, listen: false);
+    try {
+      Future.delayed(const Duration(seconds: 3), () async {
+        final bool response = await orderVM.createOrder(cartVM.carts);
+        if (response) {
+          Navigator.pushNamed(context, OrderScreen.routeName);
+        }
+        cartVM.carts = [];
+      });
+    } catch (e) {
+      print(e);
+    }
   }
 
   @override
@@ -134,47 +149,7 @@ class _CartState extends State<Cart> {
                         ),
                       ),
                     ),
-                  )
-                  // GestureDetector(
-                  //   onTap: checkOutAction,
-                  //   child: Container(
-                  //     width: 150,
-                  //     height: 40,
-                  //     padding: const EdgeInsets.symmetric(
-                  //       horizontal: 12,
-                  //       vertical: 10,
-                  //     ),
-                  //     decoration:  BoxDecoration(
-                  //       borderRadius: BorderRadius.circular(12),
-                  //       color: alertColor,
-                  //     ),
-                  //     child: Row(
-                  //       mainAxisAlignment: MainAxisAlignment.center,
-                  //       children: [
-                  //         isLoadingCheckOut ? Container(
-                  //           width: 16,
-                  //           height: 16,
-                  //           margin: EdgeInsets.zero,
-                  //           child: CircularProgressIndicator(
-                  //             strokeWidth: 2,
-                  //             valueColor: AlwaysStoppedAnimation(
-                  //               primaryTextColor,
-                  //             ),
-                  //           ),
-                  //         ) : const SizedBox(),
-                  //         isLoadingCheckOut ? const SizedBox(width: 8) : const SizedBox(),
-                  //         Text(
-                  //           'Check Out',
-                  //           style: primaryTextStyle.copyWith(
-                  //             fontSize: 13,
-                  //             fontWeight: semiBold,
-                  //           ),
-                  //           textAlign: TextAlign.center,
-                  //         ),
-                  //       ],
-                  //     ),
-                  //   ),
-                  // ),
+                  ),
                 ],
               ),
             ),
@@ -250,14 +225,26 @@ class _CartState extends State<Cart> {
         width: double.infinity,
         margin: const EdgeInsets.only(top: 30, bottom: 30),
         child: TextButton(
-          onPressed: () {},
+          onPressed: () {
+            submitOrder(cartVM);
+          },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
           ),
-          child: Text(
+          child: isLoadingOrder ? Container(
+            width: 16,
+            height: 16,
+            margin: EdgeInsets.zero,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation(
+                primaryTextColor,
+              ),
+            ),
+          ) : Text(
             'Pesan Sekarang',
             style: primaryTextStyle.copyWith(
               fontSize: 13,
