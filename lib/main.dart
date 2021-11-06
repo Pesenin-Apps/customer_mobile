@@ -1,3 +1,4 @@
+import 'package:customer_pesenin/core/helpers/routes_generator.dart';
 import 'package:customer_pesenin/core/services/navigation_custom.dart';
 import 'package:customer_pesenin/core/viewmodels/customer_vm.dart';
 import 'package:customer_pesenin/ui/views/home_screen.dart';
@@ -35,6 +36,7 @@ class MyApp extends StatelessWidget {
           ),
           navigatorKey: locator<NavigationCustom>().navigatorKey,
           routes: routesCustom,
+          onGenerateRoute: RouteGenerator.generateRoutes,
         )
       )
     );

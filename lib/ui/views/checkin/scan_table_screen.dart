@@ -1,7 +1,8 @@
+import 'package:customer_pesenin/core/helpers/routes_generator.dart';
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/customer_vm.dart';
-import 'package:customer_pesenin/ui/views/checkin/form.dart';
+import 'package:customer_pesenin/ui/views/checkin/form_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -139,12 +140,19 @@ class _ScanTableState extends State<ScanTable> {
         child: TextButton(
           onPressed: () {
             // Navigator.popAndPushNamed(context, CheckInForm.routeName, arguments: { customerVM.tableDetail.id },);
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => CheckInForm(table: customerVM.tableDetail.id.toString())
+             Navigator.popAndPushNamed(
+              context, 
+              CheckInForm.routeName,
+              arguments: ScreenArguments(
+                id: customerVM.tableDetail.id.toString(), 
               ),
             );
+            // Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => CheckInForm(table: customerVM.tableDetail.id.toString())
+            //   ),
+            // );
           },
           style: TextButton.styleFrom(
             padding: const EdgeInsets.all(12),

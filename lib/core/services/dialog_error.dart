@@ -21,7 +21,7 @@ class DialogError {
               children: [
                 Align(
                   alignment: Alignment.centerLeft,
-                  child: GestureDetector(
+                  child: InkWell(
                     onTap: () {
                       Navigator.pop(context);
                     },

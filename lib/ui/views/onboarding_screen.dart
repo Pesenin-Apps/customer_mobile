@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/utils/constans.dart';
-import 'package:customer_pesenin/ui/views/checkin/scan_table.dart';
+import 'package:customer_pesenin/ui/views/checkin/scan_table_screen.dart';
 
 class OnBoardingScreen extends StatelessWidget {
   static const routeName = '/onboarding';

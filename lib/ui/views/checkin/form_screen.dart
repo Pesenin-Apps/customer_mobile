@@ -3,7 +3,6 @@ import 'package:customer_pesenin/core/services/navigation_custom.dart';
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/customer_vm.dart';
-import 'package:customer_pesenin/ui/widgets/components/loading_button.dart';
 import 'package:device_info/device_info.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -173,7 +172,17 @@ class _CheckInFormState extends State<CheckInForm> {
               borderRadius: BorderRadius.circular(12),
             )
           ),
-          child: Text(
+          child: _isLoading ? Container(
+            width: 16,
+            height: 16,
+            margin: EdgeInsets.zero,
+            child: CircularProgressIndicator(
+              strokeWidth: 2,
+              valueColor: AlwaysStoppedAnimation(
+                primaryTextColor,
+              ),
+            ),
+          ) : Text(
             'Check In',
             style: primaryTextStyle.copyWith(
               fontSize: 16,
@@ -197,7 +206,7 @@ class _CheckInFormState extends State<CheckInForm> {
             children: [
               header(),
               inputName(),
-              _isLoading ? const LoadingButton() : buttonSubmit(),
+              buttonSubmit(),
             ],
           ),
         ),
