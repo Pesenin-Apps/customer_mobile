@@ -98,9 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   // centerTitle: true,
                   title: Text(
                     'PESENIN APPS',
-                    style: primaryTextStyle.copyWith(
-                      fontWeight: bold,
-                    ),
+                    style: titleApps,
                   ),
                   actions: <Widget>[
                     Container(

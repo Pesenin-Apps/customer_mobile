@@ -2,6 +2,10 @@ import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+TextStyle titleApps = GoogleFonts.fredokaOne(
+  color: primaryTextColor
+);
+
 TextStyle primaryTextStyle = GoogleFonts.poppins(
   color: primaryTextColor
 );
