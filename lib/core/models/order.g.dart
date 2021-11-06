@@ -14,9 +14,9 @@ Order _$OrderFromJson(Map<String, dynamic> json) {
     orderItem: (json['order_items'] as List<dynamic>?)
         ?.map((e) => OrderItem.fromJson(e as Map<String, dynamic>))
         .toList(),
-    tax: json['tax'] as int?,
-    totalPrice: json['total_price'] as int?,
-    totalOverall: json['total_overall'] as int?,
+    tax: (json['tax'] as num?)?.toDouble(),
+    totalPrice: (json['total_price'] as num?)?.toDouble(),
+    totalOverall: (json['total_overall'] as num?)?.toDouble(),
     customer: json['customer'] == null
         ? null
         : Customer.fromJson(json['customer'] as Map<String, dynamic>),
@@ -28,7 +28,7 @@ Order _$OrderFromJson(Map<String, dynamic> json) {
         : WaiterModel.fromJson(json['waiter'] as Map<String, dynamic>),
     createdAt: json['createdAt'] as String?,
     updatedAt: json['updatedAt'] as String?,
-  );
+  )..isPaid = json['is_paid'] as bool?;
 }
 
 Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
@@ -39,6 +39,7 @@ Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
       'tax': instance.tax,
       'total_price': instance.totalPrice,
       'total_overall': instance.totalOverall,
+      'is_paid': instance.isPaid,
       'customer': instance.customer,
       'table': instance.table,
       'createdAt': instance.createdAt,

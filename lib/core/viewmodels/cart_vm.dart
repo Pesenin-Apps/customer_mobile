@@ -6,7 +6,7 @@ class CartVM extends ChangeNotifier {
 
   List<CartModel> _carts = [];
 
-  List<CartModel> get carts=> _carts;
+  List<CartModel> get carts => _carts;
 
   set carts(List<CartModel> carts) {
     _carts = carts;
@@ -28,7 +28,7 @@ class CartVM extends ChangeNotifier {
     } else {
       _carts.add(
         CartModel(
-          id: _carts.length,
+          id: product.id,
           product: product,
           qty: 1,
         ),
@@ -37,20 +37,23 @@ class CartVM extends ChangeNotifier {
     notifyListeners();
   }
 
-  removeCart(int id) {
-    _carts.removeAt(id);
+  removeCart(String id) {
+    int index = _carts.indexWhere((element) => element.id == id);
+    _carts.removeAt(index);
     notifyListeners();
   }
 
-  addQty(int id) {
-    _carts[id].qty = _carts[id].qty! + 1;
+  addQty(String id) {
+    int index = _carts.indexWhere((element) => element.id == id);
+    _carts[index].qty = _carts[index].qty! + 1;
     notifyListeners();  
   }
 
-  reduceQty(int id) {
-    _carts[id].qty = _carts[id].qty! - 1;
-    if (_carts[id].qty == 0) {
-      _carts.removeAt(id);
+  reduceQty(String id) {
+    int index = _carts.indexWhere((element) => element.id == id);
+    _carts[index].qty = _carts[index].qty! - 1;
+    if (_carts[index].qty == 0) {
+      _carts.removeAt(index);
     }
     notifyListeners();
   }
@@ -62,6 +65,7 @@ class CartVM extends ChangeNotifier {
     }
     return total;
   }
+
   totalPrice() {
     int total = 0;
     for (var item in _carts) {

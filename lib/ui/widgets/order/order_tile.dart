@@ -1,17 +1,17 @@
 import 'package:customer_pesenin/core/models/order.dart';
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
+import 'package:customer_pesenin/ui/widgets/order/order_item_status.dart';
 import 'package:flutter/material.dart';
 
-class OrderCard extends StatelessWidget {
-  final OrderItem orderItem;
-  const OrderCard(
-    this.orderItem, { 
-      Key? key 
-    }
-  ) : super(key: key);
+class OrderTile extends StatelessWidget {
+   final OrderItem orderItem;
+  const OrderTile({ 
+      Key? key,
+      required this.orderItem
+  }) : super(key: key);
 
-  @override
+ @override
   Widget build(BuildContext context) {
 
     Widget imageUrl() {
@@ -45,13 +45,15 @@ class OrderCard extends StatelessWidget {
     }
 
     return Container(
-      margin: const EdgeInsets.only(top: 12),
+      margin: EdgeInsets.only(
+        top: defaultMargin/3,
+      ),
       padding: const EdgeInsets.symmetric(
         vertical: 20,
         horizontal: 12,
       ),
       decoration: BoxDecoration(
-        color: backgroundColor4,
+        color: backgroundColor2,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -70,12 +72,7 @@ class OrderCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 2),
-                Text(
-                  orderItemStatusStr(orderItem.status!),
-                  style: warningTextStyle.copyWith(
-                    fontSize: 10,
-                  ),
-                ),
+                OrderItemStatus(status: orderItem.status),
                 const SizedBox(height: 2),
                 Text(
                   formatCurrency.format(orderItem.product!.price),

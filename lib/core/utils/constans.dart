@@ -3,13 +3,20 @@ import 'package:intl/intl.dart';
 
 final formatCurrency = NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);
 
+final formatDate = DateFormat('dd MMMM yyyy', 'id_ID');
+final formatTime = DateFormat('Hms');
+final formatDateTime = DateFormat('dd-MM-yyyy Hms');
+final formatDateWithDay = DateFormat('EEEE, dd MMMM yyyy', 'id_ID');
+final formatDateTimeWithDay = DateFormat('EEEE, dd MMMM yyyy H:m:s', 'id_ID');
+
 double defaultMargin = 30.0;
 
 Color primaryColor = const Color(0xffFFA700);
 Color secondaryColor = const Color(0xff28BAAB);
 Color tertiaryColor = const Color(0xff8D887D);
-Color alertColor = const Color(0xffED6363);
+Color dangerColor = const Color(0xffED6363);
 Color warningColor = const Color(0xfffdac53);
+Color infoColor = const Color(0xff00a170);
 Color priceColor = const Color(0xff2C96F1 );
 Color backgroundColor1 = const Color(0xff252119);
 Color backgroundColor2 = const Color(0xff322D25);

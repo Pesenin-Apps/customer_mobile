@@ -5,7 +5,7 @@ import 'package:customer_pesenin/core/viewmodels/customer_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/order_vm.dart';
 import 'package:customer_pesenin/ui/views/onboarding_screen.dart';
 import 'package:customer_pesenin/ui/views/orders/order_screen.dart';
-import 'package:customer_pesenin/ui/widgets/cart/cart_card.dart';
+import 'package:customer_pesenin/ui/widgets/cart/cart_tile.dart';
 import 'package:customer_pesenin/ui/widgets/cart/cart_is_empty.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -91,7 +91,7 @@ class _CartState extends State<Cart> {
                 children: [
                   Align(
                     alignment: Alignment.centerLeft,
-                    child: GestureDetector(
+                    child: InkWell(
                       onTap: () {
                         Navigator.pop(context);
                       },
@@ -144,7 +144,7 @@ class _CartState extends State<Cart> {
                         checkOutAction();
                       },
                       style: TextButton.styleFrom(
-                        backgroundColor: alertColor,
+                        backgroundColor: dangerColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -174,7 +174,7 @@ class _CartState extends State<Cart> {
           vertical: 10,
         ),
         decoration: BoxDecoration(
-          color: backgroundColor1,
+          color: backgroundColor2,
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -227,42 +227,6 @@ class _CartState extends State<Cart> {
       );
     }
 
-    Widget buttonOrder() {
-      return Container(
-        height: 40,
-        width: double.infinity,
-        margin: const EdgeInsets.only(top: 30, bottom: 30),
-        child: TextButton(
-          onPressed: () {
-            submitOrder(cartVM);
-          },
-          style: TextButton.styleFrom(
-            backgroundColor: primaryColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
-          child: isLoadingOrder ? Container(
-            width: 16,
-            height: 16,
-            margin: EdgeInsets.zero,
-            child: CircularProgressIndicator(
-              strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation(
-                primaryTextColor,
-              ),
-            ),
-          ) : Text(
-            'Pesan Sekarang',
-            style: primaryTextStyle.copyWith(
-              fontSize: 13,
-              fontWeight: semiBold
-            ),
-          ),
-        ),
-      );
-    }
-
     Widget cartLists() {
       return Container(
         margin: EdgeInsets.only(
@@ -282,9 +246,8 @@ class _CartState extends State<Cart> {
               children: [
                 const SizedBox(height: 10),
                 Column(
-                  children: cartVM.carts.map((e) => CartCard(e)).toList(),
+                  children: cartVM.carts.map((e) => CartTile(cart: e)).toList(),
                 ),
-                buttonOrder(),
                 const SizedBox(height: 20),
               ],
             ),
@@ -309,7 +272,7 @@ class _CartState extends State<Cart> {
       return Container(
         height: 80,
         decoration: BoxDecoration(
-          color: backgroundColor1,
+          color: backgroundColor3,
         ),
         child: Column(
           children: [
@@ -327,7 +290,7 @@ class _CartState extends State<Cart> {
                         Navigator.pushNamed(context, OrderScreen.routeName);
                       },
                       style: TextButton.styleFrom(
-                        backgroundColor: secondaryColor,
+                        backgroundColor: infoColor,
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -348,7 +311,7 @@ class _CartState extends State<Cart> {
                     ),
                   ), 
                 ),
-                Expanded(
+                cartVM.carts.isEmpty ? const SizedBox() : Expanded(
                   child: Container(
                     height: 40,
                     margin: EdgeInsets.symmetric(
@@ -356,16 +319,16 @@ class _CartState extends State<Cart> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        showConfirmDialog();
+                        submitOrder(cartVM);
                       },
                       style: TextButton.styleFrom(
-                        backgroundColor: alertColor,
+                        backgroundColor: primaryColor,
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: isLoadingCheckOut ? Container(
+                      child:  isLoadingOrder ? Container(
                         width: 16,
                         height: 16,
                         margin: EdgeInsets.zero,
@@ -375,25 +338,12 @@ class _CartState extends State<Cart> {
                             primaryTextColor,
                           ),
                         ),
-                      ) : Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Icon(
-                            Icons.logout,
-                            color: primaryTextColor,
-                            size: 16,
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              'Check Out',
-                              style: primaryTextStyle.copyWith(
-                                fontSize: 13,
-                                fontWeight: semiBold,
-                              ),
-                            ),
-                          ),
-                        ],
+                      ) : Text(
+                        'Pesan Sekarang',
+                        style: primaryTextStyle.copyWith(
+                          fontSize: 13,
+                          fontWeight: semiBold,
+                        ),
                       ),
                     ),
                   ), 
@@ -406,18 +356,41 @@ class _CartState extends State<Cart> {
     }
 
     return Scaffold(
-      backgroundColor: backgroundColor3,
+      backgroundColor: backgroundColor1,
       appBar: AppBar(
+        backgroundColor: backgroundColor3,
         leading: IconButton(
           icon: const Icon(Icons.close),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
-        backgroundColor: backgroundColor1,
         elevation: 0,
         centerTitle: true,
         title: const Text('Keranjang'),
+        actions: <Widget> [
+          isLoadingCheckOut ? Container(
+            padding: const EdgeInsets.only(right: 15),
+            child: Center(
+              child: SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation(
+                    dangerColor,
+                  ),
+                ),
+              ),
+            ),
+          ) : IconButton(
+            icon: const Icon(Icons.logout_rounded),
+            color: dangerColor,
+            onPressed: () {
+              showConfirmDialog();
+            },
+          ),
+        ],
       ),
       body: isLoadingPage ? Center(
         child: SizedBox(

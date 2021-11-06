@@ -2,7 +2,7 @@ import 'package:customer_pesenin/core/models/product.dart';
 
 class CartModel {
 
-  int? id;
+  String? id;
   Product? product;
   int? qty;
 

@@ -33,7 +33,7 @@ class DialogError {
                 ),
                 Icon(
                   Icons.error_outline_rounded,
-                  color: alertColor,
+                  color: dangerColor,
                   size: 100,
                 ),
                 const SizedBox( height: 12),

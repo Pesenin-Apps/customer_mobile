@@ -16,11 +16,13 @@ class Order {
   int? status;
   @JsonKey(name: 'order_items')
   List<OrderItem>? orderItem;
-  int? tax;
+  double? tax;
   @JsonKey(name: 'total_price')
-  int? totalPrice;
+  double? totalPrice;
   @JsonKey(name: 'total_overall')
-  int? totalOverall;
+  double? totalOverall;
+  @JsonKey(name: 'is_paid')
+  bool? isPaid;
   Customer? customer;
   TableModel? table;
   String? createdAt;

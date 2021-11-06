@@ -38,41 +38,10 @@ class ProductTile extends StatelessWidget {
       );
     }
 
-    Widget productReady() {
-      return GestureDetector(
+    Widget productIsReady() {
+      return InkWell(
         onTap: () {
-          final fetchProductInCart = cartVM.productExist(product);
-          if (fetchProductInCart) {
-             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: warningColor,
-                content: RichText(
-                  text: TextSpan(
-                    children: <TextSpan>[
-                      TextSpan(text: '${product.name} ', style: const TextStyle(fontWeight: FontWeight.w700)),
-                      const TextSpan(text: 'sudah ada dikeranjang Anda!'),
-                    ],
-                  ),
-                )
-              ),
-            );
-          } else {
-            cartVM.addCart(product);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                backgroundColor: secondaryColor,
-                content: RichText(
-                  text: TextSpan(
-                    children: <TextSpan>[
-                      const TextSpan(text: 'Berhasil, '),
-                      TextSpan(text: '${product.name} ', style: const TextStyle(fontWeight: FontWeight.w700)),
-                      const TextSpan(text: 'telah dimasukkan ke keranjang Anda!'),
-                    ],
-                  ),
-                )
-              ),
-            );
-          }
+          cartVM.addCart(product);
         },
         child: Container(
           padding: const EdgeInsets.all(6.0),
@@ -90,12 +59,29 @@ class ProductTile extends StatelessWidget {
       );
     }
 
-    Widget productNotReady() {
-      return  GestureDetector(
+    Widget productAlredyExistInCart() {
+      return Container(
+        padding: const EdgeInsets.all(6.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(6),
+          border: Border.all(
+            color: infoColor
+          ),
+        ),
+        child: Icon(
+          Icons.add_task_rounded,
+          color: infoColor,
+          size: 16,
+        ),
+      );
+    }
+
+    Widget productIsNotReady() {
+      return  InkWell(
         onTap: () {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: alertColor,
+              backgroundColor: dangerColor,
               content: RichText(
                 text: TextSpan(
                   children: <TextSpan>[
@@ -113,12 +99,12 @@ class ProductTile extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
             border: Border.all(
-              color: alertColor
+              color: dangerColor
             ),
           ),
           child: Icon(
             Icons.block,
-            color: alertColor,
+            color: dangerColor,
             size: 16,
           ),
         ),
@@ -167,7 +153,7 @@ class ProductTile extends StatelessWidget {
               ],
             ),
           ),
-          product.isReady.toString() == 'true' ? productReady() : productNotReady(),
+          product.isReady.toString() == 'true' ? ( cartVM.productExist(product) ? productAlredyExistInCart() : productIsReady() ) : productIsNotReady(),
         ],
       ),
     );

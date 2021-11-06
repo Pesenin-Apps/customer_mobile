@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/cart_vm.dart';
@@ -6,6 +8,7 @@ import 'package:customer_pesenin/ui/views/orders/cart_screen.dart';
 import 'package:customer_pesenin/ui/widgets/product/product_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/home';
@@ -17,23 +20,31 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  int currentIndex = 0;
+  int _currentIndex = 0;
   bool _isLoadingPage = false;
-  String filterByCategory = '';
-  String name = '';
+  String _filterByCategory = '';
 
   @override
   void initState() {
-    setData();
+    getData();
     super.initState();
   }
 
-  void setData() async {
+  void getData() async {
     if (mounted) setState(() => _isLoadingPage = true);
-    final ProductVM productVM = Provider.of<ProductVM>(context, listen: false);
-    await productVM.fetchProductCategories();
-    await productVM.fetchProducts(filterByCategory);
+    final prefs = await SharedPreferences.getInstance();
+    if (prefs.containsKey('tokenData')) {
+      final ProductVM productVM = Provider.of<ProductVM>(context, listen: false);
+      if (mounted) await productVM.fetchProductCategories();
+      if (mounted) await productVM.fetchProducts(_filterByCategory);
+    }
     if (mounted) setState(() => _isLoadingPage = false);
+  }
+
+  Future refreshData() async{
+    if (mounted) await Provider.of<ProductVM>(context, listen: false).fetchProductCategories();
+    if (mounted) await Provider.of<ProductVM>(context, listen: false).fetchProducts(_filterByCategory);
+    setState(() { });
   }
 
   @override
@@ -46,73 +57,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     CartVM cartVM = Provider.of<CartVM>(context);
 
-    Widget cartButton() {
-      return  Container(
-        height: 45.0,
-        width: 45.0,
-        margin: EdgeInsets.zero,
-        child: FloatingActionButton(
-          onPressed: () {
-            Navigator.pushNamed(context, Cart.routeName);
-          },
-          backgroundColor: primaryColor,
-          child: Image.asset(
-            'assets/icons/icon_cart.png',
-            width: 21,
-          ),
-        ),
-      );
-    }
-
-    Widget cartButtonWithBadge() {
-      return Container(
-        margin: EdgeInsets.zero,
-        child: FittedBox(
-          child: Stack(
-            alignment: const Alignment(1.3, -1.8),
-            children: [
-              Container(
-                height: 45.0,
-                width: 45.0,
-                margin: EdgeInsets.zero,
-                child: FloatingActionButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, Cart.routeName);
-                  },
-                  backgroundColor: primaryColor,
-                  child: Image.asset(
-                    'assets/icons/icon_cart.png',
-                    width: 21,
-                  ),
-                ),
-              ),
-              Container(             
-                padding: const EdgeInsets.all(3),
-                constraints: const BoxConstraints(minHeight: 23, minWidth: 23),
-                decoration: BoxDecoration( // This controls the shadow
-                  borderRadius: BorderRadius.circular(12),
-                  color: Colors.red  // This would be color of the Badge
-                ),
-                child: Center(
-                  child: Text(
-                    cartVM.carts.length.toString(),
-                    style: primaryTextStyle.copyWith(
-                      fontSize: 10
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
     Widget lists() {
       return Container(
         margin: EdgeInsets.only(
-          top: 20.0,
-          bottom: defaultMargin*2.3,
+          top: defaultMargin/3,
+          bottom: defaultMargin/3,
         ),
         child: Consumer<ProductVM>(
           builder: (context, productVM, child) => Column(
@@ -136,56 +85,74 @@ class _HomeScreenState extends State<HomeScreen> {
         ) : Scaffold(
         backgroundColor: backgroundColor1,
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(80.0),
-          child: Container(
-            margin: const EdgeInsets.only(top: 15.0, bottom: 15.0),
-            child: Consumer<ProductVM>(
-              builder: (context, productVM, child) => SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    const SizedBox(width: 16),
-                    GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          filterByCategory = '';
-                          currentIndex = 0;
-                          Provider.of<ProductVM>(context, listen: false).fetchProducts(filterByCategory);
-                        });
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.only(right: 16),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 10,
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          color: currentIndex == 0 ? primaryColor : transparentColor,
-                          border: currentIndex == 0 ? null : Border.all(
-                            color: subtitleTextColor
+          preferredSize: const Size.fromHeight(105.0),
+          child: Column(
+            children: [
+              AppBar(
+                backgroundColor: transparentColor,
+                elevation: 0,
+                // centerTitle: true,
+                title: Text(
+                  'PESENIN APPS',
+                  style: primaryTextStyle.copyWith(
+                    fontWeight: bold,
+                  ),
+                ),
+                actions: <Widget>[
+                  Container(
+                    padding: const EdgeInsets.all(3.0),
+                    child: FittedBox(
+                      child: Stack(
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.shopping_cart_rounded),
+                            color: Colors.white,
+                            onPressed: () {
+                              Navigator.pushNamed(context, Cart.routeName);
+                            },
                           ),
-                        ),
-                        child: Text(
-                          'Semua',
-                          style: currentIndex == 0 ? primaryTextStyle.copyWith(
-                            fontSize: 13,
-                            fontWeight: medium,
-                          ) : secondaryTextStyle.copyWith(
-                            fontSize: 13,
-                            fontWeight: medium,
-                          ),
-                        ), 
+                          cartVM.carts.isEmpty ? const SizedBox() : Positioned(
+                            right: 11,
+                            top: 5,
+                            child: Container(
+                              padding: const EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                color: dangerColor,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              constraints: const BoxConstraints(
+                                minWidth: 15,
+                                minHeight: 15,
+                              ),
+                              child: Text(
+                                cartVM.carts.length.toString(),
+                                style: primaryTextStyle.copyWith(
+                                  fontSize: 8
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                    Row(
+                  ),
+                ],
+              ),
+              Container(
+                margin: const EdgeInsets.only(bottom: 5.0),
+                child: Consumer<ProductVM>(
+                  builder: (context, productVM, child) => SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
                       children: [
-                        for (int i = 0; i < productVM.productCategories.length; i++) GestureDetector(
+                        const SizedBox(width: 16),
+                        GestureDetector(
                           onTap: () {
                             setState(() {
-                              filterByCategory = productVM.productCategories[i].id.toString();
-                              currentIndex = i+1;
-                              Provider.of<ProductVM>(context, listen: false).fetchProducts(filterByCategory);
+                              _filterByCategory = '';
+                              _currentIndex = 0;
+                              Provider.of<ProductVM>(context, listen: false).fetchProducts(_filterByCategory);
                             });
                           },
                           child: Container(
@@ -196,38 +163,78 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(12),
-                              color: currentIndex == i+1 ? primaryColor : transparentColor,
-                              border: currentIndex == i+1 ? null : Border.all(
+                              color: _currentIndex == 0 ? primaryColor : transparentColor,
+                              border: _currentIndex == 0 ? null : Border.all(
                                 color: subtitleTextColor
                               ),
                             ),
                             child: Text(
-                              productVM.productCategories[i].name.toString(),
-                              style: currentIndex == i+1 ? primaryTextStyle.copyWith(
+                              'Semua',
+                              style: _currentIndex == 0 ? primaryTextStyle.copyWith(
                                 fontSize: 13,
                                 fontWeight: medium,
                               ) : secondaryTextStyle.copyWith(
                                 fontSize: 13,
                                 fontWeight: medium,
                               ),
-                            ),
+                            ), 
                           ),
-                        )
-                      ],    
+                        ),
+                        Row(
+                          children: [
+                            for (int i = 0; i < productVM.productCategories.length; i++) GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _filterByCategory = productVM.productCategories[i].id.toString();
+                                  _currentIndex = i+1;
+                                  Provider.of<ProductVM>(context, listen: false).fetchProducts(_filterByCategory);
+                                });
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.only(right: 16),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 12,
+                                  vertical: 10,
+                                ),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  color: _currentIndex == i+1 ? primaryColor : transparentColor,
+                                  border: _currentIndex == i+1 ? null : Border.all(
+                                    color: subtitleTextColor
+                                  ),
+                                ),
+                                child: Text(
+                                  productVM.productCategories[i].name.toString(),
+                                  style: _currentIndex == i+1 ? primaryTextStyle.copyWith(
+                                    fontSize: 13,
+                                    fontWeight: medium,
+                                  ) : secondaryTextStyle.copyWith(
+                                    fontSize: 13,
+                                    fontWeight: medium,
+                                  ),
+                                ),
+                              ),
+                            )
+                          ],    
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                )
               ),
-            )
+            ],
           ),
         ),
-        body: ListView(
-          children: [
-            lists(),
-          ]
+        body: Platform.isIOS ? Container() : RefreshIndicator(
+          backgroundColor: backgroundColor1,
+          color: primaryColor,
+          onRefresh: refreshData,
+          child: ListView(
+            children: [
+              lists(),
+            ]
+          ),
         ),
-        floatingActionButton: cartVM.carts.isEmpty ? cartButton() : cartButtonWithBadge(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterFloat,
       ),
     );
 

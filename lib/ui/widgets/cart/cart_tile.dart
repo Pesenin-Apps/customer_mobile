@@ -5,20 +5,19 @@ import 'package:customer_pesenin/core/viewmodels/cart_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CartCard extends StatefulWidget {
-  final CartModel? cart;
-  const CartCard(
-    this.cart, { 
+class CartTile extends StatefulWidget {
+  final CartModel cart;
+  const CartTile({
     Key? key,
-  }
-  ) : super(key: key);
+    required this.cart
+  }) : super(key: key);
 
   @override
-  State<CartCard> createState() => _CartCardState();
+  _CartTileState createState() => _CartTileState();
 }
 
-class _CartCardState extends State<CartCard> {
-  @override
+class _CartTileState extends State<CartTile> {
+ @override
   Widget build(BuildContext context) {
 
     CartVM cartVM = Provider.of<CartVM>(context);
@@ -31,7 +30,7 @@ class _CartCardState extends State<CartCard> {
           borderRadius: BorderRadius.circular(12),
           image: DecorationImage(
             image: NetworkImage(
-              'https://pesenin.onggolt-dev.com/uploads/' + widget.cart!.product!.image.toString(),
+              'https://pesenin.onggolt-dev.com/uploads/' + widget.cart.product!.image.toString(),
             ),
           ),
         ),
@@ -62,27 +61,27 @@ class _CartCardState extends State<CartCard> {
         vertical: 10,
       ),
       decoration: BoxDecoration(
-        color: backgroundColor4,
+        color: backgroundColor2,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         children: [
           Row(
             children: [
-              widget.cart!.product!.image.toString() != 'null' ? imageUrl() : imagePlaceholder(),
+              widget.cart.product!.image.toString() != 'null' ? imageUrl() : imagePlaceholder(),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      widget.cart!.product!.name.toString(),
+                      widget.cart.product!.name.toString(),
                       style: primaryTextStyle.copyWith(
                         fontWeight: semiBold,
                       ),
                     ),
                     Text(
-                      formatCurrency.format(widget.cart!.product!.price),
+                      formatCurrency.format(widget.cart.product!.price),
                       style: priceTextStyle,
                     ),
                   ],
@@ -90,30 +89,30 @@ class _CartCardState extends State<CartCard> {
               ),
               Column(
                 children: [
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
-                      if (mounted) cartVM.addQty(widget.cart!.id!);
+                      if (mounted) cartVM.addQty(widget.cart.id!);
                     },
                     child: Image.asset(
                       'assets/icons/icon_cart_add.png',
-                      width: 18,
+                      width: 20,
                     ),
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    widget.cart!.qty.toString(),
+                    widget.cart.qty.toString(),
                     style: primaryTextStyle.copyWith(
                       fontWeight: medium,
                     ),
                   ),
                   const SizedBox(height: 2),
-                  GestureDetector(
+                  InkWell(
                     onTap: () {
-                      if (mounted) cartVM.reduceQty(widget.cart!.id!);
+                      if (mounted) cartVM.reduceQty(widget.cart.id!);
                     },
                     child: Image.asset(
                       'assets/icons/icon_cart_minus.png',
-                      width: 18,
+                      width: 20,
                     ),
                   ),
                 ],
@@ -121,21 +120,21 @@ class _CartCardState extends State<CartCard> {
             ],
           ),
           const SizedBox(height: 12),
-          GestureDetector(
+          InkWell(
             onTap: () {
-              if (mounted) cartVM.removeCart(widget.cart!.id!);
+              if (mounted) cartVM.removeCart(widget.cart.id!);
             },
             child: Row(
               children: [
                 Image.asset(
                   'assets/icons/icon_cart_remove.png',
-                  width: 10,
+                  width: 12,
                 ),
                 const SizedBox(width: 4),
                 Text(
                   'Hapus',
                   style: dangerTextStyle.copyWith(
-                    fontSize: 12,
+                    fontSize: 14,
                     fontWeight: light,
                   ),
                 ),
