@@ -1,3 +1,5 @@
+import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
+import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:customer_pesenin/core/utils/constans.dart';
@@ -16,13 +18,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
+    Provider.of<ConnectionVM>(context, listen: false).startMonitoring();
     onBoarding();
-    // Timer(
-    //   const Duration(
-    //     seconds: 4
-    //   ),
-    //   () => Navigator.pushReplacementNamed(context, OnBoardingScreen.routeName),
-    // );
     super.initState();
   }
 
@@ -33,34 +30,36 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor1,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 128,
-              height: 128,
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(
-                    'assets/images/logo_no_text.png'
+    return Consumer<ConnectionVM>(
+      builder: (context, connectionVM, _) => connectionVM.isOnline != null && connectionVM.isOnline! ? Scaffold(
+        backgroundColor: backgroundColor1,
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 128,
+                height: 128,
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(
+                      'assets/images/logo_no_text.png'
+                    ),
                   ),
                 ),
               ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              'P E L A N G G A N   P E S E N I N', 
-              style: primaryTextStyle.copyWith(
-                fontSize: 16,
-                fontWeight: bold
+              const SizedBox(height: 12),
+              Text(
+                'P E L A N G G A N   P E S E N I N', 
+                style: primaryTextStyle.copyWith(
+                  fontSize: 16,
+                  fontWeight: bold
+                ),
               ),
-            ),
-          ],
-        )
-      ),
+            ],
+          )
+        ),
+      ) : const NoInternetConnectionScreen(),
     );
   }
   

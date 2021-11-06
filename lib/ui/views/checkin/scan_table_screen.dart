@@ -1,8 +1,10 @@
 import 'package:customer_pesenin/core/helpers/routes_generator.dart';
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
+import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/customer_vm.dart';
 import 'package:customer_pesenin/ui/views/checkin/form_screen.dart';
+import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -30,6 +32,7 @@ class _ScanTableState extends State<ScanTable> {
   }  
 
   getTable() async {
+    Provider.of<ConnectionVM>(context, listen: false).startMonitoring();
     await Provider.of<CustomerVM>(context, listen: false).fetchTableDetail('');
   }
 
@@ -50,33 +53,35 @@ class _ScanTableState extends State<ScanTable> {
   
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      appBar: AppBar(
-        backgroundColor: transparentColor,
-        leading: IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          color: primaryTextColor,
+    return Consumer<ConnectionVM>(
+      builder: (context, connectionVM, _) => connectionVM.isOnline != null && connectionVM.isOnline! ? Scaffold(
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          backgroundColor: transparentColor,
+          leading: IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            color: primaryTextColor,
+          ),
+          elevation: 0,
         ),
-        elevation: 0,
-      ),
-      body: Stack(
-        alignment: Alignment.center,
-        children: <Widget>[
-          buildQrView(context),
-          Positioned(
-            bottom: 30,
-            child: contentFooter(),
-          ),
-          Positioned(
-            top: 100,
-            child: contentHeader(),
-          ),
-        ]
-      ),
+        body: Stack(
+          alignment: Alignment.center,
+          children: <Widget>[
+            buildQrView(context),
+            Positioned(
+              bottom: 30,
+              child: contentFooter(),
+            ),
+            Positioned(
+              top: 100,
+              child: contentHeader(),
+            ),
+          ]
+        ),
+      ) : const NoInternetConnectionScreen(),
     );
   }
 

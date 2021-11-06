@@ -1,8 +1,10 @@
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/cart_vm.dart';
+import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/customer_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/order_vm.dart';
+import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
 import 'package:customer_pesenin/ui/views/onboarding_screen.dart';
 import 'package:customer_pesenin/ui/views/orders/order_screen.dart';
 import 'package:customer_pesenin/ui/widgets/cart/cart_tile.dart';
@@ -26,6 +28,7 @@ class _CartState extends State<Cart> {
 
   @override
   void initState() {
+    Provider.of<ConnectionVM>(context, listen: false).startMonitoring();
     if (mounted) getUser();
     super.initState();
   }
@@ -355,53 +358,55 @@ class _CartState extends State<Cart> {
       );
     }
 
-    return Scaffold(
-      backgroundColor: backgroundColor1,
-      appBar: AppBar(
-        backgroundColor: backgroundColor3,
-        leading: IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        elevation: 0,
-        centerTitle: true,
-        title: const Text('Keranjang'),
-        actions: <Widget> [
-          isLoadingCheckOut ? Container(
-            padding: const EdgeInsets.only(right: 15),
-            child: Center(
-              child: SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation(
-                    dangerColor,
+    return Consumer<ConnectionVM>(
+      builder: (context, connectionVM, _) => connectionVM.isOnline != null && connectionVM.isOnline! ? Scaffold(
+        backgroundColor: backgroundColor1,
+        appBar: AppBar(
+          backgroundColor: backgroundColor3,
+          leading: IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () {
+              Navigator.pop(context);
+            },
+          ),
+          elevation: 0,
+          centerTitle: true,
+          title: const Text('Keranjang'),
+          actions: <Widget> [
+            isLoadingCheckOut ? Container(
+              padding: const EdgeInsets.only(right: 15),
+              child: Center(
+                child: SizedBox(
+                  height: 20,
+                  width: 20,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation(
+                      dangerColor,
+                    ),
                   ),
                 ),
               ),
+            ) : IconButton(
+              icon: const Icon(Icons.logout_rounded),
+              color: dangerColor,
+              onPressed: () {
+                showConfirmDialog();
+              },
             ),
-          ) : IconButton(
-            icon: const Icon(Icons.logout_rounded),
-            color: dangerColor,
-            onPressed: () {
-              showConfirmDialog();
-            },
-          ),
-        ],
-      ),
-      body: isLoadingPage ? Center(
-        child: SizedBox(
-          height: 33,
-          width: 33,
-          child: CircularProgressIndicator(
-            color: primaryColor,
-          ),
+          ],
         ),
-      ) : content(),
-      bottomNavigationBar: customNavigationBar(),
+        body: isLoadingPage ? Center(
+          child: SizedBox(
+            height: 33,
+            width: 33,
+            child: CircularProgressIndicator(
+              color: primaryColor,
+            ),
+          ),
+        ) : content(),
+        bottomNavigationBar: customNavigationBar(),
+      ) : const NoInternetConnectionScreen(),
     );
 
   }

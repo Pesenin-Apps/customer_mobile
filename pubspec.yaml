@@ -43,6 +43,7 @@ dependencies:
   get_it: ^7.2.0
   shared_preferences: ^2.0.6
   device_info: ^2.0.1
+  connectivity: ^3.0.6
   
 dev_dependencies:
   flutter_test:
@@ -74,6 +75,7 @@ flutter:
     - assets/images/qr_code.png
     - assets/images/ikan_bakar_sample.jpg
     - assets/images/placeholder.jpg
+    - assets/images/no_internet_connection.png
     - assets/icons/icon_cart.png
     - assets/icons/icon_add_to_cart.png
     - assets/icons/icon_user.png

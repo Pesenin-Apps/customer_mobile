@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
+import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/order_vm.dart';
+import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
 import 'package:customer_pesenin/ui/widgets/order/order_tile.dart';
 import 'package:customer_pesenin/ui/widgets/order/order_description_tile.dart';
 import 'package:customer_pesenin/ui/widgets/order/order_is_empty.dart';
@@ -24,6 +26,7 @@ class _OrderScreenState extends State<OrderScreen> {
 
   @override
   void initState() {
+    Provider.of<ConnectionVM>(context, listen: false).startMonitoring();
     setData();
     super.initState();
   }
@@ -215,29 +218,31 @@ class _OrderScreenState extends State<OrderScreen> {
       );
     }
 
-    return Scaffold(
-      backgroundColor: backgroundColor1,
-      appBar: AppBar(
-        backgroundColor: backgroundColor3,
-        elevation: 0,
-        centerTitle: true,
-        title: const Text('Pesanan Saya')
-      ),
-      body: isLoadingPage? Center(
-          child: SizedBox(
-            height: 33,
-            width: 33,
-            child: CircularProgressIndicator(
-              color: primaryColor,
+    return Consumer<ConnectionVM>(
+      builder: (context, connectionVM, _) => connectionVM.isOnline != null && connectionVM.isOnline! ? Scaffold(
+        backgroundColor: backgroundColor1,
+        appBar: AppBar(
+          backgroundColor: backgroundColor3,
+          elevation: 0,
+          centerTitle: true,
+          title: const Text('Pesanan Saya')
+        ),
+        body: isLoadingPage? Center(
+            child: SizedBox(
+              height: 33,
+              width: 33,
+              child: CircularProgressIndicator(
+                color: primaryColor,
+              ),
             ),
-          ),
-        ) : Consumer<OrderVM>(builder: (context, orderVM, _) => orderVM.isExist ? (Platform.isIOS ? Container() : RefreshIndicator(
-          backgroundColor: backgroundColor1,
-          color: primaryColor,
-          onRefresh: refreshData,
-          child: content(),
-        )) : const OrderIsEmpty(),
-      ),
+          ) : Consumer<OrderVM>(builder: (context, orderVM, _) => orderVM.isExist ? (Platform.isIOS ? Container() : RefreshIndicator(
+            backgroundColor: backgroundColor1,
+            color: primaryColor,
+            onRefresh: refreshData,
+            child: content(),
+          )) : const OrderIsEmpty(),
+        ),
+      ) : const NoInternetConnectionScreen(),
     );
 
   }

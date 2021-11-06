@@ -2,7 +2,9 @@ import 'package:customer_pesenin/core/helpers/locator.dart';
 import 'package:customer_pesenin/core/services/navigation_custom.dart';
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
+import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/customer_vm.dart';
+import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
 import 'package:device_info/device_info.dart';
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -29,6 +31,7 @@ class _CheckInFormState extends State<CheckInForm> {
 
   @override
   void initState() {
+    Provider.of<ConnectionVM>(context, listen: false).startMonitoring();
     getDeviceInfo();
     super.initState();
   }  
@@ -193,24 +196,26 @@ class _CheckInFormState extends State<CheckInForm> {
       );
     }
 
-    return Scaffold(
-      backgroundColor: backgroundColor1,
-      resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: Container(
-          margin: EdgeInsets.symmetric(
-            horizontal: defaultMargin,
+    return Consumer<ConnectionVM>(
+      builder: (context, connectionVM, _) => connectionVM.isOnline != null && connectionVM.isOnline! ? Scaffold(
+        backgroundColor: backgroundColor1,
+        resizeToAvoidBottomInset: false,
+        body: SafeArea(
+          child: Container(
+            margin: EdgeInsets.symmetric(
+              horizontal: defaultMargin,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                header(),
+                inputName(),
+                buttonSubmit(),
+              ],
+            ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              header(),
-              inputName(),
-              buttonSubmit(),
-            ],
-          ),
-        ),
-      )
+        )
+      ) : const NoInternetConnectionScreen(),
     );
 
   }

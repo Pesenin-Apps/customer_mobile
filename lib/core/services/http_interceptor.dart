@@ -46,6 +46,8 @@ class HttpInterceptors extends Interceptor {
       locator<NavigationCustom>().navigateReplace('/onboarding');
     } else if ([400, 402, 403, 404].contains(DioExceptions.fromDioError(err).getStatusCode())) {
       _dialogError!.showErrorDialog(jsonDecode(err.response!.toString())['message']);
+    } else if (DioExceptions.fromDioError(err).getStatusCode() == 720) {
+      print('No Internet Connection');
     } else {
       _dialogError!.showErrorDialog(errorMessage);
     }
