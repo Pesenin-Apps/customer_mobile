@@ -24,6 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int _currentIndex = 0;
   bool _isLoadingPage = false;
+  bool _isLoadingData = false;
   String _filterByCategory = '';
 
   @override
@@ -39,6 +40,8 @@ class _HomeScreenState extends State<HomeScreen> {
     if (prefs.containsKey('tokenData')) {
       final ProductVM productVM = Provider.of<ProductVM>(context, listen: false);
       if (mounted) await productVM.fetchProductCategories();
+      final String firstCategory = productVM.productCategories[0].id.toString();
+      if (mounted) setState(() => _filterByCategory = firstCategory);
       if (mounted) await productVM.fetchProducts(_filterByCategory);
     }
     if (mounted) setState(() => _isLoadingPage = false);
@@ -149,47 +152,51 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Row(
                         children: [
                           const SizedBox(width: 16),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _filterByCategory = '';
-                                _currentIndex = 0;
-                                Provider.of<ProductVM>(context, listen: false).fetchProducts(_filterByCategory);
-                              });
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.only(right: 16),
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
-                                vertical: 10,
-                              ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: _currentIndex == 0 ? primaryColor : transparentColor,
-                                border: _currentIndex == 0 ? null : Border.all(
-                                  color: subtitleTextColor
-                                ),
-                              ),
-                              child: Text(
-                                'Semua',
-                                style: _currentIndex == 0 ? primaryTextStyle.copyWith(
-                                  fontSize: 13,
-                                  fontWeight: medium,
-                                ) : secondaryTextStyle.copyWith(
-                                  fontSize: 13,
-                                  fontWeight: medium,
-                                ),
-                              ), 
-                            ),
-                          ),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     setState(() {
+                          //       _filterByCategory = '';
+                          //       _currentIndex = 0;
+                          //       Provider.of<ProductVM>(context, listen: false).fetchProducts(_filterByCategory);
+                          //     });
+                          //   },
+                          //   child: Container(
+                          //     margin: const EdgeInsets.only(right: 16),
+                          //     padding: const EdgeInsets.symmetric(
+                          //       horizontal: 12,
+                          //       vertical: 10,
+                          //     ),
+                          //     decoration: BoxDecoration(
+                          //       borderRadius: BorderRadius.circular(12),
+                          //       color: _currentIndex == 0 ? primaryColor : transparentColor,
+                          //       border: _currentIndex == 0 ? null : Border.all(
+                          //         color: subtitleTextColor
+                          //       ),
+                          //     ),
+                          //     child: Text(
+                          //       'Semua',
+                          //       style: _currentIndex == 0 ? primaryTextStyle.copyWith(
+                          //         fontSize: 13,
+                          //         fontWeight: medium,
+                          //       ) : secondaryTextStyle.copyWith(
+                          //         fontSize: 13,
+                          //         fontWeight: medium,
+                          //       ),
+                          //     ), 
+                          //   ),
+                          // ),
                           Row(
                             children: [
                               for (int i = 0; i < productVM.productCategories.length; i++) GestureDetector(
-                                onTap: () {
+                                onTap: () async {
                                   setState(() {
+                                    _isLoadingData = true;
                                     _filterByCategory = productVM.productCategories[i].id.toString();
-                                    _currentIndex = i+1;
-                                    Provider.of<ProductVM>(context, listen: false).fetchProducts(_filterByCategory);
+                                    _currentIndex = i; // i + 1
+                                  });
+                                  await Provider.of<ProductVM>(context, listen: false).fetchProducts(_filterByCategory);
+                                  setState(() {
+                                    _isLoadingData = false;
                                   });
                                 },
                                 child: Container(
@@ -200,14 +207,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
-                                    color: _currentIndex == i+1 ? primaryColor : transparentColor,
-                                    border: _currentIndex == i+1 ? null : Border.all(
+                                    color: _currentIndex == i ? primaryColor : transparentColor,
+                                    border: _currentIndex == i ? null : Border.all(
                                       color: subtitleTextColor
                                     ),
                                   ),
                                   child: Text(
                                     productVM.productCategories[i].name.toString(),
-                                    style: _currentIndex == i+1 ? primaryTextStyle.copyWith(
+                                    style: _currentIndex == i ? primaryTextStyle.copyWith(
                                       fontSize: 13,
                                       fontWeight: medium,
                                     ) : secondaryTextStyle.copyWith(
@@ -227,7 +234,15 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          body: Platform.isIOS ? Container() : RefreshIndicator(
+          body:  _isLoadingData ? Center(
+            child: SizedBox(
+              height: 33,
+              width: 33,
+              child: CircularProgressIndicator(
+                color: primaryColor,
+              ),
+            ),
+          ) : Platform.isIOS ? Container() : RefreshIndicator(
             backgroundColor: backgroundColor1,
             color: primaryColor,
             onRefresh: refreshData,

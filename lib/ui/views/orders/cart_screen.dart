@@ -106,7 +106,7 @@ class _CartState extends State<Cart> {
                   ),
                   Icon(
                     Icons.error_outline_rounded,
-                    color: primaryColor,
+                    color: dangerColor,
                     size: 100,
                   ),
                   const SizedBox( height: 12),
@@ -154,6 +154,91 @@ class _CartState extends State<Cart> {
                       ),
                       child: Text(
                         'Check Out',
+                        style: primaryTextStyle.copyWith(
+                          fontSize: 13,
+                          fontWeight: semiBold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        )
+      );
+    }
+
+    Future<void> showConfirmDialogOrder() async {
+      return showDialog(
+        context: context, 
+        builder: (BuildContext context) => Container(
+          margin: EdgeInsets.zero,
+          width: MediaQuery.of(context).size.width - (2 * defaultMargin),
+          child: AlertDialog(
+            backgroundColor: backgroundColor3,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                        Icons.close,
+                        color: primaryTextColor,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    Icons.error_outline_rounded,
+                    color: primaryColor,
+                    size: 100,
+                  ),
+                  const SizedBox( height: 12),
+                  Text(
+                    'Pesanan telah sesuai?',
+                    style: primaryTextStyle.copyWith(
+                      fontSize: 18,
+                      fontWeight: semiBold,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Anda tidak dapat membatalkan',
+                    style: secondaryTextStyle.copyWith(
+                      fontSize: 13,
+                    ),
+                  ),
+                  Text(
+                    'jika telah mesanan.',
+                    style: secondaryTextStyle.copyWith(
+                      fontSize: 13,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    width: 150,
+                    height: 40,
+                    margin: EdgeInsets.zero,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        submitOrder(cartVM);
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        'Ya, Sesuai',
                         style: primaryTextStyle.copyWith(
                           fontSize: 13,
                           fontWeight: semiBold,
@@ -322,7 +407,7 @@ class _CartState extends State<Cart> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        submitOrder(cartVM);
+                        showConfirmDialogOrder();
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: primaryColor,

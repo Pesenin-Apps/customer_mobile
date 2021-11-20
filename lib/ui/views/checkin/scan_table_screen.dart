@@ -33,7 +33,6 @@ class _ScanTableState extends State<ScanTable> {
 
   getTable() async {
     Provider.of<ConnectionVM>(context, listen: false).startMonitoring();
-    await Provider.of<CustomerVM>(context, listen: false).fetchTableDetail('');
   }
 
   @override
@@ -66,6 +65,18 @@ class _ScanTableState extends State<ScanTable> {
             color: primaryTextColor,
           ),
           elevation: 0,
+          actions: [
+            findCode ? IconButton(
+              icon: const Icon(Icons.refresh_rounded),
+              color: Colors.white,
+              onPressed: () {
+                setState(() {
+                  controller!.resumeCamera();
+                  findCode = false;
+                });
+              },
+            ) : const SizedBox(),
+          ],
         ),
         body: Stack(
           alignment: Alignment.center,
@@ -107,7 +118,7 @@ class _ScanTableState extends State<ScanTable> {
           ],
         ) : Text(
           'QR CODE FAILED',
-          style: primaryTextStyle,
+          style: dangerTextStyle,
         ),
       ) : Text(
        'SCAN QR CODE',
@@ -144,7 +155,6 @@ class _ScanTableState extends State<ScanTable> {
         margin: EdgeInsets.zero,
         child: TextButton(
           onPressed: () {
-            // Navigator.popAndPushNamed(context, CheckInForm.routeName, arguments: { customerVM.tableDetail.id },);
              Navigator.popAndPushNamed(
               context, 
               CheckInForm.routeName,
@@ -152,12 +162,6 @@ class _ScanTableState extends State<ScanTable> {
                 id: customerVM.tableDetail.id.toString(), 
               ),
             );
-            // Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => CheckInForm(table: customerVM.tableDetail.id.toString())
-            //   ),
-            // );
           },
           style: TextButton.styleFrom(
             padding: const EdgeInsets.all(12),
@@ -179,7 +183,7 @@ class _ScanTableState extends State<ScanTable> {
         ),
         child: Text(
           'Kode bukan bagian dari Pesenin Apps.',
-          style: primaryTextStyle,
+          style: dangerTextStyle,
         ),
       )
     ) : Container(
@@ -211,13 +215,15 @@ class _ScanTableState extends State<ScanTable> {
     setState(() {
       this.controller = controller;
     });
-    controller.scannedDataStream.listen((qr) { 
+    controller.scannedDataStream.listen((qr) async { 
       setState(() {
         this.qr = qr;
-        Provider.of<CustomerVM>(context, listen: false).fetchTableDetail(this.qr!.code);
-        controller.stopCamera();
-        findCode = true;
+        controller.pauseCamera();
       }); 
+      if (mounted) await Provider.of<CustomerVM>(context, listen: false).fetchTableDetail(this.qr!.code);
+      setState(() {
+        findCode = true;
+      });
     });
   }
 

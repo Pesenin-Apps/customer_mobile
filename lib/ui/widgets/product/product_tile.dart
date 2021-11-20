@@ -21,12 +21,19 @@ class ProductTile extends StatelessWidget {
     CartVM cartVM = Provider.of<CartVM>(context);
 
     Widget imageUrl() {
-      return Image.network(
-        'https://pesenin.onggolt-dev.com/uploads/' + product.image.toString(),
+      return FadeInImage.assetNetwork(
+        placeholder: 'assets/images/placeholder.jpg', 
+        image: 'https://pesenin.onggolt-dev.com/uploads/' + product.image.toString(),
+        fit: BoxFit.cover,
         width: 90,
         height: 90,
-        fit: BoxFit.cover,
       );
+      // return Image.network(
+      //   'https://pesenin.onggolt-dev.com/uploads/' + product.image.toString(),
+      //   width: 90,
+      //   height: 90,
+      //   fit: BoxFit.cover,
+      // );
     }
 
     Widget imagePlaceholder() {
@@ -153,6 +160,7 @@ class ProductTile extends StatelessWidget {
               ],
             ),
           ),
+          const SizedBox(width: 7),
           product.isReady.toString() == 'true' ? ( cartVM.productExist(product) ? productAlredyExistInCart() : productIsReady() ) : productIsNotReady(),
         ],
       ),

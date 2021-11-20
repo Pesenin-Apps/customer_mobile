@@ -127,7 +127,7 @@ class _OrderScreenState extends State<OrderScreen> {
                           child: Text(
                             '+ Tambah Pesanan Baru',
                             style: primaryTextStyle.copyWith(
-                              fontSize: 12,
+                              fontSize: 13,
                               fontWeight: bold,
                             ),
                           ),
