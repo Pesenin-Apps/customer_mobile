@@ -14,6 +14,10 @@ TextStyle secondaryTextStyle = GoogleFonts.poppins(
   color: secondaryTextColor
 );
 
+TextStyle tertiaryTextStyle = GoogleFonts.poppins(
+  color: backgroundColor3
+);
+
 TextStyle priceTextStyle = GoogleFonts.poppins(
   color: priceColor
 );

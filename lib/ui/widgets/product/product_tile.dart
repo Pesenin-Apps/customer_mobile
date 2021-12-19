@@ -23,7 +23,7 @@ class ProductTile extends StatelessWidget {
     Widget imageUrl() {
       return FadeInImage.assetNetwork(
         placeholder: 'assets/images/placeholder.jpg', 
-        image: 'https://pesenin.onggolt-dev.com/uploads/' + product.image.toString(),
+        image: 'https://api-pesenin.onggolt-dev.com/uploads/' + product.image.toString(),
         fit: BoxFit.cover,
         width: 90,
         height: 90,

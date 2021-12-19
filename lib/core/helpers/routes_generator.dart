@@ -1,12 +1,15 @@
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
-import 'package:customer_pesenin/ui/views/checkin/form_screen.dart';
+import 'package:customer_pesenin/ui/views/auth/check_in_screen.dart';
+import 'package:customer_pesenin/ui/views/scanning_screen.dart';
 import 'package:flutter/material.dart';
 
 class ScreenArguments {
   final String? id;
+  final String? type;
   ScreenArguments({
     this.id,
+    this.type,
   });
 }
 
@@ -17,11 +20,19 @@ class RouteGenerator {
     final args = settings.arguments as ScreenArguments;
 
     switch (settings.name) {
-      case CheckInForm.routeName:
+      case CheckInScreen.routeName:
         return MaterialPageRoute(
             builder: (context) {
-              return CheckInForm(
+              return CheckInScreen(
                 table: args.id!,
+              );
+            },
+          );
+      case ScanningScreen.routeName:
+        return MaterialPageRoute(
+            builder: (context) {
+              return ScanningScreen(
+                type: args.type!,
               );
             },
           );

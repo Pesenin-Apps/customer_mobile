@@ -1,8 +1,8 @@
 import 'dart:convert';
-
-import 'package:customer_pesenin/core/models/customer.dart';
+import 'package:customer_pesenin/core/models/guest.dart';
 import 'package:customer_pesenin/core/models/order.dart';
 import 'package:customer_pesenin/core/models/table.dart';
+import 'package:customer_pesenin/core/models/user.dart';
 import 'package:dio/dio.dart';
 import 'package:customer_pesenin/core/models/product.dart';
 import 'package:customer_pesenin/core/models/cart.dart';
@@ -13,21 +13,38 @@ class Api {
   
   final Dio _dio = Dio(baseOptions)..interceptors.add(HttpInterceptors());
 
-  /* ========= START API CUSTOMER ========= */
+  /* ========= START API GUEST & CUSTOMER ========= */
 
-  Future<Customer?> getCustomer() async {
+  Future<GuestModel?> getGuest() async {
     try {
       var response = await _dio.get(
-        '/customers/me',
+        '/guest/me',
         options: Options(
           headers: {
             'requiresToken': true,
           },
         ),
       );
-      return Customer.fromJson(response.data['customer']);
+      return GuestModel.fromJson(response.data['data']);
     } catch (e) {
-      // print('error: $e');
+      // print('Something Error (Me Guest) : $e');
+      return null;
+    }
+  }
+
+  Future<UserModel?> getCustomer() async {
+    try {
+      var response = await _dio.get(
+        '/users/me',
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          },
+        ),
+      );
+      return UserModel.fromJson(response.data['data']);
+    } catch (e) {
+      // print('Something Error (Me User) : $e');
       return null;
     }
   }
@@ -35,7 +52,7 @@ class Api {
   Future<bool> checkOut() async {
     try {
       await _dio.post(
-        '/customers/check-out',
+        '/guest/check-out',
         options: Options(
           headers: {
             'requiresToken': true,
@@ -44,12 +61,29 @@ class Api {
       );
       return true;
     } catch (e) {
-      // print('error: $e');
+      // print('Something Error (Checkout Guest) : $e');
       return false;
     }
   }
 
-  /* ========= START API CUSTOMER ========= */
+  Future<bool> signOut() async {
+    try {
+      await _dio.post(
+        '/auth/signout',
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          },
+        ),
+      );
+      return true;
+    } catch (e) {
+      // print('Something Error (Sign Out) : $e');
+      return false;
+    }
+  }
+
+  /* ========= START API Guest & CUSTOMER ========= */
 
 
   /* ========= START API PRODUCTS ========= */
@@ -113,11 +147,10 @@ class Api {
           'id': null,
           'name': null,
           'number': null,
-          'used': null,
+          'status': null,
           'section': TableSection.fromJson({
             'id': null,
             'name': null,
-            'code': null,
           }),
         }
       });

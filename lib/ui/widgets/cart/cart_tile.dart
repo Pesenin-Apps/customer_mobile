@@ -30,7 +30,7 @@ class _CartTileState extends State<CartTile> {
           borderRadius: BorderRadius.circular(12),
           image: DecorationImage(
             image: NetworkImage(
-              'https://pesenin.onggolt-dev.com/uploads/' + widget.cart.product!.image.toString(),
+              'https://api-pesenin.onggolt-dev.com/uploads/' + widget.cart.product!.image.toString(),
             ),
           ),
         ),

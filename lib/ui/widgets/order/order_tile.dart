@@ -22,7 +22,7 @@ class OrderTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           image: DecorationImage(
             image: NetworkImage(
-              'https://pesenin.onggolt-dev.com/uploads/' + orderItem.product!.image.toString(),
+              'https://api-pesenin.onggolt-dev.com/uploads/' + orderItem.product!.image.toString(),
             ),
           ),
         ),

@@ -11,7 +11,7 @@ TableModel _$TableModelFromJson(Map<String, dynamic> json) {
     id: json['_id'] as String?,
     name: json['name'] as String?,
     number: json['number'] as int?,
-    used: json['used'] as bool?,
+    status: json['status'] as int?,
     section: json['section'] == null
         ? null
         : TableSection.fromJson(json['section'] as Map<String, dynamic>),
@@ -23,7 +23,7 @@ Map<String, dynamic> _$TableModelToJson(TableModel instance) =>
       '_id': instance.id,
       'name': instance.name,
       'number': instance.number,
-      'used': instance.used,
+      'status': instance.status,
       'section': instance.section,
     };
 

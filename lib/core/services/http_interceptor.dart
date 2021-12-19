@@ -41,8 +41,10 @@ class HttpInterceptors extends Interceptor {
       // implement logout
       // await SharedPreferences.getInstance();
       final prefs = await SharedPreferences.getInstance();
-      prefs.remove('customerNewData');
+      // prefs.remove('customerNewData');
       prefs.remove('tokenData');
+      prefs.remove('userData');
+      prefs.remove('roleData');
       locator<NavigationCustom>().navigateReplace('/onboarding');
     } else if ([400, 402, 403, 404].contains(DioExceptions.fromDioError(err).getStatusCode())) {
       _dialogError!.showErrorDialog(jsonDecode(err.response!.toString())['message']);
