@@ -4,7 +4,7 @@ import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/order_vm.dart';
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
-import 'package:customer_pesenin/ui/widgets/order/order_tile.dart';
+import 'package:customer_pesenin/ui/widgets/order/order_item_tile.dart';
 import 'package:customer_pesenin/ui/widgets/order/order_description_tile.dart';
 import 'package:customer_pesenin/ui/widgets/order/order_is_empty.dart';
 import 'package:customer_pesenin/ui/widgets/order/order_payment_status.dart';
@@ -112,7 +112,7 @@ class _OrderScreenState extends State<OrderScreen> {
             Consumer<OrderVM>(
               builder: (context, orderVM, child) => Column(
                 children: [
-                  for (var i = 0; i < orderVM.orderDetail.orderItem!.length; i++) OrderTile(orderItem: orderVM.orderDetail.orderItem![i]),
+                  for (var i = 0; i < orderVM.orderDetail.orderItem!.length; i++) OrderItemTile(orderItem: orderVM.orderDetail.orderItem![i]),
                   const SizedBox(height: 5),
                   Center(
                     child: Padding(

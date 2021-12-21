@@ -37,12 +37,15 @@ Color backgroundColor3 = const Color(0xffFFFFFF);
 // Color backgroundColor3 = const Color(0xff2F2A21);
 Color backgroundColor4 = const Color(0xff322D25);
 // Color backgroundColor4 = const Color(0xff353025);
+Color backgroundColor5 = const Color(0xffF9F9F9);
+// Color backgroundColorTile = const Color(0xffFBFAF8);
 Color primaryTextColor = const Color(0xff111111);
 // Color primaryTextColor = const Color(0xffF1F0F2);
 Color secondaryTextColor = const Color(0xff9B9B9A);
 Color subtitleTextColor = const Color(0xff3C3833);
 Color transparentColor = Colors.transparent;
 Color errorColor = Colors.red;
+Color roundedBorderColor = const Color(0xffF5F5F5);
 
 FontWeight light = FontWeight.w300;
 FontWeight regular = FontWeight.w400;

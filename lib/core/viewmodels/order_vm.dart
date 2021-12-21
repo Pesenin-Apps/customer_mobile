@@ -7,6 +7,25 @@ import 'package:flutter/material.dart';
 class OrderVM extends ChangeNotifier {
 
   Api api = locator<Api>();
+  List<Order> _onGoingCustomerOrders = [];
+
+  List<Order> get onGoingCustomerOrders {
+    return [..._onGoingCustomerOrders];
+  }
+
+  Future fetchOnGoingCustomerOrders() async {
+    final Map<String, dynamic> queryParams = {
+      'filters': {
+        'status' : [ 1, 2, 3],
+        'is_paid' : false, 
+      }
+    };
+    _onGoingCustomerOrders = await api.getOrders(queryParams);
+    notifyListeners();
+  }
+
+  // old
+
   Order? _orderDetail;
 
   Order get orderDetail {

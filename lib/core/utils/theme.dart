@@ -37,3 +37,7 @@ TextStyle warningTextStyle = GoogleFonts.poppins(
 TextStyle infoTextStyle = GoogleFonts.poppins(
   color: infoColor
 );
+
+TextStyle themeTextStyle = GoogleFonts.poppins(
+  color: primaryColor
+);

@@ -162,6 +162,32 @@ class Api {
   
   /* ========= START API ORDER ========= */
 
+  // Guest //
+
+
+  // [START] Customer //
+
+  Future<List<Order>> getOrders(Map<String, dynamic> queryParams) async {
+    try {
+      var response = await _dio.get(
+        '/customers/orders',
+        queryParameters: queryParams,
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          },
+        ),
+      );
+      return (response.data['data'] as List<dynamic>).map((e) {
+        return Order.fromJson(e);
+      }).toList();
+    } catch (e) {
+      return [];
+    }
+  }
+
+  // [END] Customer //
+
   Future<Order?> getOrder() async {
     try {
       var response = await _dio.get(

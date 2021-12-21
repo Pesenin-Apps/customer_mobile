@@ -1,6 +1,7 @@
 import 'package:customer_pesenin/core/helpers/routes_generator.dart';
 import 'package:customer_pesenin/core/services/navigation_custom.dart';
 import 'package:customer_pesenin/core/viewmodels/user_vm.dart';
+import 'package:customer_pesenin/ui/views/customer/home_screen.dart';
 import 'package:customer_pesenin/ui/views/home_screen.dart';
 import 'package:customer_pesenin/ui/views/splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -28,10 +29,10 @@ class MyApp extends StatelessWidget {
       child: Consumer<UserVM>(
         builder: (context, userVM, _) => MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: userVM.isAuth ? ( userVM.isGuest ? const HomeScreen() : const SizedBox() ) : FutureBuilder(
+          home: userVM.isAuth ? ( userVM.isGuest ? const HomeScreen() : const CustomerHomeScreen() ) : FutureBuilder(
             future: userVM.tryAutoCheckInAndSignIn(),
             builder: (context, snapshot) {
-              return snapshot.connectionState == ConnectionState.waiting ? ( userVM.isGuest ? const HomeScreen() : const SizedBox() ) : const SplashScreen();
+              return snapshot.connectionState == ConnectionState.waiting ? ( userVM.isGuest ? const HomeScreen() : const CustomerHomeScreen() ) : const SplashScreen();
             },
           ),
           navigatorKey: locator<NavigationCustom>().navigatorKey,

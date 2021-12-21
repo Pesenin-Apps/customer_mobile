@@ -1,5 +1,6 @@
 import 'package:customer_pesenin/core/helpers/routes_generator.dart';
 import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
+import 'package:customer_pesenin/ui/views/auth/sign_in_screen.dart';
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
 import 'package:customer_pesenin/ui/views/scanning_screen.dart';
 import 'package:flutter/material.dart';
@@ -122,7 +123,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     margin: EdgeInsets.zero,
                     child: TextButton(
                       onPressed: () {
-                        print('Halaman Sign Nih Bosskuh');
+                        Navigator.pushNamed(context, SignInScreen.routeName);
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: primaryColor,

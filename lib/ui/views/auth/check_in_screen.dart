@@ -25,7 +25,7 @@ class CheckInScreen extends StatefulWidget {
 
 class _CheckInScreenState extends State<CheckInScreen> {
 
-  bool _isLoading = false;
+  bool _isLoadingSubmit = false;
   String deviceDetection = '';
   final TextEditingController nameController = TextEditingController(text: '');
 
@@ -54,7 +54,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
 
   void submitForm() async {
 
-    setState(() => _isLoading = true);
+    setState(() => _isLoadingSubmit = true);
 
     final Map<String, dynamic> checkInForm = {
       'table' : widget.table,
@@ -78,7 +78,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
       );
     }
 
-    setState(() => _isLoading = false);
+    setState(() => _isLoadingSubmit = false);
 
   }
   
@@ -180,7 +180,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
               borderRadius: BorderRadius.circular(16),
             )
           ),
-          child: _isLoading ? Container(
+          child: _isLoadingSubmit ? Container(
             width: 16,
             height: 16,
             margin: EdgeInsets.zero,
