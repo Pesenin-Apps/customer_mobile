@@ -34,12 +34,14 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     if (mounted) setState(() => _isLoadingPage = true );
     if (mounted) await Provider.of<UserVM>(context, listen: false).fetchCustomer();
     if (mounted) await Provider.of<OrderVM>(context, listen: false).fetchOnGoingCustomerOrders();
+    if (mounted) await Provider.of<OrderVM>(context, listen: false).fetchHistoryCustomerOrderLimits();
     if (mounted) setState(() => _isLoadingPage = false );
   }
 
   Future refreshData() async{
-    if (mounted) await Provider.of<OrderVM>(context, listen: false).fetchOnGoingCustomerOrders();
     if (mounted) await Provider.of<UserVM>(context, listen: false).fetchCustomer();
+    if (mounted) await Provider.of<OrderVM>(context, listen: false).fetchOnGoingCustomerOrders();
+    if (mounted) await Provider.of<OrderVM>(context, listen: false).fetchHistoryCustomerOrderLimits();
     setState(() { });
   }
 
@@ -244,15 +246,15 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     }
 
     Widget orderOnGoing() {
-      return Container(
-        margin: EdgeInsets.only(
-          top: defaultMargin,
-        ),
-        padding: EdgeInsets.symmetric(
-          horizontal: defaultMargin,
-        ),
-        child: Consumer<OrderVM>(
-          builder: (context, orderVM, child) => orderVM.onGoingCustomerOrders.isEmpty ? const SizedBox() : Column(
+      return Consumer<OrderVM>(
+        builder: (context, orderVM, child) => orderVM.onGoingCustomerOrders.isEmpty ? const SizedBox() : Container(
+          margin: EdgeInsets.only(
+            top: defaultMargin,
+          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: defaultMargin,
+          ),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -276,45 +278,54 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     }
 
     Widget orderHistory() {
-      return Container(
-        margin: EdgeInsets.only(
-          top: defaultMargin,
-        ),
-        padding: EdgeInsets.symmetric(
-          horizontal: defaultMargin,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Riwayat',
-                  style: primaryTextStyle.copyWith(
-                    fontSize: 13,
-                    fontWeight: semiBold,
-                  ),
-                ),
-                InkWell(
-                  onTap: () {
-                    print('Halaman Riwayat Pesanan');
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6.0),
-                    child: Text(
-                      'Lihat Semua',
-                      style: themeTextStyle.copyWith(
-                        fontSize: 12,
-                        fontWeight: bold,
-                      ),
+      return Consumer<OrderVM>(
+        builder: (context, orderVM, child) => orderVM.historyCustomerOrderLimits.isEmpty ? const SizedBox() : Container(
+          margin: EdgeInsets.only(
+            top: defaultMargin,
+          ),
+          padding: EdgeInsets.symmetric(
+            horizontal: defaultMargin,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Riwayat',
+                    style: primaryTextStyle.copyWith(
+                      fontSize: 13,
+                      fontWeight: semiBold,
                     ),
                   ),
-                ) ,
-              ],
-            ),
-          ],
-        ),
+                  orderVM.isLimited ? InkWell(
+                    onTap: () {
+                      print('Halaman Riwayat Pesanan');
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6.0),
+                      child: Text(
+                        'Lihat Semua',
+                        style: themeTextStyle.copyWith(
+                          fontSize: 12,
+                          fontWeight: bold,
+                        ),
+                      ),
+                    ),
+                  ) : const SizedBox() ,
+                ],
+              ),
+              const SizedBox(height: 5),
+              Column(
+                children: [
+                  for (var i = 0; i < orderVM.historyCustomerOrderLimits.length; i++) 
+                    OrderTile(order: orderVM.historyCustomerOrderLimits[i]),
+                ],
+              ),
+            ],
+          ),
+        )
       );
     }
 

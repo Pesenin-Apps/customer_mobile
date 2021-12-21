@@ -8,19 +8,55 @@ class OrderVM extends ChangeNotifier {
 
   Api api = locator<Api>();
   List<Order> _onGoingCustomerOrders = [];
+  List<Order> _historyCustomerOrders = [];
+  List<Order> _historyCustomerOrderLimits = [];
 
   List<Order> get onGoingCustomerOrders {
     return [..._onGoingCustomerOrders];
   }
 
+  List<Order> get historyCustomerOrders {
+    return [..._historyCustomerOrders];
+  }
+
+  List<Order> get historyCustomerOrderLimits {
+    return [..._historyCustomerOrderLimits];
+  }
+
+  bool get isLimited {
+    return _historyCustomerOrderLimits.length > 3;
+  }
+
   Future fetchOnGoingCustomerOrders() async {
     final Map<String, dynamic> queryParams = {
       'filters': {
-        'status' : [ 1, 2, 3],
+        'status' : [ 1, 2, 3 ],
         'is_paid' : false, 
       }
     };
     _onGoingCustomerOrders = await api.getOrders(queryParams);
+    notifyListeners();
+  }
+
+  Future fetchHistoryCustomerOrders() async {
+    final Map<String, dynamic> queryParams = {
+      'filters': {
+        'status' : [ 1, 2, 3 ],
+        'is_paid' : true, 
+      }
+    };
+    _historyCustomerOrders = await api.getOrders(queryParams);
+    notifyListeners();
+  }
+
+  Future fetchHistoryCustomerOrderLimits() async {
+    final Map<String, dynamic> queryParams = {
+      'filters': {
+        'status' : [ 1, 2, 3 ],
+        'is_paid' : true, 
+      }
+    };
+    _historyCustomerOrderLimits = await api.getOrders(queryParams);
     notifyListeners();
   }
 
