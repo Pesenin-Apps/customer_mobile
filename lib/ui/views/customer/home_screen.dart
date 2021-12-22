@@ -6,6 +6,7 @@ import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/order_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/user_vm.dart';
+import 'package:customer_pesenin/ui/views/customer/orders/histories_screen.dart';
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
 import 'package:customer_pesenin/ui/views/scanning_screen.dart';
 import 'package:customer_pesenin/ui/widgets/order/order_tile.dart';
@@ -34,14 +35,14 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     if (mounted) setState(() => _isLoadingPage = true );
     if (mounted) await Provider.of<UserVM>(context, listen: false).fetchCustomer();
     if (mounted) await Provider.of<OrderVM>(context, listen: false).fetchOnGoingCustomerOrders();
-    if (mounted) await Provider.of<OrderVM>(context, listen: false).fetchHistoryCustomerOrderLimits();
+    if (mounted) await Provider.of<OrderVM>(context, listen: false).fetchHistoryCustomerOrders();
     if (mounted) setState(() => _isLoadingPage = false );
   }
 
   Future refreshData() async{
     if (mounted) await Provider.of<UserVM>(context, listen: false).fetchCustomer();
     if (mounted) await Provider.of<OrderVM>(context, listen: false).fetchOnGoingCustomerOrders();
-    if (mounted) await Provider.of<OrderVM>(context, listen: false).fetchHistoryCustomerOrderLimits();
+    if (mounted) await Provider.of<OrderVM>(context, listen: false).fetchHistoryCustomerOrders();
     setState(() { });
   }
 
@@ -301,7 +302,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                   ),
                   orderVM.isLimited ? InkWell(
                     onTap: () {
-                      print('Halaman Riwayat Pesanan');
+                      Navigator.pushNamed(context, CustomerOrderHistoryScreen.routeName);
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 6.0),
@@ -331,17 +332,19 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
 
     return Consumer<ConnectionVM>(
       builder: (context, connectionVM, _) => connectionVM.isOnline != null && connectionVM.isOnline! ? SafeArea(
-        child: _isLoadingPage ? Center(
-          child: SizedBox(
-            height: 33,
-            width: 33,
-            child: CircularProgressIndicator(
-              color: primaryColor,
+        child:  _isLoadingPage ? Scaffold(
+          body: Center(
+              child: SizedBox(
+                height: 33,
+                width: 33,
+                child: CircularProgressIndicator(
+                  color: primaryColor,
+                ),
+              ),
             ),
-          ),
         ) : Scaffold(
-            backgroundColor: backgroundColor1,
-            body: Platform.isIOS ? Container() : RefreshIndicator(
+          backgroundColor: backgroundColor1,
+          body: Platform.isIOS ? Container() : RefreshIndicator(
             backgroundColor: backgroundColor1,
             color: primaryColor,
             onRefresh: refreshData,
