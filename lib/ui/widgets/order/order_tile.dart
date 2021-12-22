@@ -1,7 +1,7 @@
 import 'package:customer_pesenin/core/models/order.dart';
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
-import 'package:customer_pesenin/ui/widgets/order/order_status.dart';
+import 'package:customer_pesenin/ui/widgets/order/order_type.dart';
 import 'package:flutter/material.dart';
 
 class OrderTile extends StatelessWidget {
@@ -74,7 +74,7 @@ class OrderTile extends StatelessWidget {
                 ),
               ],
             ),
-            OrderStatus(status: order.status!, addCircle: false,),
+            OrderType(type: order.type!),
           ],
         ),
       ),
