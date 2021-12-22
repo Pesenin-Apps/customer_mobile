@@ -10,6 +10,7 @@ import 'package:customer_pesenin/ui/views/customer/orders/histories_screen.dart'
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
 import 'package:customer_pesenin/ui/views/scanning_screen.dart';
 import 'package:customer_pesenin/ui/widgets/order/order_tile.dart';
+import 'package:customer_pesenin/ui/widgets/refresh/page_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -133,7 +134,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                       border: Border.all(
                         color: roundedBorderColor
                       ),
-                                    boxShadow: [
+                      boxShadow: [
                         BoxShadow(
                           offset: const Offset(0, 3),
                           spreadRadius: 0,
@@ -198,7 +199,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                       border: Border.all(
                         color: roundedBorderColor
                       ),
-                                    boxShadow: [
+                      boxShadow: [
                         BoxShadow(
                           offset: const Offset(0, 3),
                           spreadRadius: 0,
@@ -332,17 +333,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
 
     return Consumer<ConnectionVM>(
       builder: (context, connectionVM, _) => connectionVM.isOnline != null && connectionVM.isOnline! ? SafeArea(
-        child:  _isLoadingPage ? Scaffold(
-          body: Center(
-              child: SizedBox(
-                height: 33,
-                width: 33,
-                child: CircularProgressIndicator(
-                  color: primaryColor,
-                ),
-              ),
-            ),
-        ) : Scaffold(
+        child:  _isLoadingPage ? PageRefresh(bgColor: backgroundColor1, circularColor: primaryColor) : Scaffold(
           backgroundColor: backgroundColor1,
           body: Platform.isIOS ? Container() : RefreshIndicator(
             backgroundColor: backgroundColor1,

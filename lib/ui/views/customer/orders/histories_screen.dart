@@ -6,6 +6,7 @@ import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/order_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/user_vm.dart';
 import 'package:customer_pesenin/ui/widgets/order/order_tile.dart';
+import 'package:customer_pesenin/ui/widgets/refresh/page_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,13 +30,13 @@ class _CustomerOrderHistoryScreenState extends State<CustomerOrderHistoryScreen>
 
   void getData() async {
     Provider.of<ConnectionVM>(context, listen: false).startMonitoring();
-    if (mounted) setState(() => _isLoadingPage = true );
-    if (mounted) await Provider.of<OrderVM>(context, listen: false).fetchHistoryCustomerOrders();
-    if (mounted) setState(() => _isLoadingPage = false );
+    setState(() => _isLoadingPage = true );
+    await Provider.of<OrderVM>(context, listen: false).fetchHistoryCustomerOrders();
+    setState(() => _isLoadingPage = false );
   }
 
   Future refreshData() async{
-    if (mounted) await Provider.of<OrderVM>(context, listen: false).fetchHistoryCustomerOrders();
+    await Provider.of<OrderVM>(context, listen: false).fetchHistoryCustomerOrders();
     setState(() { });
   }
 
@@ -67,17 +68,7 @@ class _CustomerOrderHistoryScreenState extends State<CustomerOrderHistoryScreen>
     }
 
     return SafeArea(
-      child: _isLoadingPage ? Scaffold(
-        body: Center(
-            child: SizedBox(
-              height: 33,
-              width: 33,
-              child: CircularProgressIndicator(
-                color: primaryColor,
-              ),
-            ),
-          ),
-      ) : Scaffold(
+      child: _isLoadingPage ? PageRefresh(bgColor: backgroundColor1, circularColor: primaryColor) : Scaffold(
         backgroundColor: backgroundColor1,
         appBar: AppBar(
           backgroundColor: primaryColor,
