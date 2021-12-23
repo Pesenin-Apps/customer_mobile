@@ -186,9 +186,43 @@ class Api {
     }
   }
 
+  Future<Order?> getOrder(String id) async {
+    try {
+      var response = await _dio.get(
+        '/orders/$id',
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          },
+        ),
+      );
+      return Order.fromJson(response.data['data']);
+    } catch (e) {
+      // print('Something Error (getOrder) : $e');
+      return null;
+    }
+  }
+
+  Future<bool> postCancelCustomerOrder(String id) async {
+    try {
+      await _dio.post(
+        '/customers/orders/cancel/$id',
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          },
+        ),
+      );
+      return true;
+    } catch (e) {
+      // print('Something Error (postCancelOrder) : $e');
+      return false;
+    }
+  }
+
   // [END] Customer //
 
-  Future<Order?> getOrder() async {
+  Future<Order?> getOrderGuest() async {
     try {
       var response = await _dio.get(
         '/customers/orders',

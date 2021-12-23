@@ -10,6 +10,22 @@ const tableFree = 1;
 const tableUsed = 2;
 const tableReserved = 3;
 
+// Type Order
+const typeDineIn = 1;
+const typeReservation = 2;
+
+// Order Status
+const orderStatusCreated = 1;
+const orderStatusProcessed = 2;
+const orderStatusFinised = 3;
+const orderStatusCanceled = 4;
+
+// Order Item Status
+const orderItemStatusNew = 1;
+const orderItemStatusInQueue = 2;
+const orderItemStatusInProcess = 3;
+const orderItemStatusFinish = 4;
+
 const baseUrlImage = 'https://api-pesenin.onggolt-dev.com/uploads/';
 
 final formatCurrency = NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);

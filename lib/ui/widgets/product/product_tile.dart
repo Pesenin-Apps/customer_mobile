@@ -88,7 +88,7 @@ class ProductTile extends StatelessWidget {
         onTap: () {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: dangerColor,
+              backgroundColor: errorColor,
               content: RichText(
                 text: TextSpan(
                   children: <TextSpan>[
@@ -106,12 +106,12 @@ class ProductTile extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
             border: Border.all(
-              color: dangerColor
+              color: errorColor
             ),
           ),
           child: Icon(
             Icons.block,
-            color: dangerColor,
+            color: errorColor,
             size: 16,
           ),
         ),

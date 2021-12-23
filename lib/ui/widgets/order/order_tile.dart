@@ -1,6 +1,8 @@
+import 'package:customer_pesenin/core/helpers/routes_generator.dart';
 import 'package:customer_pesenin/core/models/order.dart';
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
+import 'package:customer_pesenin/ui/views/customer/orders/detail_screen.dart';
 import 'package:customer_pesenin/ui/widgets/order/order_type.dart';
 import 'package:flutter/material.dart';
 
@@ -37,13 +39,13 @@ class OrderTile extends StatelessWidget {
       ),
       child: InkWell(
         onTap: () {
-          // Navigator.pushNamed(
-          //   context, 
-          //   OrderDetailScreen.routeName,
-          //   arguments: ScreenArguments(
-          //     id: order.id.toString(), 
-          //   ),
-          // );
+          Navigator.pushNamed(
+            context, 
+            CustomerOrderDetailScreen.routeName,
+            arguments: ScreenArguments(
+              id: order.id.toString(), 
+            ),
+          );
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

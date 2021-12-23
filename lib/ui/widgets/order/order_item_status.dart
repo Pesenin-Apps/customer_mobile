@@ -23,7 +23,7 @@ class _OrderItemStatusState extends State<OrderItemStatus> {
       case 1:
         setState(() {
           title = "Menunggu Verifikasi Pelayan";
-          textStyle = dangerTextStyle;
+          textStyle = errorTextStyle;
         });
         break;
       case 2:

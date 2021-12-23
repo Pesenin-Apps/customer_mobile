@@ -25,8 +25,8 @@ class _OrderTypeState extends State<OrderType> {
     switch (widget.type) {
       case 1:
         setState(() {
-          title = "DINE IN";
-          color = dangerColor;
+          title = "DINE-IN";
+          color = errorColor;
         });
         break;
       case 2:

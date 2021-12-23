@@ -69,7 +69,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          backgroundColor: dangerColor,
+          backgroundColor: errorColor,
           content: const Text(
             'Gagal Check In!',
             textAlign: TextAlign.center,

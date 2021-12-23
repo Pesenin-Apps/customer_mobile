@@ -40,6 +40,7 @@ class OrderItemTile extends StatelessWidget {
               'assets/images/placeholder.jpg',
             ),
           ),
+          color: backgroundColor3,
         ),
       );
     }
@@ -53,8 +54,19 @@ class OrderItemTile extends StatelessWidget {
         horizontal: 12,
       ),
       decoration: BoxDecoration(
-        color: backgroundColor2,
+        color: backgroundColor1,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: roundedBorderColor
+        ),
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(0, 3),
+            spreadRadius: 0,
+            blurRadius: 5,
+            color: backgroundColor4.withOpacity(0.2),
+          ),
+        ],
       ),
       child: Row(
         children: [
@@ -76,7 +88,9 @@ class OrderItemTile extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   formatCurrency.format(orderItem.product!.price),
-                  style: priceTextStyle,
+                  style: priceTextStyle.copyWith(
+                    fontWeight: semiBold,
+                  ),
                 ),
               ],
             ),

@@ -1,6 +1,7 @@
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/ui/views/auth/check_in_screen.dart';
+import 'package:customer_pesenin/ui/views/customer/orders/detail_screen.dart';
 import 'package:customer_pesenin/ui/views/scanning_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -33,6 +34,14 @@ class RouteGenerator {
             builder: (context) {
               return ScanningScreen(
                 type: args.type!,
+              );
+            },
+          );
+      case CustomerOrderDetailScreen.routeName:
+        return MaterialPageRoute(
+            builder: (context) {
+              return CustomerOrderDetailScreen(
+                id: args.id,
               );
             },
           );

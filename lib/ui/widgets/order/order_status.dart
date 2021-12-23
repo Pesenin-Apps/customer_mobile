@@ -29,7 +29,7 @@ class _OrderStatusState extends State<OrderStatus> {
       case 1:
         setState(() {
           title = "NEW";
-          color = dangerColor;
+          color = errorColor;
           textStyle = dangerTextStyle;
         });
         break;

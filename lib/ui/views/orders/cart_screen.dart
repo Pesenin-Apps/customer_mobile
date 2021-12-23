@@ -106,7 +106,7 @@ class _CartState extends State<Cart> {
                   ),
                   Icon(
                     Icons.error_outline_rounded,
-                    color: dangerColor,
+                    color: errorColor,
                     size: 100,
                   ),
                   const SizedBox( height: 12),
@@ -147,7 +147,7 @@ class _CartState extends State<Cart> {
                         checkOutAction();
                       },
                       style: TextButton.styleFrom(
-                        backgroundColor: dangerColor,
+                        backgroundColor: errorColor,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -467,14 +467,14 @@ class _CartState extends State<Cart> {
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
                     valueColor: AlwaysStoppedAnimation(
-                      dangerColor,
+                      errorColor,
                     ),
                   ),
                 ),
               ),
             ) : IconButton(
               icon: const Icon(Icons.logout_rounded),
-              color: dangerColor,
+              color: errorColor,
               onPressed: () {
                 showConfirmDialog();
               },

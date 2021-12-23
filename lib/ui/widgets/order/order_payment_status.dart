@@ -48,7 +48,7 @@ class OrderPaymentStatus extends StatelessWidget {
             // color: Colors.white,
             borderRadius: BorderRadius.circular(20),
             border: Border.all(
-              color: dangerColor,
+              color: errorColor,
             ),
           ),
           child: Row(
@@ -56,7 +56,7 @@ class OrderPaymentStatus extends StatelessWidget {
               Icon(
                 Icons.circle,
                 size: 5,
-                color: dangerColor,
+                color: errorColor,
               ),
               const SizedBox(width: 6),
               Text(

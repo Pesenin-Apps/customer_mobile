@@ -30,6 +30,10 @@ TextStyle dangerTextStyle = GoogleFonts.poppins(
   color: dangerColor
 );
 
+TextStyle errorTextStyle = GoogleFonts.poppins(
+  color: errorColor
+);
+
 TextStyle warningTextStyle = GoogleFonts.poppins(
   color: warningColor
 );

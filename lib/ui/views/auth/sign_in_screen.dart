@@ -45,7 +45,7 @@ class _SignInScreenState extends State<SignInScreen> {
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          backgroundColor: dangerColor,
+          backgroundColor: errorColor,
           content: const Text(
             'Gagal, Periksa kembali Username dan Password Anda!',
           ),
