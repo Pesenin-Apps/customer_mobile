@@ -220,7 +220,7 @@ class _OrderScreenState extends State<OrderScreen> {
 
     return Consumer<ConnectionVM>(
       builder: (context, connectionVM, _) => connectionVM.isOnline != null && connectionVM.isOnline! ? Scaffold(
-        backgroundColor: backgroundColor1,
+        backgroundColor: backgroundColor3,
         appBar: AppBar(
           backgroundColor: backgroundColor3,
           elevation: 0,
@@ -236,7 +236,7 @@ class _OrderScreenState extends State<OrderScreen> {
               ),
             ),
           ) : Consumer<OrderVM>(builder: (context, orderVM, _) => orderVM.isExist ? (Platform.isIOS ? Container() : RefreshIndicator(
-            backgroundColor: backgroundColor1,
+            backgroundColor: backgroundColor3,
             color: primaryColor,
             onRefresh: refreshData,
             child: content(),

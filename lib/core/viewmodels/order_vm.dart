@@ -89,6 +89,16 @@ class OrderVM extends ChangeNotifier {
     return response;
   }
 
+  Future<bool> updateCustomerOrderItem(String orderId, Map<String, dynamic> updateForm) async {
+    final bool response = await api.patchCustomerOrderItem(orderId, updateForm);
+    return response;
+  }
+
+  Future<bool> removeCustomerOrderItem(String orderId, Map<String, dynamic> deletedForm) async {
+    final bool response = await api.deleteCustomerOrderItem(orderId, deletedForm);
+    return response;
+  }
+
   // old
 
   Order? _orderDetail;

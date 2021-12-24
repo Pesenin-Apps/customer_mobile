@@ -1,7 +1,9 @@
+import 'package:customer_pesenin/core/helpers/routes_generator.dart';
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/order_vm.dart';
+import 'package:customer_pesenin/ui/views/customer/orders/updated_screen.dart';
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
 import 'package:customer_pesenin/ui/widgets/order/description_tile.dart';
 import 'package:customer_pesenin/ui/widgets/order/order_item_tile.dart';
@@ -174,7 +176,7 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
         ),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: backgroundColor1,
+          color: backgroundColor3,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: roundedBorderColor
@@ -244,13 +246,13 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
                   ),
                   orderVM.canChangedOrderExist ? InkWell(
                     onTap: () {
-                      // Navigator.pushNamed(
-                      //   context, 
-                      //   OrderUpdateScreen.routeName,
-                      //   arguments: ScreenArguments(
-                      //     id: widget.id!, 
-                      //   ),
-                      // );
+                      Navigator.pushNamed(
+                        context, 
+                        CustomerOrderUpdateScreen.routeName,
+                        arguments: ScreenArguments(
+                          id: widget.id!, 
+                        ),
+                      );
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 6.0),
@@ -311,7 +313,7 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
         ),
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: backgroundColor1,
+          color: backgroundColor3,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: roundedBorderColor
@@ -420,7 +422,7 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
 
     Widget content() {
       return RefreshIndicator(
-        backgroundColor: backgroundColor1,
+        backgroundColor: backgroundColor3,
         color: primaryColor,
         onRefresh: refreshData,
         child: ListView(
@@ -440,7 +442,7 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
     return Consumer<ConnectionVM>(
       builder: (context, connectionVM, _) => connectionVM.isOnline != null && connectionVM.isOnline! ? SafeArea(
         child: Scaffold(
-          backgroundColor: backgroundColor1,
+          backgroundColor: backgroundColor3,
           appBar: AppBar(
             backgroundColor: primaryColor,
             leading: IconButton(

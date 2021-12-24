@@ -54,7 +54,7 @@ class OrderItemTile extends StatelessWidget {
         horizontal: 12,
       ),
       decoration: BoxDecoration(
-        color: backgroundColor1,
+        color: backgroundColor3,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
           color: roundedBorderColor

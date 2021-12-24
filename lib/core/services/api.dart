@@ -215,7 +215,43 @@ class Api {
       );
       return true;
     } catch (e) {
-      // print('Something Error (postCancelOrder) : $e');
+      // print('Something Error (postCancelCustomerOrder) : $e');
+      return false;
+    }
+  }
+
+  Future<bool> patchCustomerOrderItem(String orderId, Map<String, dynamic> updatedForm) async {
+    try {
+      await _dio.patch(
+        '/customers/orders/$orderId',
+        data: updatedForm,
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          },
+        ),
+      );
+      return true;
+    } catch (e) {
+      // print('Something Error (patchCustomerOrderItem) : $e');
+      return false;
+    }
+  }
+
+  Future<bool> deleteCustomerOrderItem(String orderId, Map<String, dynamic> deletedForm) async {
+    try {
+      await _dio.delete(
+        '/customers/orders/$orderId',
+        data: deletedForm,
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          },
+        ),
+      );
+      return true;
+    } catch (e) {
+      // print('Something Error (deleteCustomerOrderItem) : $e');
       return false;
     }
   }

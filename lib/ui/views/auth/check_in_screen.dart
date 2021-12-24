@@ -203,7 +203,7 @@ class _CheckInScreenState extends State<CheckInScreen> {
 
     return Consumer<ConnectionVM>(
       builder: (context, connectionVM, _) => connectionVM.isOnline != null && connectionVM.isOnline! ? Scaffold(
-        backgroundColor: backgroundColor1,
+        backgroundColor: backgroundColor3,
         resizeToAvoidBottomInset: false,
         body: SafeArea(
           child: SingleChildScrollView(

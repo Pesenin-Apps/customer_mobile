@@ -445,7 +445,7 @@ class _CartState extends State<Cart> {
 
     return Consumer<ConnectionVM>(
       builder: (context, connectionVM, _) => connectionVM.isOnline != null && connectionVM.isOnline! ? Scaffold(
-        backgroundColor: backgroundColor1,
+        backgroundColor: backgroundColor3,
         appBar: AppBar(
           backgroundColor: backgroundColor3,
           leading: IconButton(

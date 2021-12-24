@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ) : Scaffold(
-          backgroundColor: backgroundColor1,
+          backgroundColor: backgroundColor3,
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(105.0),
             child: Column(
@@ -242,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ) : Platform.isIOS ? Container() : RefreshIndicator(
-            backgroundColor: backgroundColor1,
+            backgroundColor: backgroundColor3,
             color: primaryColor,
             onRefresh: refreshData,
             child: ListView(

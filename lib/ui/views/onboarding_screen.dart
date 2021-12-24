@@ -151,7 +151,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
 
     return Consumer<ConnectionVM>(
       builder: (context, connectionVM, _) => connectionVM.isOnline != null && connectionVM.isOnline! ? Scaffold(
-        backgroundColor: backgroundColor1,
+        backgroundColor: backgroundColor3,
         body: SingleChildScrollView(
           child: Container(
             margin: EdgeInsets.symmetric(

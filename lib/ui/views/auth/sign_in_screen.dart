@@ -272,7 +272,7 @@ class _SignInScreenState extends State<SignInScreen> {
 
     return Consumer<ConnectionVM>(
       builder: (context, connectionVM, _) => connectionVM.isOnline != null && connectionVM.isOnline! ? Scaffold(
-        backgroundColor: backgroundColor1,
+        backgroundColor: backgroundColor3,
         body: SafeArea(
           child: SingleChildScrollView(
             child: Container(

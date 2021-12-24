@@ -132,7 +132,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                     //   ],
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: roundedBorderColor
+                        color: const Color(0xffc0f2ed),
                       ),
                       boxShadow: [
                         BoxShadow(
@@ -197,7 +197,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                     //   ],
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: roundedBorderColor
+                        color: const Color(0xffffe4b3),
                       ),
                       boxShadow: [
                         BoxShadow(
@@ -333,10 +333,10 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
 
     return Consumer<ConnectionVM>(
       builder: (context, connectionVM, _) => connectionVM.isOnline != null && connectionVM.isOnline! ? SafeArea(
-        child:  _isLoadingPage ? PageRefresh(bgColor: backgroundColor1, circularColor: primaryColor) : Scaffold(
-          backgroundColor: backgroundColor1,
+        child:  _isLoadingPage ? PageRefresh(bgColor: backgroundColor3, circularColor: primaryColor) : Scaffold(
+          backgroundColor: backgroundColor3,
           body: Platform.isIOS ? Container() : RefreshIndicator(
-            backgroundColor: backgroundColor1,
+            backgroundColor: backgroundColor3,
             color: primaryColor,
             onRefresh: refreshData,
             child: ListView(

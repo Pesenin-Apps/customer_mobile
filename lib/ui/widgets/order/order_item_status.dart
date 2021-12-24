@@ -29,13 +29,13 @@ class _OrderItemStatusState extends State<OrderItemStatus> {
       case 2:
         setState(() {
           title = "Sedang Diproses";
-          textStyle = warningTextStyle;
+          textStyle = themeTextStyle;
         });
         break;
       case 3:
         setState(() {
           title = "Sedang Diproses";
-          textStyle = warningTextStyle;
+          textStyle = themeTextStyle;
         });
         break;
       case 4:

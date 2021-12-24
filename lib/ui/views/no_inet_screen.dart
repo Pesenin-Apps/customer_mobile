@@ -21,7 +21,7 @@ class _NoInternetConnectionScreenState extends State<NoInternetConnectionScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor1,
+      backgroundColor: backgroundColor3,
       body: Container(
         margin: EdgeInsets.zero,
         child: Column(

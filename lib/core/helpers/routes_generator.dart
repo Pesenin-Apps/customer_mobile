@@ -2,6 +2,7 @@ import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/ui/views/auth/check_in_screen.dart';
 import 'package:customer_pesenin/ui/views/customer/orders/detail_screen.dart';
+import 'package:customer_pesenin/ui/views/customer/orders/updated_screen.dart';
 import 'package:customer_pesenin/ui/views/scanning_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -45,6 +46,14 @@ class RouteGenerator {
               );
             },
           );
+      case CustomerOrderUpdateScreen.routeName:
+        return MaterialPageRoute(
+            builder: (context) {
+              return CustomerOrderUpdateScreen(
+                id: args.id,
+              );
+            },
+          );
       default:
         return _onErrorRoute();
     }
@@ -67,7 +76,7 @@ class ErrorRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor1,
+      backgroundColor: backgroundColor3,
       appBar: AppBar(
         backgroundColor: transparentColor,
         leading: IconButton(
