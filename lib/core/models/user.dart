@@ -29,11 +29,13 @@ class UserModel {
   String? id;
   String? fullname;
   String? email;
+  String? phone;
 
   UserModel({
     required this.id,
     required this.fullname,
     required this.email,
+    this.phone,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);

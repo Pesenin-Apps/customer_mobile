@@ -1,5 +1,6 @@
 import 'package:customer_pesenin/core/utils/constans.dart';
-import 'package:customer_pesenin/ui/views/home_screen.dart';
+import 'package:customer_pesenin/ui/views/customer/profiles/change_password_screen.dart';
+import 'package:customer_pesenin/ui/views/customer/profiles/change_profile_screen.dart';
 import 'package:customer_pesenin/ui/widgets/menu_tile.dart';
 import 'package:flutter/material.dart';
 
@@ -28,8 +29,8 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: const [
-              MenuTile(title: 'Ubah Profil', routeName: HomeScreen.routeName),
-              MenuTile(title: 'Ganti Password', routeName: HomeScreen.routeName),
+              MenuTile(title: 'Ubah Profil', routeName: ChangeProfileScreen.routeName),
+              MenuTile(title: 'Ganti Password', routeName: ChangePasswordScreen.routeName),
             ],
           ),
         ),

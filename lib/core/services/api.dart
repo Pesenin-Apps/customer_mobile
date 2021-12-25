@@ -83,6 +83,24 @@ class Api {
     }
   }
 
+  Future<bool> postUpdateProfileCustomer(Map<String, dynamic> changedForm) async {
+    try {
+      await _dio.post(
+        '/users/change-profile',
+        data: changedForm,
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          },
+        ),
+      );
+      return true;
+    } catch (e) {
+      // print('Something Error (postProfile) : $e');
+      return false;
+    }
+  }
+
   /* ========= START API Guest & CUSTOMER ========= */
 
 

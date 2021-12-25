@@ -59,6 +59,10 @@ class UserVM extends ChangeNotifier {
     }
   }
 
+  UserModel get customerDetail {
+    return customer!;
+  }
+
   TableModel get tableDetail {
     return _tableDetail!;
   }
@@ -249,6 +253,16 @@ class UserVM extends ChangeNotifier {
 
     } else {
       // print('Something Is Wrong');
+      return false;
+    }
+  }
+
+  Future<bool> changeProfileCustomer(Map<String, dynamic> changedProfileForm) async {
+    final response = await api.postUpdateProfileCustomer(changedProfileForm);
+    notifyListeners();
+    if (response) {
+      return true;
+    } else {
       return false;
     }
   }
