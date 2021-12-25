@@ -3,6 +3,7 @@ import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/order_vm.dart';
+import 'package:customer_pesenin/ui/views/customer/orders/choose_product_screen.dart';
 import 'package:customer_pesenin/ui/views/customer/orders/updated_screen.dart';
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
 import 'package:customer_pesenin/ui/widgets/order/description_tile.dart';
@@ -48,20 +49,19 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
     Future.delayed(const Duration(seconds: 2), () async {
       final response =  await Provider.of<OrderVM>(context, listen: false).cancelCustomerOrder(widget.id!);
       if (response) {
+        // refresh data
+        await Provider.of<OrderVM>(context, listen: false).fetchOnGoingCustomerOrders();
+        await Provider.of<OrderVM>(context, listen: false).fetchHistoryCustomerOrders();
+        setState(() { });
         Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            behavior: SnackBarBehavior.floating,
             backgroundColor: primaryColor,
             content: const Text(
               'Berhasil, Pesanan telah di Batalkan!',
             ),
           ),
         );
-        // refresh data
-        await Provider.of<OrderVM>(context, listen: false).fetchOnGoingCustomerOrders();
-        await Provider.of<OrderVM>(context, listen: false).fetchHistoryCustomerOrders();
-        setState(() { });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -76,7 +76,7 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
     });
   }
 
-  Future refreshData() async{
+  Future refreshData() async {
     if (mounted) await Provider.of<OrderVM>(context, listen: false).fetchCustomerOrderDetail(widget.id!);
     setState(() { });
   }
@@ -216,7 +216,7 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
               DescriptionTile(title: 'Waktu', description: formatTime.format(
                 DateTime.parse(orderVM.order.createdAt!).toLocal(),
               )),
-              DescriptionTile(title: 'Pelanggan', description: orderVM.order.customer!.fullname),
+              DescriptionTile(title: 'Pelayan', description: orderVM.order.waiter!.users!.fullname),
               DescriptionTile(title: 'Meja Bagian', description: orderVM.order.table!.section!.name.toString()),
               DescriptionTile(title: 'Nomor Meja', description: orderVM.order.table!.number.toString()),
             ],
@@ -276,14 +276,14 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
                       padding: const EdgeInsets.all(8.0),
                       child: InkWell(
                         onTap: () {
-                          // Navigator.pushNamed(
-                          //   context, 
-                          //   ProductScreen.routeName,
-                          //   arguments: ScreenArguments(
-                          //     table: orderVM.order.table!.id,
-                          //     orderInfo: 'additional',
-                          //   ),
-                          // );
+                          Navigator.pushNamed(
+                            context, 
+                            ChooseProductScreen.routeName,
+                            arguments: ScreenArguments(
+                              table: orderVM.order.table!.id,
+                              type: 'additional',
+                            ),
+                          );
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 6.0),

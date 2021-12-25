@@ -4,6 +4,7 @@ import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/user_vm.dart';
 import 'package:customer_pesenin/ui/views/auth/check_in_screen.dart';
+import 'package:customer_pesenin/ui/views/customer/orders/choose_product_screen.dart';
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -141,7 +142,14 @@ class _ScanningScreenState extends State<ScanningScreen> {
                 ),
               );
             } else {
-              print('For Create Order Customer');
+              Navigator.pushNamed(
+                context, 
+                ChooseProductScreen.routeName,
+                arguments: ScreenArguments(
+                  table: tableId,
+                  type: 'new',
+                ),
+              );
             }
           },
           style: TextButton.styleFrom(

@@ -48,6 +48,7 @@ class _CartTileState extends State<CartTile> {
               'assets/images/placeholder.jpg',
             ),
           ),
+          color: backgroundColor3,
         ),
       );
     }
@@ -61,8 +62,19 @@ class _CartTileState extends State<CartTile> {
         vertical: 10,
       ),
       decoration: BoxDecoration(
-        color: backgroundColor2,
+        color: backgroundColor3,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: roundedBorderColor
+        ),
+        boxShadow: [
+          BoxShadow(
+            offset: const Offset(0, 3),
+            spreadRadius: 0,
+            blurRadius: 5,
+            color: backgroundColor4.withOpacity(0.2),
+          ),
+        ],
       ),
       child: Column(
         children: [
@@ -95,7 +107,7 @@ class _CartTileState extends State<CartTile> {
                     },
                     child: Image.asset(
                       'assets/icons/icon_cart_add.png',
-                      width: 20,
+                      width: 23,
                     ),
                   ),
                   const SizedBox(height: 2),
@@ -112,7 +124,7 @@ class _CartTileState extends State<CartTile> {
                     },
                     child: Image.asset(
                       'assets/icons/icon_cart_minus.png',
-                      width: 20,
+                      width: 23,
                     ),
                   ),
                 ],
@@ -128,14 +140,14 @@ class _CartTileState extends State<CartTile> {
               children: [
                 Image.asset(
                   'assets/icons/icon_cart_remove.png',
-                  width: 12,
+                  width: 14,
                 ),
                 const SizedBox(width: 4),
                 Text(
                   'Hapus',
                   style: dangerTextStyle.copyWith(
-                    fontSize: 14,
-                    fontWeight: light,
+                    fontSize: 13,
+                    fontWeight: semiBold,
                   ),
                 ),
               ],

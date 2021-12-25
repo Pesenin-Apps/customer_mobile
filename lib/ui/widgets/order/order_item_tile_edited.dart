@@ -329,13 +329,13 @@ class _OrderItemTileEditedState extends State<OrderItemTileEdited> {
                   children: [
                     Image.asset(
                       'assets/icons/icon_cart_remove.png',
-                      width: 12,
+                      width: 14,
                     ),
                     const SizedBox(width: 4),
                     Text(
                       'Hapus',
                       style: dangerTextStyle.copyWith(
-                        fontSize: 12,
+                        fontSize: 13,
                         fontWeight: semiBold,
                       ),
                     ),

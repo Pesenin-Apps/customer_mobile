@@ -1,17 +1,21 @@
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/ui/views/auth/check_in_screen.dart';
+import 'package:customer_pesenin/ui/views/customer/orders/cart_screen.dart';
 import 'package:customer_pesenin/ui/views/customer/orders/detail_screen.dart';
 import 'package:customer_pesenin/ui/views/customer/orders/updated_screen.dart';
+import 'package:customer_pesenin/ui/views/customer/orders/choose_product_screen.dart';
 import 'package:customer_pesenin/ui/views/scanning_screen.dart';
 import 'package:flutter/material.dart';
 
 class ScreenArguments {
   final String? id;
   final String? type;
+  final String? table;
   ScreenArguments({
     this.id,
     this.type,
+    this.table,
   });
 }
 
@@ -51,6 +55,24 @@ class RouteGenerator {
             builder: (context) {
               return CustomerOrderUpdateScreen(
                 id: args.id,
+              );
+            },
+          );
+      case ChooseProductScreen.routeName:
+        return MaterialPageRoute(
+            builder: (context) {
+              return ChooseProductScreen(
+                table: args.table,
+                type: args.type,
+              );
+            },
+          );
+      case CustomerCartScreen.routeName:
+        return MaterialPageRoute(
+            builder: (context) {
+              return CustomerCartScreen(
+                table: args.table,
+                type: args.type,
               );
             },
           );

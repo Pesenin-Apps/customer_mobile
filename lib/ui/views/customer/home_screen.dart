@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CustomerHomeScreen extends StatefulWidget {
+  static const routeName = '/home-customer';
   const CustomerHomeScreen({ Key? key }) : super(key: key);
 
   @override
@@ -281,9 +282,10 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
 
     Widget orderHistory() {
       return Consumer<OrderVM>(
-        builder: (context, orderVM, child) => orderVM.historyCustomerOrderLimits.isEmpty ? const SizedBox() : Container(
+        builder: (context, orderVM, child) => orderVM.historyCustomerOrderLimits.isEmpty ? const SizedBox(height: 30) : Container(
           margin: EdgeInsets.only(
             top: defaultMargin,
+            bottom: defaultMargin,
           ),
           padding: EdgeInsets.symmetric(
             horizontal: defaultMargin,

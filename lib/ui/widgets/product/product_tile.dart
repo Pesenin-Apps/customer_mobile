@@ -67,18 +67,23 @@ class ProductTile extends StatelessWidget {
     }
 
     Widget productAlredyExistInCart() {
-      return Container(
-        padding: const EdgeInsets.all(6.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(
-            color: infoColor
+      return InkWell(
+        onTap: () {
+          cartVM.removeCart(product.id!);
+        },
+        child: Container(
+          padding: const EdgeInsets.all(6.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(
+              color: infoColor
+            ),
           ),
-        ),
-        child: Icon(
-          Icons.add_task_rounded,
-          color: infoColor,
-          size: 16,
+          child: Icon(
+            Icons.add_task_rounded,
+            color: infoColor,
+            size: 16,
+          ),
         ),
       );
     }
@@ -153,7 +158,7 @@ class ProductTile extends StatelessWidget {
                 Text(
                   formatCurrency.format(product.price),
                   style: priceTextStyle.copyWith(
-                    fontWeight: medium,
+                    fontWeight: semiBold,
                     fontSize: 12,
                   ),
                 ),

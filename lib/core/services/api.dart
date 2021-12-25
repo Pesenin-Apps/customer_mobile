@@ -203,6 +203,31 @@ class Api {
     }
   }
 
+  Future<String> postCustomerOrder(String table, List<CartModel> carts) async {
+    try {
+      var body = jsonEncode({
+        'table': table,
+        'orders': carts.map((cart) => {
+          'item': cart.product!.id,
+          'qty': cart.qty,
+        }).toList(),
+      });
+      var response = await _dio.post(
+        '/customers/orders',
+        data: body,
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          },
+        ),
+      );
+      return response.data['data']['_id'];
+    } catch (e) {
+      // print('Something Error (postOrder) : $e');
+      return 'null';
+    }
+  }
+
   Future<bool> postCancelCustomerOrder(String id) async {
     try {
       await _dio.post(

@@ -84,6 +84,16 @@ class OrderVM extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<String> createCustomerOrder(String table, List<CartModel> carts) async {
+    var response = await api.postCustomerOrder(table, carts);
+    notifyListeners();
+    if (response == 'null') {
+      return 'null';
+    } else {
+      return response;
+    }
+  }
+
   Future<bool> cancelCustomerOrder(String id) async {
     final bool response = await api.postCancelCustomerOrder(id);
     return response;
