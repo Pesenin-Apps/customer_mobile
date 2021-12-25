@@ -267,6 +267,16 @@ class UserVM extends ChangeNotifier {
     }
   }
 
+  Future<bool> changePasswordCustomer(Map<String, dynamic> changedPasswordForm) async {
+    final response = await api.postChangePassword(changedPasswordForm);
+    notifyListeners();
+    if (response) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future fetchTableDetail(String id) async {
     _tableDetail = await api.getTable(id);
     notifyListeners();

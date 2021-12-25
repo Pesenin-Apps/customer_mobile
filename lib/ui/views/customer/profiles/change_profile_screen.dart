@@ -1,7 +1,6 @@
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
-import 'package:customer_pesenin/core/viewmodels/order_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/user_vm.dart';
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
 import 'package:customer_pesenin/ui/widgets/custom_textfield.dart';
@@ -22,11 +21,13 @@ class _ChangeProfileScreenState extends State<ChangeProfileScreen> {
   TextEditingController _fullname = TextEditingController();
   TextEditingController _phoneNumber = TextEditingController();
 
+  bool _isLoadingPage = false;
   bool _isLoadingSubmited = false;
 
   @override
   void initState() {
     Provider.of<ConnectionVM>(context, listen: false).startMonitoring();
+    getData();
     _fullname = TextEditingController(
       text: Provider.of<UserVM>(context, listen: false).customerDetail.fullname,
     );
@@ -36,6 +37,12 @@ class _ChangeProfileScreenState extends State<ChangeProfileScreen> {
     );
     _phoneNumber.addListener(onChangeControl);
     super.initState();
+  }
+  
+  void getData() async {
+    setState(() => _isLoadingPage = true );
+    await Provider.of<UserVM>(context, listen: false).fetchCustomer();
+    setState(() => _isLoadingPage = false );
   }
 
   void onChangeControl() {
@@ -235,17 +242,18 @@ class _ChangeProfileScreenState extends State<ChangeProfileScreen> {
           backgroundColor: backgroundColor1,
           appBar: AppBar(
             backgroundColor: primaryColor,
-            leading: IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
             elevation: 0,
-            centerTitle: true,
             title: const Text('Ubah Profil'),
           ),
-          body: SingleChildScrollView(
+          body: _isLoadingPage ? Center(
+            child: SizedBox(
+              height: 33,
+              width: 33,
+              child: CircularProgressIndicator(
+                color: primaryColor,
+              ),
+            ),
+          ) : SingleChildScrollView(
             child: content()
           ),
         ),

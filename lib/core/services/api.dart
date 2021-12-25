@@ -101,6 +101,24 @@ class Api {
     }
   }
 
+  Future<bool> postChangePassword(Map<String, dynamic> changedPasswordForm) async {
+    try {
+      await _dio.post(
+        '/users/change-password',
+        data: changedPasswordForm,
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          },
+        ),
+      );
+      return true;
+    } catch (e) {
+      // print('Something Error (postPassword) : $e');
+      return false;
+    }
+  }
+
   /* ========= START API Guest & CUSTOMER ========= */
 
 
