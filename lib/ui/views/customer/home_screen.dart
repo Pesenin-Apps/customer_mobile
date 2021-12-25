@@ -7,6 +7,7 @@ import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/order_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/user_vm.dart';
 import 'package:customer_pesenin/ui/views/customer/orders/histories_screen.dart';
+import 'package:customer_pesenin/ui/views/customer/profile_screen.dart';
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
 import 'package:customer_pesenin/ui/views/scanning_screen.dart';
 import 'package:customer_pesenin/ui/widgets/order/order_tile.dart';
@@ -81,24 +82,29 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                   ],
                 ),
               ),
-              Container(
-                width: 54,
-                height: 54,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  image: const DecorationImage(
-                    image: AssetImage(
-                      'assets/icons/icon_avatar.png'
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, CustomerProfileScreen.routeName);
+                },
+                child: Container(
+                  width: 54,
+                  height: 54,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    image: const DecorationImage(
+                      image: AssetImage(
+                        'assets/icons/icon_avatar.png'
+                      ),
                     ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: backgroundColor4.withOpacity(0.3),
+                        offset: const Offset(0, 1),
+                        blurRadius: 5,
+                        spreadRadius: 0,
+                      ),
+                    ],
                   ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: backgroundColor4.withOpacity(0.3),
-                      offset: const Offset(0, 1),
-                      blurRadius: 5,
-                      spreadRadius: 0,
-                    ),
-                  ],
                 ),
               )
             ],
