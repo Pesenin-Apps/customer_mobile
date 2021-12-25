@@ -29,7 +29,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     Widget header() {
       return Container(
         margin: const EdgeInsets.only(
-          top: 70,
+          top: 60,
         ),
         child: Center(
           child: Image.asset(
@@ -150,20 +150,22 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     }
 
     return Consumer<ConnectionVM>(
-      builder: (context, connectionVM, _) => connectionVM.isOnline != null && connectionVM.isOnline! ? Scaffold(
-        backgroundColor: backgroundColor3,
-        body: SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.symmetric(
-              horizontal: defaultMargin,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                header(),
-                title(),
-                buttonAction(),
-              ],
+      builder: (context, connectionVM, _) => connectionVM.isOnline != null && connectionVM.isOnline! ? SafeArea(
+        child: Scaffold(
+          backgroundColor: backgroundColor3,
+          body: SingleChildScrollView(
+            child: Container(
+              margin: EdgeInsets.symmetric(
+                horizontal: defaultMargin,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  header(),
+                  title(),
+                  buttonAction(),
+                ],
+              ),
             ),
           ),
         ),
