@@ -4,6 +4,7 @@ import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/user_vm.dart';
+import 'package:customer_pesenin/ui/views/auth/sign_up_screen.dart';
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -252,10 +253,9 @@ class _SignInScreenState extends State<SignInScreen> {
                 fontSize: 12,
               ),
             ),
-            GestureDetector(
+            InkWell(
               onTap: () {
-                // Navigator.pushNamed(context, '/sign-up');
-                print('Daftar Akun Baru Boss Ku!');
+                Navigator.pushNamed(context, SignUpScreen.routeName);
               },
               child: Text(
                 'Sign Up',

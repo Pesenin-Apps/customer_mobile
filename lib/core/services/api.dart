@@ -49,6 +49,19 @@ class Api {
     }
   }
 
+  Future<bool> signUp(Map<String, dynamic> inputForm) async {
+    try {
+      await _dio.post(
+        '/auth/signup',
+        data: inputForm,
+      );
+      return true;
+    } catch (e) {
+      // print('Something Error (signUp) : $e');
+      return false;
+    }
+  }
+
   Future<bool> checkOut() async {
     try {
       await _dio.post(

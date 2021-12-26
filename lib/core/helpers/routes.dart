@@ -1,4 +1,5 @@
 import 'package:customer_pesenin/ui/views/auth/sign_in_screen.dart';
+import 'package:customer_pesenin/ui/views/auth/sign_up_screen.dart';
 import 'package:customer_pesenin/ui/views/customer/home_screen.dart';
 import 'package:customer_pesenin/ui/views/customer/orders/histories_screen.dart';
 import 'package:customer_pesenin/ui/views/customer/profile_screen.dart';
@@ -13,6 +14,7 @@ import 'package:customer_pesenin/ui/views/onboarding_screen.dart';
 final Map<String, Widget Function(BuildContext)> routesCustom = {
   OnBoardingScreen.routeName: (context) => const OnBoardingScreen(),
   SignInScreen.routeName: (context) => const SignInScreen(),
+  SignUpScreen.routeName: (context) => const SignUpScreen(),
   CustomerHomeScreen.routeName: (context) => const CustomerHomeScreen(),
   CustomerProfileScreen.routeName: (context) => const CustomerProfileScreen(),
   ChangeProfileScreen.routeName: (context) => const ChangeProfileScreen(),

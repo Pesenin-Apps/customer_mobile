@@ -77,6 +77,12 @@ class UserVM extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<bool> signUp(Map<String, dynamic> signUpForm) async {
+    final bool response = await api.signUp(signUpForm);
+    return response;
+  }
+
+
   Future<bool> checkIn(Map<String, dynamic> checkInForm) async {
     try {
 
