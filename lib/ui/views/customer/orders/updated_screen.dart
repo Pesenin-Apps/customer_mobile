@@ -2,12 +2,12 @@ import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/order_vm.dart';
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
-import 'package:customer_pesenin/ui/widgets/order/order_item_tile_edited.dart';
+import 'package:customer_pesenin/ui/widgets/order/order_item_tile_edited_customer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CustomerOrderUpdateScreen extends StatefulWidget {
-  static const routeName = '/order-update';
+  static const routeName = '/order-update-customer';
 
   final String? id;
   const CustomerOrderUpdateScreen({ 
@@ -54,9 +54,9 @@ class _CustomerOrderUpdateScreenState extends State<CustomerOrderUpdateScreen> {
           builder: (context, orderVM, child) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              for (var i = 0; i < orderVM.order.orderItem!.length; i++) 
-                orderVM.order.orderItem![i].status! <= orderItemStatusNew 
-                ? OrderItemTileEdited(orderId: widget.id!, orderItem : orderVM.order.orderItem![i])
+              for (var i = 0; i < orderVM.customerOrder.orderItem!.length; i++) 
+                orderVM.customerOrder.orderItem![i].status! <= orderItemStatusNew 
+                ? OrderItemTileEditedCustomer(orderId: widget.id!, orderItem : orderVM.customerOrder.orderItem![i])
                 : const SizedBox(),
             ],
           ),

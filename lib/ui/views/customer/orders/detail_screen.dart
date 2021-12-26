@@ -14,7 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CustomerOrderDetailScreen extends StatefulWidget {
-  static const routeName = '/order-detail';
+  static const routeName = '/order-detail-customer';
 
   final String? id;
   const CustomerOrderDetailScreen({ 
@@ -204,21 +204,21 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
                       fontWeight: semiBold,
                     ),
                   ),
-                  OrderStatus(status: orderVM.order.status),
+                  OrderStatus(status: orderVM.customerOrder.status),
                 ],
               ),
               const SizedBox(height: 12),
-              DescriptionTile(title: 'Order Id', description: orderVM.order.orderNumber.toString()),
-              DescriptionTile(title: 'Jenis', description: orderVM.order.type == typeDineIn ? 'DINE-IN' : 'RESERVATION'),
+              DescriptionTile(title: 'Order Id', description: orderVM.customerOrder.orderNumber.toString()),
+              DescriptionTile(title: 'Jenis', description: orderVM.customerOrder.type == typeDineIn ? 'DINE-IN' : 'RESERVATION'),
               DescriptionTile(title: 'Tanggal', description: formatDateWithDay.format(
-                DateTime.parse(orderVM.order.createdAt!).toLocal(),
+                DateTime.parse(orderVM.customerOrder.createdAt!).toLocal(),
               )),
               DescriptionTile(title: 'Waktu', description: formatTime.format(
-                DateTime.parse(orderVM.order.createdAt!).toLocal(),
+                DateTime.parse(orderVM.customerOrder.createdAt!).toLocal(),
               )),
-              DescriptionTile(title: 'Pelayan', description: orderVM.order.waiter!.users!.fullname),
-              DescriptionTile(title: 'Meja Bagian', description: orderVM.order.table!.section!.name.toString()),
-              DescriptionTile(title: 'Nomor Meja', description: orderVM.order.table!.number.toString()),
+              DescriptionTile(title: 'Pelayan', description: orderVM.customerOrder.waiter!.users!.fullname),
+              DescriptionTile(title: 'Meja Bagian', description: orderVM.customerOrder.table!.section!.name.toString()),
+              DescriptionTile(title: 'Nomor Meja', description: orderVM.customerOrder.table!.number.toString()),
             ],
           ),
         ),
@@ -244,7 +244,7 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
                       fontWeight: semiBold,
                     ),
                   ),
-                  orderVM.canChangedOrderExist ? InkWell(
+                  orderVM.canChangedCustomerOrderExist ? InkWell(
                     onTap: () {
                       Navigator.pushNamed(
                         context, 
@@ -269,7 +269,7 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
               ),
               Column(
                 children: [
-                  for (var i = 0; i < orderVM.order.orderItem!.length; i++) OrderItemTile(orderItem : orderVM.order.orderItem![i]),
+                  for (var i = 0; i < orderVM.customerOrder.orderItem!.length; i++) OrderItemTile(orderItem : orderVM.customerOrder.orderItem![i]),
                   const SizedBox(height: 5),
                   Center(
                     child: Padding(
@@ -280,14 +280,14 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
                             context, 
                             ChooseProductScreen.routeName,
                             arguments: ScreenArguments(
-                              table: orderVM.order.table!.id,
+                              table: orderVM.customerOrder.table!.id,
                               type: 'additional',
                             ),
                           );
                         },
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 6.0),
-                          child: orderVM.orderIsPaid ? const SizedBox() : Text(
+                          child: orderVM.customerOrderIsPaid ? const SizedBox() : Text(
                             '+ Tambah Item',
                             style: themeTextStyle.copyWith(
                               fontSize: 12,
@@ -341,12 +341,12 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
                       fontWeight: semiBold,
                     ),
                   ),
-                  OrderPaymentStatus(status: orderVM.order.isPaid),
+                  OrderPaymentStatus(status: orderVM.customerOrder.isPaid),
                 ],
               ),
               const SizedBox(height: 12),
-              DescriptionTile(title: 'Subtotal', description: formatCurrency.format(orderVM.order.totalPrice)),
-              DescriptionTile(title: 'Pajak (PPN 10%)', description: formatCurrency.format(orderVM.order.tax)),
+              DescriptionTile(title: 'Subtotal', description: formatCurrency.format(orderVM.customerOrder.totalPrice)),
+              DescriptionTile(title: 'Pajak (PPN 10%)', description: formatCurrency.format(orderVM.customerOrder.tax)),
               const SizedBox(height: 12),
               Divider(
                 thickness: 1,
@@ -365,7 +365,7 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
                     ),
                   ),
                   Text(
-                    formatCurrency.format(orderVM.order.totalOverall),
+                    formatCurrency.format(orderVM.customerOrder.totalOverall),
                     style: priceTextStyle.copyWith(
                       fontSize: 12,
                       fontWeight: semiBold,
@@ -381,7 +381,7 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
 
     Widget buttonSubmit() {
       return Consumer<OrderVM>(
-        builder: (context, orderVM, child) => orderVM.canNotChangedOrderExist ? SizedBox(height: defaultMargin) : Container(
+        builder: (context, orderVM, child) => orderVM.canNotChangedCustomerOrderExist ? SizedBox(height: defaultMargin) : Container(
           height: 35,
           width: double.infinity,
           margin: EdgeInsets.only(

@@ -20,48 +20,50 @@ class _NoInternetConnectionScreenState extends State<NoInternetConnectionScreen>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: backgroundColor3,
-      body: Container(
-        margin: EdgeInsets.zero,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              height: 128,
-              width: 128,
-              margin: const EdgeInsets.only(
-                bottom: 25,
-              ),
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage(
-                    'assets/images/no_internet_connection.png',
-                    
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: backgroundColor3,
+        body: Container(
+          margin: EdgeInsets.zero,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Container(
+                height: 128,
+                width: 128,
+                margin: const EdgeInsets.only(
+                  bottom: 25,
+                ),
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage(
+                      'assets/images/no_internet_connection.png',
+                      
+                    ),
                   ),
                 ),
               ),
-            ),
-            Text(
-              'Tidak Ada Sambungan Internet',
-              style: primaryTextStyle.copyWith(
-                fontSize: 16,
-                fontWeight: bold,
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(15),
-              child: Text(
-                'Anda tidak terhubung dengan Internet, silahkan hubungkan Handphone anda dengan Internet.',
+              Text(
+                'Tidak Ada Sambungan Internet',
                 style: primaryTextStyle.copyWith(
-                  fontSize: 12,
-                  fontWeight: medium
+                  fontSize: 16,
+                  fontWeight: bold,
                 ),
-                textAlign: TextAlign.center,
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.all(15),
+                child: Text(
+                  'Anda tidak terhubung dengan Internet, silahkan hubungkan Handphone anda dengan Internet.',
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 12,
+                    fontWeight: medium
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

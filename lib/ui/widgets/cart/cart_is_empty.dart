@@ -24,20 +24,24 @@ class CartIsEmpty extends StatelessWidget {
           Text(
             'Keranjang anda Kosong',
             style: primaryTextStyle.copyWith(
-              fontSize: 16,
-              fontWeight: medium,
+              fontSize: 14,
+              fontWeight: semiBold,
             ),
           ),
           const SizedBox(height: 10),
           Text(
             'Silahkan pilih menu',
             maxLines: 2,
-            style: secondaryTextStyle,
+            style: secondaryTextStyle.copyWith(
+              fontSize: 12,
+            ),
           ),
           Text(
             'yang akan anda Pesan',
             maxLines: 2,
-            style: secondaryTextStyle,
+            style: secondaryTextStyle.copyWith(
+              fontSize: 12,
+            ),
           ),
         ]
       ),
