@@ -276,32 +276,32 @@ class _CartState extends State<Cart> {
             const SizedBox(width: 10),
             Expanded(
               child: Consumer<UserVM>(
-                builder: (context, UserVM, child) => Column(
+                builder: (context, userVM, child) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${UserVM.guest?.checkInNumber}',
+                      '${userVM.guest?.checkInNumber}',
                       style: secondaryTextStyle.copyWith(
                         fontSize: 12,
                         fontWeight: bold,
                       ),
                     ),
                     Text(
-                      '${UserVM.guest?.name}',
+                      '${userVM.guest?.name}',
                       style: primaryTextStyle.copyWith(
                         fontSize: 16,
                         fontWeight: bold,
                       ),
                     ),
                     Text(
-                      '${UserVM.guest?.table?.section?.name} No. ${UserVM.guest?.table?.number}',
+                      '${userVM.guest?.table?.section?.name} No. ${userVM.guest?.table?.number}',
                       style: secondaryTextStyle.copyWith(
                         fontSize: 14,
                         fontWeight: medium
                       ),
                     ),
                     Text(
-                      '${UserVM.guest?.deviceDetection}',
+                      '${userVM.guest?.deviceDetection}',
                       style: secondaryTextStyle.copyWith(
                         fontSize: 12,
                       ),
