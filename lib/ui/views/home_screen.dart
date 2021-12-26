@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/cart_vm.dart';
@@ -90,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ) : Scaffold(
-          backgroundColor: backgroundColor1,
+          backgroundColor: backgroundColor3,
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(105.0),
             child: Column(
@@ -122,7 +121,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Container(
                                 padding: const EdgeInsets.all(2),
                                 decoration: BoxDecoration(
-                                  color: dangerColor,
+                                  color: errorColor,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 constraints: const BoxConstraints(
@@ -243,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ) : Platform.isIOS ? Container() : RefreshIndicator(
-            backgroundColor: backgroundColor1,
+            backgroundColor: backgroundColor3,
             color: primaryColor,
             onRefresh: refreshData,
             child: ListView(

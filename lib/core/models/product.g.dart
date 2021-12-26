@@ -49,6 +49,7 @@ ProductType _$ProductTypeFromJson(Map<String, dynamic> json) {
   return ProductType(
     id: json['_id'] as String?,
     name: json['name'] as String?,
+    belong: json['belong'] as int?,
   );
 }
 
@@ -56,4 +57,5 @@ Map<String, dynamic> _$ProductTypeToJson(ProductType instance) =>
     <String, dynamic>{
       '_id': instance.id,
       'name': instance.name,
+      'belong': instance.belong,
     };

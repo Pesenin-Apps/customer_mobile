@@ -23,19 +23,19 @@ class _OrderItemStatusState extends State<OrderItemStatus> {
       case 1:
         setState(() {
           title = "Menunggu Verifikasi Pelayan";
-          textStyle = dangerTextStyle;
+          textStyle = errorTextStyle;
         });
         break;
       case 2:
         setState(() {
           title = "Sedang Diproses";
-          textStyle = warningTextStyle;
+          textStyle = themeTextStyle;
         });
         break;
       case 3:
         setState(() {
           title = "Sedang Diproses";
-          textStyle = warningTextStyle;
+          textStyle = themeTextStyle;
         });
         break;
       case 4:

@@ -1,10 +1,10 @@
 import 'package:customer_pesenin/core/models/table.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-part 'customer.g.dart';
+part 'guest.g.dart';
 
 @JsonSerializable()
-class Customer {
+class GuestModel {
   
   @JsonKey(name: '_id')
   String? id;
@@ -18,7 +18,7 @@ class Customer {
   int? status;
   TableModel? table;
 
-  Customer({
+  GuestModel({
     required this.id,
     required this.name,
     required this.deviceDetection,
@@ -28,8 +28,8 @@ class Customer {
     required this.table,
   });
 
-  factory Customer.fromJson(Map<String, dynamic> json) => _$CustomerFromJson(json);
+  factory GuestModel.fromJson(Map<String, dynamic> json) => _$GuestModelFromJson(json);
 
-  Map<String, dynamic> toJson() => _$CustomerToJson(this);
+  Map<String, dynamic> toJson() => _$GuestModelToJson(this);
 
 }

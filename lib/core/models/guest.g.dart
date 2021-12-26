@@ -1,13 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'customer.dart';
+part of 'guest.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Customer _$CustomerFromJson(Map<String, dynamic> json) {
-  return Customer(
+GuestModel _$GuestModelFromJson(Map<String, dynamic> json) {
+  return GuestModel(
     id: json['_id'] as String?,
     name: json['name'] as String?,
     deviceDetection: json['device_detection'] as String?,
@@ -20,7 +20,8 @@ Customer _$CustomerFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$CustomerToJson(Customer instance) => <String, dynamic>{
+Map<String, dynamic> _$GuestModelToJson(GuestModel instance) =>
+    <String, dynamic>{
       '_id': instance.id,
       'name': instance.name,
       'device_detection': instance.deviceDetection,

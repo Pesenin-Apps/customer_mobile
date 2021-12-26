@@ -55,10 +55,12 @@ class ProductType {
   @JsonKey(name: '_id')
   String? id;
   String? name;
+  int? belong;
 
   ProductType({
     required this.id,
     required this.name,
+    required this.belong,
   });
 
   factory ProductType.fromJson(Map<String, dynamic> json) => _$ProductTypeFromJson(json);

@@ -1,33 +1,33 @@
+import 'dart:io';
 import 'package:customer_pesenin/core/helpers/locator.dart';
 import 'package:customer_pesenin/core/services/navigation_custom.dart';
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
-import 'package:customer_pesenin/core/viewmodels/customer_vm.dart';
+import 'package:customer_pesenin/core/viewmodels/user_vm.dart';
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
 import 'package:device_info/device_info.dart';
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CheckInForm extends StatefulWidget {
-  static const routeName = '/checkin-form';
+class CheckInScreen extends StatefulWidget {
+  static const routeName = '/check-in';
   final String table;
 
-  const CheckInForm({
+  const CheckInScreen({
     Key? key,
-    required this.table
+    required this.table,
   }) : super(key: key);
 
   @override
-  _CheckInFormState createState() => _CheckInFormState();
+  _CheckInScreenState createState() => _CheckInScreenState();
 }
 
-class _CheckInFormState extends State<CheckInForm> {
+class _CheckInScreenState extends State<CheckInScreen> {
 
+  bool _isLoadingSubmit = false;
   String deviceDetection = '';
   final TextEditingController nameController = TextEditingController(text: '');
-  bool _isLoading = false;
 
   @override
   void initState() {
@@ -46,11 +46,15 @@ class _CheckInFormState extends State<CheckInForm> {
     }
   }
 
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
+  }
+
   void submitForm() async {
-    
-    setState(() {
-      _isLoading = true;
-    });
+
+    setState(() => _isLoadingSubmit = true);
 
     final Map<String, dynamic> checkInForm = {
       'table' : widget.table,
@@ -58,14 +62,14 @@ class _CheckInFormState extends State<CheckInForm> {
       'name' : nameController.text
     };
 
-    bool response = await Provider.of<CustomerVM>(context, listen: false).checkIn(checkInForm);
+    bool response = await Provider.of<UserVM>(context, listen: false).checkIn(checkInForm);
 
     if(response) {
       locator<NavigationCustom>().navigateReplace('/');
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          backgroundColor: dangerColor,
+          backgroundColor: errorColor,
           content: const Text(
             'Gagal Check In!',
             textAlign: TextAlign.center,
@@ -74,12 +78,10 @@ class _CheckInFormState extends State<CheckInForm> {
       );
     }
 
-    setState(() {
-      _isLoading = false;
-    });
+    setState(() => _isLoadingSubmit = false);
 
   }
-
+  
   @override
   Widget build(BuildContext context) {
 
@@ -93,7 +95,7 @@ class _CheckInFormState extends State<CheckInForm> {
               'Check In',
               style: primaryTextStyle.copyWith(
                 fontSize: 24,
-                fontWeight: semiBold
+                fontWeight: semiBold,
               ),
             ),
             const SizedBox(height: 3),
@@ -108,7 +110,7 @@ class _CheckInFormState extends State<CheckInForm> {
 
     Widget inputName() {
       return Container(
-        margin: const EdgeInsets.only(top: 70),
+        margin: const EdgeInsets.only(top: 50),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -164,32 +166,35 @@ class _CheckInFormState extends State<CheckInForm> {
 
     Widget buttonSubmit() {
       return Container(
-        height: 50,
+        height: 45,
         width: double.infinity,
-        margin: const EdgeInsets.only(top: 30, bottom: 30),
+        margin: EdgeInsets.only(
+          top: defaultMargin,
+          bottom: defaultMargin,
+        ),
         child: TextButton(
           onPressed: submitForm,
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
             )
           ),
-          child: _isLoading ? Container(
+          child: _isLoadingSubmit ? Container(
             width: 16,
             height: 16,
             margin: EdgeInsets.zero,
             child: CircularProgressIndicator(
               strokeWidth: 2,
               valueColor: AlwaysStoppedAnimation(
-                primaryTextColor,
+                backgroundColor3,
               ),
             ),
           ) : Text(
             'Check In',
-            style: primaryTextStyle.copyWith(
+            style: tertiaryTextStyle.copyWith(
               fontSize: 16,
-              fontWeight: medium
+              fontWeight: semiBold
             ),
           ),
         ),
@@ -198,25 +203,27 @@ class _CheckInFormState extends State<CheckInForm> {
 
     return Consumer<ConnectionVM>(
       builder: (context, connectionVM, _) => connectionVM.isOnline != null && connectionVM.isOnline! ? Scaffold(
-        backgroundColor: backgroundColor1,
+        backgroundColor: backgroundColor3,
         resizeToAvoidBottomInset: false,
         body: SafeArea(
-          child: Container(
-            margin: EdgeInsets.symmetric(
-              horizontal: defaultMargin,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                header(),
-                inputName(),
-                buttonSubmit(),
-              ],
+          child: SingleChildScrollView(
+            child: Container(
+              margin: EdgeInsets.symmetric(
+                horizontal: defaultMargin,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  header(),
+                  inputName(),
+                  buttonSubmit(),
+                ],
+              ),
             ),
           ),
         )
       ) : const NoInternetConnectionScreen(),
     );
-
+    
   }
 }

@@ -1,12 +1,21 @@
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
-import 'package:customer_pesenin/ui/views/checkin/form_screen.dart';
+import 'package:customer_pesenin/ui/views/auth/check_in_screen.dart';
+import 'package:customer_pesenin/ui/views/customer/orders/cart_screen.dart';
+import 'package:customer_pesenin/ui/views/customer/orders/detail_screen.dart';
+import 'package:customer_pesenin/ui/views/customer/orders/updated_screen.dart';
+import 'package:customer_pesenin/ui/views/customer/orders/choose_product_screen.dart';
+import 'package:customer_pesenin/ui/views/scanning_screen.dart';
 import 'package:flutter/material.dart';
 
 class ScreenArguments {
   final String? id;
+  final String? type;
+  final String? table;
   ScreenArguments({
     this.id,
+    this.type,
+    this.table,
   });
 }
 
@@ -17,11 +26,53 @@ class RouteGenerator {
     final args = settings.arguments as ScreenArguments;
 
     switch (settings.name) {
-      case CheckInForm.routeName:
+      case CheckInScreen.routeName:
         return MaterialPageRoute(
             builder: (context) {
-              return CheckInForm(
+              return CheckInScreen(
                 table: args.id!,
+              );
+            },
+          );
+      case ScanningScreen.routeName:
+        return MaterialPageRoute(
+            builder: (context) {
+              return ScanningScreen(
+                type: args.type!,
+              );
+            },
+          );
+      case CustomerOrderDetailScreen.routeName:
+        return MaterialPageRoute(
+            builder: (context) {
+              return CustomerOrderDetailScreen(
+                id: args.id,
+              );
+            },
+          );
+      case CustomerOrderUpdateScreen.routeName:
+        return MaterialPageRoute(
+            builder: (context) {
+              return CustomerOrderUpdateScreen(
+                id: args.id,
+              );
+            },
+          );
+      case ChooseProductScreen.routeName:
+        return MaterialPageRoute(
+            builder: (context) {
+              return ChooseProductScreen(
+                table: args.table,
+                type: args.type,
+              );
+            },
+          );
+      case CustomerCartScreen.routeName:
+        return MaterialPageRoute(
+            builder: (context) {
+              return CustomerCartScreen(
+                table: args.table,
+                type: args.type,
               );
             },
           );
@@ -47,7 +98,7 @@ class ErrorRoute extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor1,
+      backgroundColor: backgroundColor3,
       appBar: AppBar(
         backgroundColor: transparentColor,
         leading: IconButton(

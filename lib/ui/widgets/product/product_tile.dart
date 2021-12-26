@@ -23,7 +23,7 @@ class ProductTile extends StatelessWidget {
     Widget imageUrl() {
       return FadeInImage.assetNetwork(
         placeholder: 'assets/images/placeholder.jpg', 
-        image: 'https://pesenin.onggolt-dev.com/uploads/' + product.image.toString(),
+        image: baseUrlImage + product.image.toString(),
         fit: BoxFit.cover,
         width: 90,
         height: 90,
@@ -67,18 +67,23 @@ class ProductTile extends StatelessWidget {
     }
 
     Widget productAlredyExistInCart() {
-      return Container(
-        padding: const EdgeInsets.all(6.0),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(6),
-          border: Border.all(
-            color: infoColor
+      return InkWell(
+        onTap: () {
+          cartVM.removeCart(product.id!);
+        },
+        child: Container(
+          padding: const EdgeInsets.all(6.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(6),
+            border: Border.all(
+              color: infoColor
+            ),
           ),
-        ),
-        child: Icon(
-          Icons.add_task_rounded,
-          color: infoColor,
-          size: 16,
+          child: Icon(
+            Icons.add_task_rounded,
+            color: infoColor,
+            size: 16,
+          ),
         ),
       );
     }
@@ -88,7 +93,7 @@ class ProductTile extends StatelessWidget {
         onTap: () {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: dangerColor,
+              backgroundColor: errorColor,
               content: RichText(
                 text: TextSpan(
                   children: <TextSpan>[
@@ -106,12 +111,12 @@ class ProductTile extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6),
             border: Border.all(
-              color: dangerColor
+              color: errorColor
             ),
           ),
           child: Icon(
             Icons.block,
-            color: dangerColor,
+            color: errorColor,
             size: 16,
           ),
         ),
@@ -153,7 +158,7 @@ class ProductTile extends StatelessWidget {
                 Text(
                   formatCurrency.format(product.price),
                   style: priceTextStyle.copyWith(
-                    fontWeight: medium,
+                    fontWeight: semiBold,
                     fontSize: 12,
                   ),
                 ),

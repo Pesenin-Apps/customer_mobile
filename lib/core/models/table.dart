@@ -9,14 +9,14 @@ class TableModel {
   String? id;
   String? name;
   int? number;
-  bool? used;
+  int? status;
   TableSection? section;
 
   TableModel({
     required this.id,
     required this.name,
     required this.number,
-    required this.used,
+    required this.status,
     required this.section,
   });
 

@@ -14,6 +14,10 @@ TextStyle secondaryTextStyle = GoogleFonts.poppins(
   color: secondaryTextColor
 );
 
+TextStyle tertiaryTextStyle = GoogleFonts.poppins(
+  color: backgroundColor3
+);
+
 TextStyle priceTextStyle = GoogleFonts.poppins(
   color: priceColor
 );
@@ -26,10 +30,18 @@ TextStyle dangerTextStyle = GoogleFonts.poppins(
   color: dangerColor
 );
 
+TextStyle errorTextStyle = GoogleFonts.poppins(
+  color: errorColor
+);
+
 TextStyle warningTextStyle = GoogleFonts.poppins(
   color: warningColor
 );
 
 TextStyle infoTextStyle = GoogleFonts.poppins(
   color: infoColor
+);
+
+TextStyle themeTextStyle = GoogleFonts.poppins(
+  color: primaryColor
 );
