@@ -60,7 +60,7 @@ class _GuestCartScreenState extends State<GuestCartScreen> {
       Future.delayed(const Duration(seconds: 3), () async {
         final bool response = await orderVM.createGuestOrder(cartVM.carts);
         if (response) {
-          // Navigator.pushNamed(context, OrderScreen.routeName);
+          Navigator.pushNamed(context, GuestOrderDetailScreen.routeName);
           cartVM.carts = [];
         } else {
           setState(() {
@@ -216,7 +216,7 @@ class _GuestCartScreenState extends State<GuestCartScreen> {
                     ),
                   ),
                   Text(
-                    'jika telah mesanan.',
+                    'jika telah diproses.',
                     style: secondaryTextStyle.copyWith(
                       fontSize: 13,
                     ),
