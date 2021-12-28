@@ -116,7 +116,7 @@ class _ScanningScreenState extends State<ScanningScreen> {
 
     Widget tableIsNotPart() {
       return Text(
-        'Kode bukan bagian dari Pesenin Apps.',
+        'Kode bukan bagian dari Pesenin App.',
         style: dangerTextStyle,
       );
     }

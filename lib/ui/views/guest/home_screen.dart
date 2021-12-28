@@ -93,7 +93,7 @@ class _GuestHomeScreenState extends State<GuestHomeScreen> {
                   elevation: 0,
                   // centerTitle: true,
                   title: Text(
-                    'PESENIN APPS',
+                    'PESENIN APP',
                     style: titleApps,
                   ),
                   actions: <Widget>[

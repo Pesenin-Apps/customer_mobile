@@ -50,7 +50,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Pesenin Apps',
+              'Pesenin App',
               style: primaryTextStyle.copyWith(
                 fontSize: 28,
                 fontWeight: semiBold,
