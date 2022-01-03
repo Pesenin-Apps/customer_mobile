@@ -48,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 20),
               Text(
                 'P E L A N G G A N   P E S E N I N', 
                 style: primaryTextStyle.copyWith(

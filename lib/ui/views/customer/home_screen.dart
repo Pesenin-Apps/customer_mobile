@@ -8,6 +8,7 @@ import 'package:customer_pesenin/core/viewmodels/order_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/user_vm.dart';
 import 'package:customer_pesenin/ui/views/customer/orders/histories_screen.dart';
 import 'package:customer_pesenin/ui/views/customer/profile_screen.dart';
+import 'package:customer_pesenin/ui/views/customer/reservations/create_screen.dart';
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
 import 'package:customer_pesenin/ui/views/scanning_screen.dart';
 import 'package:customer_pesenin/ui/widgets/order/order_tile.dart';
@@ -217,7 +218,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        // Navigator.pushNamed(context, SignInScreen.routeName);
+                        Navigator.pushNamed(context, CustomerReservationCreateScreen.routeName);
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: primaryColor,

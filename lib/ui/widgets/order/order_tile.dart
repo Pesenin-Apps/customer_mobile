@@ -53,7 +53,12 @@ class OrderTile extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                order.table == null ? Text(
+                  'Menunggu Nomor Meja',
+                  style: secondaryTextStyle.copyWith(
+                    fontSize: 12,
+                  ),
+                ) : Text(
                   '${order.table!.section!.name} No. ${order.table!.number}',
                   style: secondaryTextStyle.copyWith(
                     fontSize: 12,

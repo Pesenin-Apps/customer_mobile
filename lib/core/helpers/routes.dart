@@ -5,6 +5,7 @@ import 'package:customer_pesenin/ui/views/customer/orders/histories_screen.dart'
 import 'package:customer_pesenin/ui/views/customer/profile_screen.dart';
 import 'package:customer_pesenin/ui/views/customer/profiles/change_password_screen.dart';
 import 'package:customer_pesenin/ui/views/customer/profiles/change_profile_screen.dart';
+import 'package:customer_pesenin/ui/views/customer/reservations/create_screen.dart';
 import 'package:customer_pesenin/ui/views/guest/home_screen.dart';
 import 'package:customer_pesenin/ui/views/guest/orders/cart_screen.dart';
 import 'package:customer_pesenin/ui/views/guest/orders/detail_screen.dart';
@@ -21,6 +22,7 @@ final Map<String, Widget Function(BuildContext)> routesCustom = {
   ChangeProfileScreen.routeName: (context) => const ChangeProfileScreen(),
   ChangePasswordScreen.routeName: (context) => const ChangePasswordScreen(),
   CustomerOrderHistoryScreen.routeName: (context) => const CustomerOrderHistoryScreen(),
+  CustomerReservationCreateScreen.routeName: (context) => const CustomerReservationCreateScreen(),
   GuestHomeScreen.routeName: (context) => const GuestHomeScreen(),
   GuestCartScreen.routeName: (context) => const GuestCartScreen(),
   GuestOrderDetailScreen.routeName: (context) => const GuestOrderDetailScreen(),

@@ -2,7 +2,6 @@ import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/order_vm.dart';
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
-import 'package:customer_pesenin/ui/widgets/order/order_item_tile_edited_customer.dart';
 import 'package:customer_pesenin/ui/widgets/order/order_item_tile_edited_guest.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

@@ -123,6 +123,11 @@ class OrderVM extends ChangeNotifier {
     return response;
   }
 
+  Future<bool> createCustomerReservation(Map<String, dynamic> createForm) async {
+    final bool response = await api.postCustomerReservation(createForm);
+    return response;
+  }
+
   Future fetchGuestOrderDetail() async {
     _guestOrder = await api.getGuestOrders();
     notifyListeners();

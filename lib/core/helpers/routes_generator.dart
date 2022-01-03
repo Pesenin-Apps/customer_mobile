@@ -5,6 +5,8 @@ import 'package:customer_pesenin/ui/views/customer/orders/cart_screen.dart';
 import 'package:customer_pesenin/ui/views/customer/orders/detail_screen.dart';
 import 'package:customer_pesenin/ui/views/customer/orders/updated_screen.dart';
 import 'package:customer_pesenin/ui/views/customer/orders/choose_product_screen.dart';
+import 'package:customer_pesenin/ui/views/customer/reservations/cart_screen.dart';
+import 'package:customer_pesenin/ui/views/customer/reservations/choose_product_screen.dart';
 import 'package:customer_pesenin/ui/views/scanning_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -72,6 +74,22 @@ class RouteGenerator {
             builder: (context) {
               return CustomerCartScreen(
                 table: args.table,
+                type: args.type,
+              );
+            },
+          );
+      case ReservationChooseProductScreen.routeName:
+        return MaterialPageRoute(
+            builder: (context) {
+              return ReservationChooseProductScreen(
+                type: args.type,
+              );
+            },
+          );
+      case CustomerReservationCartScreen.routeName:
+        return MaterialPageRoute(
+            builder: (context) {
+              return CustomerReservationCartScreen(
                 type: args.type,
               );
             },

@@ -330,6 +330,24 @@ class Api {
     }
   }
 
+  Future<bool> postCustomerReservation(Map<String, dynamic> createForm) async {
+    try {
+      await _dio.post(
+        '/customers/reservations',
+        data: createForm,
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          },
+        ),
+      );
+      return true;
+    } catch (e) {
+      // print('Something Error (postCancelCustomerOrder) : $e');
+      return false;
+    }
+  }
+
   // [END] Customer //
 
 

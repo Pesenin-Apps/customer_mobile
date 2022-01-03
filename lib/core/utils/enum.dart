@@ -1,0 +1,1 @@
+enum OrderServing { onTime, byConfirmation, none }
