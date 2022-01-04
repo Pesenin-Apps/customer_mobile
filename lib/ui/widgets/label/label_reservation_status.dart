@@ -2,21 +2,21 @@ import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:flutter/material.dart';
 
-class OrderStatus extends StatefulWidget {
-
+class LabelReservationStatus extends StatefulWidget {
   final int? status;
   final bool? addCircle;
-  const OrderStatus({
+
+  const LabelReservationStatus({
     Key? key,
     required this.status,
     this.addCircle = true,
   }) : super(key: key);
 
   @override
-  State<OrderStatus> createState() => _OrderStatusState();
+  _LabelReservationStatusState createState() => _LabelReservationStatusState();
 }
 
-class _OrderStatusState extends State<OrderStatus> {
+class _LabelReservationStatusState extends State<LabelReservationStatus> {
 
   String? title;
   Color? color;
@@ -28,21 +28,14 @@ class _OrderStatusState extends State<OrderStatus> {
     switch (widget.status) {
       case 1:
         setState(() {
-          title = "Baru"; // NEW
-          color = errorColor;
-          textStyle = errorTextStyle;
-        });
-        break;
-      case 2:
-        setState(() {
-          title = "Sedang Diproses"; // PROCESSED
+          title = "Menunggu Konfirmasi";
           color = primaryColor;
           textStyle = themeTextStyle;
         });
         break;
-      case 3:
+      case 2:
         setState(() {
-          title = "Telah Selesai"; // FINISHED
+          title = "Telah Dikonfirmasi";
           color = infoColor;
           textStyle = infoTextStyle;
         });
@@ -87,7 +80,7 @@ class _OrderStatusState extends State<OrderStatus> {
         ],
       ),
     );
-    
-  }
 
+  }
+  
 }

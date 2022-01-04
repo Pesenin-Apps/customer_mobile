@@ -1,25 +1,27 @@
 import 'dart:io';
+
 import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/cart_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/product_vm.dart';
+import 'package:customer_pesenin/ui/views/guest/orders/cart_screen.dart';
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
-import 'package:customer_pesenin/ui/views/orders/cart_screen.dart';
 import 'package:customer_pesenin/ui/widgets/product/product_tile.dart';
+import 'package:customer_pesenin/ui/widgets/refresh/page_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HomeScreen extends StatefulWidget {
-  static const routeName = '/home';
-  const HomeScreen({ Key? key }) : super(key: key);
+class GuestHomeScreen extends StatefulWidget {
+  static const routeName = '/home-guest';
+  const GuestHomeScreen({ Key? key }) : super(key: key);
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _GuestHomeScreenState createState() => _GuestHomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _GuestHomeScreenState extends State<GuestHomeScreen> {
 
   int _currentIndex = 0;
   bool _isLoadingPage = false;
@@ -45,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     if (mounted) setState(() => _isLoadingPage = false);
   }
-
+  
   Future refreshData() async{
     if (mounted) await Provider.of<ProductVM>(context, listen: false).fetchProductCategories();
     if (mounted) await Provider.of<ProductVM>(context, listen: false).fetchProducts(_filterByCategory);
@@ -80,15 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return  Consumer<ConnectionVM>(
       builder: (context, connectionVM, _) => connectionVM.isOnline != null && connectionVM.isOnline! ? SafeArea(
-        child:  _isLoadingPage ? Center(
-            child: SizedBox(
-              height: 33,
-              width: 33,
-              child: CircularProgressIndicator(
-                color: primaryColor,
-              ),
-            ),
-          ) : Scaffold(
+        child:  _isLoadingPage ? PageRefresh(bgColor: backgroundColor3, circularColor: primaryColor) : Scaffold(
           backgroundColor: backgroundColor3,
           appBar: PreferredSize(
             preferredSize: const Size.fromHeight(105.0),
@@ -99,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   elevation: 0,
                   // centerTitle: true,
                   title: Text(
-                    'PESENIN APPS',
+                    'PESENIN APP',
                     style: titleApps,
                   ),
                   actions: <Widget>[
@@ -110,9 +104,9 @@ class _HomeScreenState extends State<HomeScreen> {
                           children: [
                             IconButton(
                               icon: const Icon(Icons.shopping_cart_rounded),
-                              color: Colors.white,
+                              color: primaryTextColor,
                               onPressed: () {
-                                Navigator.pushNamed(context, Cart.routeName);
+                                Navigator.pushNamed(context, GuestCartScreen.routeName);
                               },
                             ),
                             cartVM.carts.isEmpty ? const SizedBox() : Positioned(
@@ -130,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 child: Text(
                                   cartVM.carts.length.toString(),
-                                  style: primaryTextStyle.copyWith(
+                                  style: tertiaryTextStyle.copyWith(
                                     fontSize: 8
                                   ),
                                   textAlign: TextAlign.center,
@@ -207,13 +201,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12),
                                     color: _currentIndex == i ? primaryColor : transparentColor,
-                                    border: _currentIndex == i ? null : Border.all(
-                                      color: subtitleTextColor
+                                    border: _currentIndex == i ? Border.all(
+                                      color: primaryColor
+                                    ) : Border.all(
+                                      color: secondaryTextColor
                                     ),
                                   ),
                                   child: Text(
                                     productVM.productCategories[i].name.toString(),
-                                    style: _currentIndex == i ? primaryTextStyle.copyWith(
+                                    style: _currentIndex == i ? tertiaryTextStyle.copyWith(
                                       fontSize: 13,
                                       fontWeight: medium,
                                     ) : secondaryTextStyle.copyWith(

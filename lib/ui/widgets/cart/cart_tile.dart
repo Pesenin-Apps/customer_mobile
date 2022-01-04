@@ -94,7 +94,9 @@ class _CartTileState extends State<CartTile> {
                     ),
                     Text(
                       formatCurrency.format(widget.cart.product!.price),
-                      style: priceTextStyle,
+                      style: priceTextStyle.copyWith(
+                        fontWeight: semiBold,
+                      ),
                     ),
                   ],
                 ),

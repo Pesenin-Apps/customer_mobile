@@ -116,8 +116,8 @@ class _ScanningScreenState extends State<ScanningScreen> {
 
     Widget tableIsNotPart() {
       return Text(
-        'Kode bukan bagian dari Pesenin Apps.',
-        style: dangerTextStyle,
+        'Kode bukan bagian dari Pesenin App.',
+        style: errorTextStyle,
       );
     }
 
@@ -178,7 +178,7 @@ class _ScanningScreenState extends State<ScanningScreen> {
           builder: (context, userVM, child) => userVM.tableDetail.name != null ? 
             tableInfo(userVM.tableDetail.section!.name!, userVM.tableDetail.number.toString(), userVM.tableDetail.status!) : Text(
             'QR CODE FAILED',
-            style: dangerTextStyle,
+            style: errorTextStyle,
           ),
         ) : Text(
         'SCAN QR CODE',

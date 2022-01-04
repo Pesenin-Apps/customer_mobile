@@ -20,10 +20,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool _isLoadingSubmit = false;
 
   final formGlobalKey = GlobalKey<FormState>();
-  TextEditingController _fullname = TextEditingController();
-  TextEditingController _email = TextEditingController();
-  TextEditingController _phone = TextEditingController();
-  TextEditingController _password = TextEditingController();
+  final TextEditingController _fullname = TextEditingController();
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController _phone = TextEditingController();
+  final TextEditingController _password = TextEditingController();
 
   @override
   void initState() {

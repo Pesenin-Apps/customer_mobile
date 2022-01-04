@@ -4,23 +4,23 @@ import 'package:customer_pesenin/core/viewmodels/cart_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/order_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/user_vm.dart';
+import 'package:customer_pesenin/ui/views/guest/orders/detail_screen.dart';
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
 import 'package:customer_pesenin/ui/views/onboarding_screen.dart';
-import 'package:customer_pesenin/ui/views/orders/order_screen.dart';
-import 'package:customer_pesenin/ui/widgets/cart/cart_tile.dart';
 import 'package:customer_pesenin/ui/widgets/cart/cart_is_empty.dart';
+import 'package:customer_pesenin/ui/widgets/cart/cart_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class Cart extends StatefulWidget {
-  static const routeName = '/cart';
-  const Cart({ Key? key }) : super(key: key);
+class GuestCartScreen extends StatefulWidget {
+  static const routeName = '/cart-guest';
+  const GuestCartScreen({ Key? key }) : super(key: key);
 
   @override
-  _CartState createState() => _CartState();
+  _GuestCartScreenState createState() => _GuestCartScreenState();
 }
 
-class _CartState extends State<Cart> {
+class _GuestCartScreenState extends State<GuestCartScreen> {
 
   bool isLoadingPage = false;
   bool isLoadingCheckOut = false;
@@ -58,9 +58,9 @@ class _CartState extends State<Cart> {
     final OrderVM orderVM = Provider.of<OrderVM>(context, listen: false);
     try {
       Future.delayed(const Duration(seconds: 3), () async {
-        final bool response = await orderVM.createOrder(cartVM.carts);
+        final bool response = await orderVM.createGuestOrder(cartVM.carts);
         if (response) {
-          Navigator.pushNamed(context, OrderScreen.routeName);
+          Navigator.pushNamed(context, GuestOrderDetailScreen.routeName);
           cartVM.carts = [];
         } else {
           setState(() {
@@ -78,7 +78,7 @@ class _CartState extends State<Cart> {
     
     CartVM cartVM = Provider.of<CartVM>(context);
 
-    Future<void> showConfirmDialog() async {
+    Future<void> showConfirmDialogCheckOut() async {
       return showDialog(
         context: context, 
         builder: (BuildContext context) => Container(
@@ -154,7 +154,7 @@ class _CartState extends State<Cart> {
                       ),
                       child: Text(
                         'Check Out',
-                        style: primaryTextStyle.copyWith(
+                        style: tertiaryTextStyle.copyWith(
                           fontSize: 13,
                           fontWeight: semiBold,
                         ),
@@ -216,7 +216,7 @@ class _CartState extends State<Cart> {
                     ),
                   ),
                   Text(
-                    'jika telah mesanan.',
+                    'jika telah diproses.',
                     style: secondaryTextStyle.copyWith(
                       fontSize: 13,
                     ),
@@ -239,7 +239,7 @@ class _CartState extends State<Cart> {
                       ),
                       child: Text(
                         'Ya, Sesuai',
-                        style: primaryTextStyle.copyWith(
+                        style: tertiaryTextStyle.copyWith(
                           fontSize: 13,
                           fontWeight: semiBold,
                         ),
@@ -262,8 +262,19 @@ class _CartState extends State<Cart> {
           vertical: 10,
         ),
         decoration: BoxDecoration(
-          color: backgroundColor2,
+          color: backgroundColor3,
           borderRadius: BorderRadius.circular(12),
+          border: Border.all(
+            color: roundedBorderColor
+          ),
+          boxShadow: [
+            BoxShadow(
+              offset: const Offset(0, 3),
+              spreadRadius: 0,
+              blurRadius: 5,
+              color: backgroundColor4.withOpacity(0.2),
+            ),
+          ],
         ),
         child: Row(
           children: [
@@ -276,32 +287,32 @@ class _CartState extends State<Cart> {
             const SizedBox(width: 10),
             Expanded(
               child: Consumer<UserVM>(
-                builder: (context, UserVM, child) => Column(
+                builder: (context, userVM, child) => Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${UserVM.guest?.checkInNumber}',
+                      '${userVM.guest?.checkInNumber}',
                       style: secondaryTextStyle.copyWith(
                         fontSize: 12,
                         fontWeight: bold,
                       ),
                     ),
                     Text(
-                      '${UserVM.guest?.name}',
+                      '${userVM.guest?.name}',
                       style: primaryTextStyle.copyWith(
                         fontSize: 16,
                         fontWeight: bold,
                       ),
                     ),
                     Text(
-                      '${UserVM.guest?.table?.section?.name} No. ${UserVM.guest?.table?.number}',
+                      '${userVM.guest?.table?.section?.name} No. ${userVM.guest?.table?.number}',
                       style: secondaryTextStyle.copyWith(
                         fontSize: 14,
                         fontWeight: medium
                       ),
                     ),
                     Text(
-                      '${UserVM.guest?.deviceDetection}',
+                      '${userVM.guest?.deviceDetection}',
                       style: secondaryTextStyle.copyWith(
                         fontSize: 12,
                       ),
@@ -310,6 +321,26 @@ class _CartState extends State<Cart> {
                 ),
               ),
             ),
+            const SizedBox(width: 10),
+              InkWell(
+                onTap: () {
+                  showConfirmDialogCheckOut();
+                },
+                child: isLoadingCheckOut ? Container(
+                  width: 16,
+                  height: 16,
+                  margin: EdgeInsets.zero,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation(
+                      dangerColor,
+                    ),
+                  ),
+                ) : Image.asset(
+                  'assets/icons/icon_sign_out.png',
+                  width: 23,
+                ),
+              ),
           ],
         ),
       );
@@ -318,25 +349,17 @@ class _CartState extends State<Cart> {
     Widget cartLists() {
       return Container(
         margin: EdgeInsets.only(
-          top: defaultMargin,
+          top: defaultMargin/2,
+          bottom: defaultMargin/1.5,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Daftar Item',
-              style: primaryTextStyle.copyWith(
-                fontSize: 16,
-                fontWeight: semiBold,
-              ),
-            ),
             Column(
               children: [
-                const SizedBox(height: 10),
                 Column(
                   children: cartVM.carts.map((e) => CartTile(cart: e)).toList(),
                 ),
-                const SizedBox(height: 20),
               ],
             ),
           ],
@@ -375,10 +398,10 @@ class _CartState extends State<Cart> {
                     ),
                     child: TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, OrderScreen.routeName);
+                        Navigator.pushNamed(context, GuestOrderDetailScreen.routeName);
                       },
                       style: TextButton.styleFrom(
-                        backgroundColor: infoColor,
+                        backgroundColor: backgroundColor2,
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -423,12 +446,12 @@ class _CartState extends State<Cart> {
                         child: CircularProgressIndicator(
                           strokeWidth: 2,
                           valueColor: AlwaysStoppedAnimation(
-                            primaryTextColor,
+                            backgroundColor3,
                           ),
                         ),
                       ) : Text(
                         'Pesan Sekarang',
-                        style: primaryTextStyle.copyWith(
+                        style: tertiaryTextStyle.copyWith(
                           fontSize: 13,
                           fontWeight: semiBold,
                         ),
@@ -444,55 +467,35 @@ class _CartState extends State<Cart> {
     }
 
     return Consumer<ConnectionVM>(
-      builder: (context, connectionVM, _) => connectionVM.isOnline != null && connectionVM.isOnline! ? Scaffold(
-        backgroundColor: backgroundColor3,
-        appBar: AppBar(
+      builder: (context, connectionVM, _) => connectionVM.isOnline != null && connectionVM.isOnline! ? SafeArea(
+        child: Scaffold(
           backgroundColor: backgroundColor3,
-          leading: IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          elevation: 0,
-          centerTitle: true,
-          title: const Text('Keranjang'),
-          actions: <Widget> [
-            isLoadingCheckOut ? Container(
-              padding: const EdgeInsets.only(right: 15),
-              child: Center(
-                child: SizedBox(
-                  height: 20,
-                  width: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    valueColor: AlwaysStoppedAnimation(
-                      errorColor,
-                    ),
-                  ),
-                ),
-              ),
-            ) : IconButton(
-              icon: const Icon(Icons.logout_rounded),
-              color: errorColor,
+          appBar: AppBar(
+            backgroundColor: primaryColor,
+            leading: IconButton(
+              icon: const Icon(Icons.close),
               onPressed: () {
-                showConfirmDialog();
+                Navigator.pop(context);
               },
             ),
-          ],
-        ),
-        body: isLoadingPage ? Center(
-          child: SizedBox(
-            height: 33,
-            width: 33,
-            child: CircularProgressIndicator(
-              color: primaryColor,
-            ),
+            elevation: 0,
+            centerTitle: true,
+            title: const Text('Keranjang'),
           ),
-        ) : content(),
-        bottomNavigationBar: customNavigationBar(),
+          body: isLoadingPage ? Center(
+            child: SizedBox(
+              height: 33,
+              width: 33,
+              child: CircularProgressIndicator(
+                color: primaryColor,
+              ),
+            ),
+          ) : content(),
+          bottomNavigationBar: customNavigationBar(),
+        ),
       ) : const NoInternetConnectionScreen(),
     );
 
   }
+
 }

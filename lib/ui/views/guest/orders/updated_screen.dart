@@ -2,24 +2,19 @@ import 'package:customer_pesenin/core/utils/constans.dart';
 import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/order_vm.dart';
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
-import 'package:customer_pesenin/ui/widgets/order/order_item_tile_edited_customer.dart';
+import 'package:customer_pesenin/ui/widgets/order/order_item_tile_edited_guest.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CustomerOrderUpdateScreen extends StatefulWidget {
-  static const routeName = '/order-update-customer';
-
-  final String? id;
-  const CustomerOrderUpdateScreen({ 
-    Key? key,
-    required this.id,
-  }) : super(key: key);
+class GuestOrderUpdateScreen extends StatefulWidget {
+  static const routeName = '/order-update-guest';
+  const GuestOrderUpdateScreen({ Key? key }) : super(key: key);
 
   @override
-  _CustomerOrderUpdateScreenState createState() => _CustomerOrderUpdateScreenState();
+  _GuestOrderUpdateScreenState createState() => _GuestOrderUpdateScreenState();
 }
 
-class _CustomerOrderUpdateScreenState extends State<CustomerOrderUpdateScreen> {
+class _GuestOrderUpdateScreenState extends State<GuestOrderUpdateScreen> {
 
   bool _isLoadingPage = false;
 
@@ -32,12 +27,12 @@ class _CustomerOrderUpdateScreenState extends State<CustomerOrderUpdateScreen> {
   void getData() async {
     Provider.of<ConnectionVM>(context, listen: false).startMonitoring();
     setState(() => _isLoadingPage = true );
-    await Provider.of<OrderVM>(context, listen: false).fetchCustomerOrderDetail(widget.id!);
+    await Provider.of<OrderVM>(context, listen: false).fetchGuestOrderDetail();
     setState(() => _isLoadingPage = false );
   }
 
   Future refreshData() async{
-    if (mounted) await Provider.of<OrderVM>(context, listen: false).fetchCustomerOrderDetail(widget.id!);
+    if (mounted) await Provider.of<OrderVM>(context, listen: false).fetchGuestOrderDetail();
     setState(() { });
   }
 
@@ -54,9 +49,9 @@ class _CustomerOrderUpdateScreenState extends State<CustomerOrderUpdateScreen> {
           builder: (context, orderVM, child) => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              for (var i = 0; i < orderVM.customerOrder.orderItem!.length; i++) 
-                orderVM.customerOrder.orderItem![i].status! <= orderItemStatusNew 
-                ? OrderItemTileEditedCustomer(orderId: widget.id!, orderItem : orderVM.customerOrder.orderItem![i])
+              for (var i = 0; i < orderVM.guestOrder.orderItem!.length; i++) 
+                orderVM.guestOrder.orderItem![i].status! <= orderItemStatusNew 
+                ? OrderItemTileEditedGuest(orderId: orderVM.guestOrder.id, orderItem : orderVM.guestOrder.orderItem![i])
                 : const SizedBox(),
             ],
           ),
@@ -87,7 +82,6 @@ class _CustomerOrderUpdateScreenState extends State<CustomerOrderUpdateScreen> {
           appBar: AppBar(
             backgroundColor: primaryColor,
             elevation: 0,
-            centerTitle: true,
             title: const Text('Ubah Item'),
           ),
           body: _isLoadingPage ? Center(
@@ -104,5 +98,5 @@ class _CustomerOrderUpdateScreenState extends State<CustomerOrderUpdateScreen> {
     );
 
   }
-  
+
 }

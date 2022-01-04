@@ -216,7 +216,7 @@ class Api {
 
   // [START] Customer //
 
-  Future<List<Order>> getOrders(Map<String, dynamic> queryParams) async {
+  Future<List<Order>> getCustomerOrders(Map<String, dynamic> queryParams) async {
     try {
       var response = await _dio.get(
         '/customers/orders',
@@ -330,12 +330,33 @@ class Api {
     }
   }
 
+  Future<bool> postCustomerReservation(Map<String, dynamic> createForm) async {
+    try {
+      await _dio.post(
+        '/customers/reservations',
+        data: createForm,
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          },
+        ),
+      );
+      return true;
+    } catch (e) {
+      // print('Something Error (postCancelCustomerOrder) : $e');
+      return false;
+    }
+  }
+
   // [END] Customer //
 
-  Future<Order?> getOrderGuest() async {
+
+  // [START] Guest //
+
+  Future<Order?> getGuestOrders() async {
     try {
       var response = await _dio.get(
-        '/customers/orders',
+        '/guest/orders',
         options: Options(
           headers: {
             'requiresToken': true,
@@ -350,7 +371,7 @@ class Api {
     }
   }
 
-  Future<bool> postOrder(List<CartModel> carts)  async {
+  Future<bool> postGuestOrder(List<CartModel> carts)  async {
     try {
       var body = jsonEncode({
         'orders': carts.map((cart) => {
@@ -359,7 +380,7 @@ class Api {
         }).toList(),
       });
       await _dio.post(
-        '/customers/orders',
+        '/guest/orders',
         data: body,
         options: Options(
           headers: {
@@ -372,6 +393,45 @@ class Api {
       return false;
     }
   }
+
+  Future<bool> patchGuestOrderItem(String orderId, Map<String, dynamic> updatedForm) async {
+    try {
+      await _dio.patch(
+        '/guest/orders/$orderId',
+        data: updatedForm,
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          },
+        ),
+      );
+      return true;
+    } catch (e) {
+      // print('Something Error (patchCustomerOrderItem) : $e');
+      return false;
+    }
+  }
+
+  Future<bool> deleteGuestOrderItem(String orderId, Map<String, dynamic> deletedForm) async {
+    try {
+      await _dio.delete(
+        '/guest/orders/$orderId',
+        data: deletedForm,
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          },
+        ),
+      );
+      return true;
+    } catch (e) {
+      // print('Something Error (deleteCustomerOrderItem) : $e');
+      return false;
+    }
+  }
+
+  // [END] Guest //
+
 
   /* ========= END API ORDER ========= */
 

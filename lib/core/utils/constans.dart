@@ -26,11 +26,21 @@ const orderItemStatusInQueue = 2;
 const orderItemStatusInProcess = 3;
 const orderItemStatusFinish = 4;
 
+// Reservation Serving Type
+const orderServingOntime = 1;
+const orderServingByConfirmation = 2;
+
+// Theme 
+const dangerTheme = 1;
+const primaryTheme = 2;
+
 const baseUrlImage = 'https://api-pesenin.onggolt-dev.com/uploads/';
 
 final formatCurrency = NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);
 
+final formatYearMonthDay = DateFormat('yyyy-MM-dd');
 final formatDate = DateFormat('dd MMMM yyyy', 'id_ID');
+final formatHourMinute = DateFormat('Hm');
 final formatTime = DateFormat('Hms');
 final formatDateTime = DateFormat('dd-MM-yyyy Hms');
 final formatDateWithDay = DateFormat('EEEE, dd MMMM yyyy', 'id_ID');
@@ -95,4 +105,10 @@ String tableStatusStr(int tableStatus) {
     default:
       return 'null';
   }
+}
+
+String formatTimeOfDay(TimeOfDay tod) {
+  final now = DateTime.now();
+  final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);
+  return formatHourMinute.format(dt);
 }

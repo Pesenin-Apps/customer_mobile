@@ -58,7 +58,7 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
         if (response == 'null') {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: dangerColor,
+              backgroundColor: errorColor,
               content: const Text(
                 'Gagal, Terjadi Kesalahan!',
               ),
@@ -102,6 +102,91 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
   Widget build(BuildContext context) {
 
     CartVM cartVM = Provider.of<CartVM>(context);
+
+    Future<void> showConfirmDialogOrder(String orderId) async {
+      return showDialog(
+        context: context, 
+        builder: (BuildContext context) => Container(
+          margin: EdgeInsets.zero,
+          width: MediaQuery.of(context).size.width - (2 * defaultMargin),
+          child: AlertDialog(
+            backgroundColor: backgroundColor3,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                        Icons.close,
+                        color: primaryTextColor,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    Icons.error_outline_rounded,
+                    color: primaryColor,
+                    size: 100,
+                  ),
+                  const SizedBox( height: 12),
+                  Text(
+                    'Pesanan telah sesuai?',
+                    style: primaryTextStyle.copyWith(
+                      fontSize: 18,
+                      fontWeight: semiBold,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Anda tidak dapat membatalkan',
+                    style: secondaryTextStyle.copyWith(
+                      fontSize: 13,
+                    ),
+                  ),
+                  Text(
+                    'jika telah diproses.',
+                    style: secondaryTextStyle.copyWith(
+                      fontSize: 13,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    width: 150,
+                    height: 40,
+                    margin: EdgeInsets.zero,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        onSubmitOrder(orderId, cartVM);
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        'Ya, Sesuai',
+                        style: tertiaryTextStyle.copyWith(
+                          fontSize: 13,
+                          fontWeight: semiBold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        )
+      );
+    }
 
     Widget tableInfo() {
       return Container(
@@ -194,7 +279,7 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
                 ),
                 child: TextButton(
                   onPressed: () {
-                    onSubmitOrder(userVM.tableDetail.id.toString(), cartVM);
+                    showConfirmDialogOrder(userVM.tableDetail.id.toString());
                   },
                   style: TextButton.styleFrom(
                     backgroundColor: primaryColor,

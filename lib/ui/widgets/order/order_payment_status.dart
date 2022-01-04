@@ -61,7 +61,7 @@ class OrderPaymentStatus extends StatelessWidget {
               const SizedBox(width: 6),
               Text(
                 'Bulum Bayar',
-                style: dangerTextStyle.copyWith(
+                style: errorTextStyle.copyWith(
                   fontSize: 9,
                 ),
               ),

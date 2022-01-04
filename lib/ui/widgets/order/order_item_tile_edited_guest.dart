@@ -6,22 +6,22 @@ import 'package:customer_pesenin/ui/widgets/order/order_item_status.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class OrderItemTileEdited extends StatefulWidget {
+class OrderItemTileEditedGuest extends StatefulWidget {
   final String? orderId;
   final OrderItem? orderItem;
 
-  const OrderItemTileEdited({
+  const OrderItemTileEditedGuest({
     Key? key,
     required this.orderId,
     required this.orderItem,
   }) : super(key: key);
 
   @override
-  _OrderItemTileEditedState createState() => _OrderItemTileEditedState();
+  _OrderItemTileEditedGuestState createState() => _OrderItemTileEditedGuestState();
 }
 
-class _OrderItemTileEditedState extends State<OrderItemTileEdited> {
-
+class _OrderItemTileEditedGuestState extends State<OrderItemTileEditedGuest> {
+  
   int _currentlyQty = 0;
   bool _isLoadingUpdate = false;
   bool _isLoadingRemove = false;
@@ -43,11 +43,11 @@ class _OrderItemTileEditedState extends State<OrderItemTileEdited> {
           }
         ],
       };
-      final bool response = await Provider.of<OrderVM>(context, listen: false).updateCustomerOrderItem(orderId, formUpdate);
+      final bool response = await Provider.of<OrderVM>(context, listen: false).updateGuestOrderItem(orderId, formUpdate);
 
       if (response) {
         // refresh data
-        await Provider.of<OrderVM>(context, listen: false).fetchCustomerOrderDetail(orderId);
+        await Provider.of<OrderVM>(context, listen: false).fetchGuestOrderDetail();
         setState(() { });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -86,11 +86,11 @@ class _OrderItemTileEditedState extends State<OrderItemTileEdited> {
           }
         ],
       };
-      final bool response = await Provider.of<OrderVM>(context, listen: false).removeCustomerOrderItem(orderId, formRemove);
+      final bool response = await Provider.of<OrderVM>(context, listen: false).removeGuestOrderItem(orderId, formRemove);
 
       if (response) {
         // refresh data
-        await Provider.of<OrderVM>(context, listen: false).fetchCustomerOrderDetail(orderId);
+        await Provider.of<OrderVM>(context, listen: false).fetchGuestOrderDetail();
         setState(() { });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

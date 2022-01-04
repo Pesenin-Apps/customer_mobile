@@ -21,6 +21,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
 
   bool _isLoadingSignOut = false;
 
+  @override
   void initState() {
     Provider.of<ConnectionVM>(context, listen: false).startMonitoring();
     super.initState();

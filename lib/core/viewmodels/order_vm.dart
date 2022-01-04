@@ -13,6 +13,7 @@ class OrderVM extends ChangeNotifier {
   List<Order> _historyCustomerOrders = [];
   List<Order> _historyCustomerOrderLimits = [];
   Order? _customerOrder;
+  Order? _guestOrder;
 
   List<Order> get onGoingCustomerOrders {
     return [..._onGoingCustomerOrders];
@@ -30,22 +31,55 @@ class OrderVM extends ChangeNotifier {
     return _historyCustomerOrders.length > limitOrderHistory;
   }
 
-  Order get order {
+  Order get customerOrder {
     return _customerOrder!;
   }
 
-  bool get orderIsPaid {
-    return order.isPaid!;
+  Order get guestOrder {
+    return _guestOrder!;
   }
 
-  bool get canChangedOrderExist {
-    var orderItemsSelected = order.orderItem?.where((element) => element.status! <= orderItemStatusNew);
+  bool get customerOrderIsPaid {
+    return customerOrder.isPaid!;
+  }
+
+  bool get canChangedCustomerOrderExist {
+    var orderItemsSelected = customerOrder.orderItem?.where((element) => element.status! <= orderItemStatusNew);
     return orderItemsSelected!.isNotEmpty;
   }
 
-  bool get canNotChangedOrderExist {
-    var orderItemsSelected = order.orderItem?.where((element) => element.status! > orderItemStatusNew);
+  bool get canNotChangedCustomerOrderExist {
+    var orderItemsSelected = customerOrder.orderItem?.where((element) => element.status! > orderItemStatusNew);
     return orderItemsSelected!.isNotEmpty;
+  }
+  
+  bool get canChangedGuestOrderExist {
+    var orderItemsSelected = guestOrder.orderItem?.where((element) => element.status! <= orderItemStatusNew);
+    return orderItemsSelected!.isNotEmpty;
+  }
+
+  bool get reservationLessThanTimeLimit {
+    final timeNow = DateTime.now().toUtc();
+    final timePlanReservation = DateTime.parse(customerOrder.reservation!.datetimePlan!).toUtc();
+    return timeNow.difference(timePlanReservation).inMinutes < -45;
+  }
+
+  bool get reservationMoreThanTimeLimit {
+    final timeNow = DateTime.now().toUtc();
+    final timePlanReservation = DateTime.parse(customerOrder.reservation!.datetimePlan!).toUtc();
+    return timeNow.difference(timePlanReservation).inMinutes > 0;
+  }
+
+  bool get isDineIn {
+    return customerOrder.type! == typeDineIn;
+  }
+
+  bool get isReservation {
+    return customerOrder.type! == typeReservation;
+  }
+
+  bool get isExistGuestOrder {
+    return _guestOrder != null;
   }
 
   Future fetchOnGoingCustomerOrders() async {
@@ -55,7 +89,7 @@ class OrderVM extends ChangeNotifier {
         'is_paid' : false,
       }
     };
-    _onGoingCustomerOrders = await api.getOrders(queryParams);
+    _onGoingCustomerOrders = await api.getCustomerOrders(queryParams);
     notifyListeners();
   }
 
@@ -66,7 +100,7 @@ class OrderVM extends ChangeNotifier {
         'is_paid' : true, 
       }
     };
-    _historyCustomerOrders = await api.getOrders(queryParamsHistory);
+    _historyCustomerOrders = await api.getCustomerOrders(queryParamsHistory);
     notifyListeners();
     final Map<String, dynamic> queryParamsHistoryLimit = {
       'filters': {
@@ -75,7 +109,7 @@ class OrderVM extends ChangeNotifier {
       },
       'limit': limitOrderHistory,
     };
-    _historyCustomerOrderLimits = await api.getOrders(queryParamsHistoryLimit);
+    _historyCustomerOrderLimits = await api.getCustomerOrders(queryParamsHistoryLimit);
     notifyListeners();
   }
 
@@ -109,30 +143,28 @@ class OrderVM extends ChangeNotifier {
     return response;
   }
 
-  // old
-
-  Order? _orderDetail;
-
-  Order get orderDetail {
-    return _orderDetail!;
+  Future<bool> createCustomerReservation(Map<String, dynamic> createForm) async {
+    final bool response = await api.postCustomerReservation(createForm);
+    return response;
   }
 
-  bool get isExist {
-    return _orderDetail != null;
-  }
-
-  bool get isOrdering {
-    var statusOrder = [ 2, 3, 4 ];
-    return statusOrder.contains(_orderDetail!.status);
-  }
-
-  Future fetchOrderDetail() async {
-    _orderDetail = await api.getOrderGuest();
+  Future fetchGuestOrderDetail() async {
+    _guestOrder = await api.getGuestOrders();
     notifyListeners();
   }
 
-  Future<bool> createOrder(List<CartModel> carts) async {
-    final bool response = await api.postOrder(carts);
+  Future<bool> createGuestOrder(List<CartModel> carts) async {
+    final bool response = await api.postGuestOrder(carts);
+    return response;
+  }
+
+  Future<bool> updateGuestOrderItem(String orderId, Map<String, dynamic> updateForm) async {
+    final bool response = await api.patchGuestOrderItem(orderId, updateForm);
+    return response;
+  }
+
+  Future<bool> removeGuestOrderItem(String orderId, Map<String, dynamic> deletedForm) async {
+    final bool response = await api.deleteGuestOrderItem(orderId, deletedForm);
     return response;
   }
 
