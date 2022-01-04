@@ -31,6 +31,7 @@ class Order {
   String? createdAt;
   String? updatedAt;
   WaiterModel? waiter;
+  ReservationModel? reservation;
 
   Order({
     required this.id,
@@ -49,6 +50,7 @@ class Order {
     required this.createdAt,
     required this.updatedAt,
     this.waiter,
+    this.reservation,
   });
 
   factory Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);
@@ -83,4 +85,36 @@ class OrderItem {
 
   Map<String, dynamic> toJson() => _$OrderItemToJson(this);
   
+}
+
+@JsonSerializable()
+class ReservationModel {
+
+  @JsonKey(name: '_id')
+  String? id;
+  int? status;
+  @JsonKey(name: 'reservation_confirm')
+  int? reservationConfirm;
+  String? order;
+  @JsonKey(name: 'datetime_plan')
+  String? datetimePlan;
+  @JsonKey(name: 'number_of_people')
+  int? numberOfPeople;
+  @JsonKey(name: 'serving_type')
+  int? servingType;
+
+  ReservationModel({
+    required this.id,
+    required this.status,
+    required this.reservationConfirm,
+    this.order,
+    required this.datetimePlan,
+    required this.numberOfPeople,
+    required this.servingType,
+  });
+
+  factory ReservationModel.fromJson(Map<String, dynamic> json) => _$ReservationModelFromJson(json);
+
+  Map<String, dynamic> toJson() => _$ReservationModelToJson(this);
+
 }

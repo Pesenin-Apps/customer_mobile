@@ -6,6 +6,7 @@ import 'package:customer_pesenin/core/viewmodels/order_vm.dart';
 import 'package:customer_pesenin/ui/views/customer/orders/choose_product_screen.dart';
 import 'package:customer_pesenin/ui/views/customer/orders/updated_screen.dart';
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
+import 'package:customer_pesenin/ui/widgets/label/label_reservation_status.dart';
 import 'package:customer_pesenin/ui/widgets/order/description_tile.dart';
 import 'package:customer_pesenin/ui/widgets/order/order_item_tile.dart';
 import 'package:customer_pesenin/ui/widgets/order/order_payment_status.dart';
@@ -67,7 +68,7 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
           SnackBar(
             backgroundColor: errorColor,
             content: const Text(
-              'Gagal, Terjadi Kesalahan!',
+              'Gagal, Terjadi Kesalahan Pada Sistem!',
             ),
           ),
         );
@@ -209,19 +210,137 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
               ),
               const SizedBox(height: 12),
               DescriptionTile(title: 'Order Id', description: orderVM.customerOrder.orderNumber.toString()),
-              DescriptionTile(title: 'Jenis', description: orderVM.customerOrder.type == typeDineIn ? 'DINE-IN' : 'RESERVATION'),
-              DescriptionTile(title: 'Tanggal', description: formatDateWithDay.format(
-                DateTime.parse(orderVM.customerOrder.createdAt!).toLocal(),
-              )),
-              DescriptionTile(title: 'Waktu', description: formatTime.format(
-                DateTime.parse(orderVM.customerOrder.createdAt!).toLocal(),
-              )),
-              DescriptionTile(title: 'Pelayan', description: orderVM.customerOrder.waiter!.users!.fullname),
-              DescriptionTile(title: 'Meja Bagian', description: orderVM.customerOrder.table!.section!.name.toString()),
-              DescriptionTile(title: 'Nomor Meja', description: orderVM.customerOrder.table!.number.toString()),
+              DescriptionTile(title: 'Jenis', description: orderVM.isDineIn ? 'DINE-IN' : 'RESERVATION'),
+              orderVM.isDineIn ? Column(
+                children: [
+                  DescriptionTile(title: 'Tanggal', description: formatDateWithDay.format(
+                    DateTime.parse(orderVM.customerOrder.createdAt!).toLocal(),
+                  )),
+                  DescriptionTile(title: 'Waktu', description: formatTime.format(
+                    DateTime.parse(orderVM.customerOrder.createdAt!).toLocal(),
+                  )),
+                ],
+              ) : const SizedBox(),
+              DescriptionTile(title: 'Pelayan', description: orderVM.customerOrder.waiter != null ? orderVM.customerOrder.waiter!.users!.fullname : 'Menunggu...'),
+              DescriptionTile(title: 'Meja Bagian', description: orderVM.customerOrder.table != null ? orderVM.customerOrder.table!.section!.name.toString() : 'Menunggu...'),
+              DescriptionTile(title: 'Nomor Meja', description: orderVM.customerOrder.table != null ? orderVM.customerOrder.table!.number.toString() : 'Menunggu...'),
             ],
           ),
         ),
+      );
+    }
+
+    Widget reservationDetail() {
+      return Consumer<OrderVM>(
+        builder: (context, orderVM, child) => orderVM.isReservation ? Container(
+          margin: EdgeInsets.only(
+            top: defaultMargin/1.5,
+          ),
+          padding: const EdgeInsets.only(
+            top: 20,
+            bottom: 5,
+            right: 20,
+            left: 20,
+          ),
+          decoration: BoxDecoration(
+            color: backgroundColor3,
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: roundedBorderColor
+            ),
+            boxShadow: [
+              BoxShadow(
+                offset: const Offset(0, 3),
+                spreadRadius: 0,
+                blurRadius: 5,
+                color: backgroundColor4.withOpacity(0.2),
+              ),
+            ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Detail Reservasi',
+                    style: primaryTextStyle.copyWith(
+                      fontSize: 13,
+                      fontWeight: semiBold,
+                    ),
+                  ),
+                  LabelReservationStatus(status: orderVM.customerOrder.reservation!.status),
+                ],
+              ),
+              const SizedBox(height: 12),
+              DescriptionTile(title: 'Tanggal', description: formatDateWithDay.format(
+                DateTime.parse(orderVM.customerOrder.reservation!.datetimePlan!).toLocal(),
+              )),
+              DescriptionTile(title: 'Waktu', description: formatTime.format(
+                DateTime.parse(orderVM.customerOrder.reservation!.datetimePlan!).toLocal(),
+              )),
+              DescriptionTile(
+                title: 'Penyajian Pesanan', description: orderVM.customerOrder.reservation!.servingType == orderServingOntime ? 'ON TIME' : 'BY CONFIRMATION'
+              ),
+              DescriptionTile(title: 'Jumlah Orang', description: orderVM.customerOrder.reservation!.numberOfPeople.toString()),
+              const SizedBox(height: 5),
+              orderVM.reservationLessThanTimeLimit ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: InkWell(
+                  onTap: () {
+                    print(DateTime.now().toUtc());
+                    print(DateTime.now().runtimeType);
+                    // print(orderVM.customerOrder.reservation!.datetimePlan.runtimeType);
+                    print(DateTime.parse(orderVM.customerOrder.reservation!.datetimePlan!).toUtc());
+                    print(DateTime.parse(orderVM.customerOrder.reservation!.datetimePlan!).toUtc().runtimeType);
+                    print('=========');
+                    print(DateTime.now().toUtc().difference(DateTime.parse(orderVM.customerOrder.reservation!.datetimePlan!).toUtc()).inMinutes);
+                    print(DateTime.now().toUtc().difference(DateTime.parse(orderVM.customerOrder.reservation!.datetimePlan!).toUtc()).inMinutes < -45);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 6.0),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.mode_edit_rounded,
+                          color: primaryColor,
+                          size: 20,
+                        ),
+                        const SizedBox(width: 3),
+                        Text(
+                          'Ubah Data',
+                          style: themeTextStyle.copyWith(
+                            fontSize: 12,
+                            fontWeight: bold,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ),
+              ) : orderVM.reservationMoreThanTimeLimit ? const SizedBox(height: 10) : Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 8.0,
+                  vertical: 8.0,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6.0),
+                  child: Text(
+                    'Data sudah tidak bisa diubah, waktu reservasi kurang dari 45 menit lagi.',
+                    style: errorTextStyle.copyWith(
+                      fontSize: 10,
+                      fontWeight: semiBold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ) : const SizedBox(),
       );
     }
 
@@ -431,6 +550,7 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
           ),
           children: [
             orderDetail(),
+            reservationDetail(),
             orderItems(),
             paymentDetail(),
             buttonSubmit(),

@@ -34,6 +34,10 @@ Order _$OrderFromJson(Map<String, dynamic> json) {
     waiter: json['waiter'] == null
         ? null
         : WaiterModel.fromJson(json['waiter'] as Map<String, dynamic>),
+    reservation: json['reservation'] == null
+        ? null
+        : ReservationModel.fromJson(
+            json['reservation'] as Map<String, dynamic>),
   );
 }
 
@@ -54,6 +58,7 @@ Map<String, dynamic> _$OrderToJson(Order instance) => <String, dynamic>{
       'createdAt': instance.createdAt,
       'updatedAt': instance.updatedAt,
       'waiter': instance.waiter,
+      'reservation': instance.reservation,
     };
 
 OrderItem _$OrderItemFromJson(Map<String, dynamic> json) {
@@ -78,4 +83,27 @@ Map<String, dynamic> _$OrderItemToJson(OrderItem instance) => <String, dynamic>{
       'price': instance.price,
       'total': instance.total,
       'qty': instance.qty,
+    };
+
+ReservationModel _$ReservationModelFromJson(Map<String, dynamic> json) {
+  return ReservationModel(
+    id: json['_id'] as String?,
+    status: json['status'] as int?,
+    reservationConfirm: json['reservation_confirm'] as int?,
+    order: json['order'] as String?,
+    datetimePlan: json['datetime_plan'] as String?,
+    numberOfPeople: json['number_of_people'] as int?,
+    servingType: json['serving_type'] as int?,
+  );
+}
+
+Map<String, dynamic> _$ReservationModelToJson(ReservationModel instance) =>
+    <String, dynamic>{
+      '_id': instance.id,
+      'status': instance.status,
+      'reservation_confirm': instance.reservationConfirm,
+      'order': instance.order,
+      'datetime_plan': instance.datetimePlan,
+      'number_of_people': instance.numberOfPeople,
+      'serving_type': instance.servingType,
     };

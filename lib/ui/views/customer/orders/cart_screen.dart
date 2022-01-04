@@ -58,7 +58,7 @@ class _CustomerCartScreenState extends State<CustomerCartScreen> {
         if (response == 'null') {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              backgroundColor: dangerColor,
+              backgroundColor: errorColor,
               content: const Text(
                 'Gagal, Terjadi Kesalahan!',
               ),

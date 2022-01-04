@@ -28,21 +28,21 @@ class _OrderStatusState extends State<OrderStatus> {
     switch (widget.status) {
       case 1:
         setState(() {
-          title = "NEW";
+          title = "Baru"; // NEW
           color = errorColor;
-          textStyle = dangerTextStyle;
+          textStyle = errorTextStyle;
         });
         break;
       case 2:
         setState(() {
-          title = "PROCESSED";
+          title = "Sedang Diproses"; // PROCESSED
           color = primaryColor;
           textStyle = themeTextStyle;
         });
         break;
       case 3:
         setState(() {
-          title = "FINISHED";
+          title = "Telah Selesai"; // FINISHED
           color = infoColor;
           textStyle = infoTextStyle;
         });

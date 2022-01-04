@@ -58,6 +58,26 @@ class OrderVM extends ChangeNotifier {
     return orderItemsSelected!.isNotEmpty;
   }
 
+  bool get reservationLessThanTimeLimit {
+    final timeNow = DateTime.now().toUtc();
+    final timePlanReservation = DateTime.parse(customerOrder.reservation!.datetimePlan!).toUtc();
+    return timeNow.difference(timePlanReservation).inMinutes < -45;
+  }
+
+  bool get reservationMoreThanTimeLimit {
+    final timeNow = DateTime.now().toUtc();
+    final timePlanReservation = DateTime.parse(customerOrder.reservation!.datetimePlan!).toUtc();
+    return timeNow.difference(timePlanReservation).inMinutes > 0;
+  }
+
+  bool get isDineIn {
+    return customerOrder.type! == typeDineIn;
+  }
+
+  bool get isReservation {
+    return customerOrder.type! == typeReservation;
+  }
+
   bool get isExistGuestOrder {
     return _guestOrder != null;
   }

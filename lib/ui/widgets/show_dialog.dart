@@ -8,7 +8,7 @@ Future<void> showDialogCustom(BuildContext context, int dialogTheme, IconData ic
 
   switch (dialogTheme) {
     case dangerTheme:
-      color = dangerColor;
+      color = errorColor;
       break;
     default:
       color = primaryColor;
