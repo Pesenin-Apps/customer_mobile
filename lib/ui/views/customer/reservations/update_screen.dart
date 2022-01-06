@@ -139,12 +139,12 @@ class _CustomerReservationUpdateScreenState extends State<CustomerReservationUpd
     final currentDateTime = DateTime.now();
     final dateTimePlan = DateTime.parse('${_datePlan.text} ${_timePlan.text}');
     final minutesBefore = currentDateTime.difference(dateTimePlan).inMinutes;
-    if (minutesBefore > -150) {
+    if (minutesBefore > -120) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: errorColor,
           content: const Text(
-            'Periksa kembali waktu reservasi, pemesanan reservasi maksimal 3 jam sebelumnya!',
+            'Periksa kembali waktu reservasi, pemesanan reservasi maksimal 2 jam sebelumnya!',
           ),
         ),
       );
