@@ -5,6 +5,7 @@ import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/order_vm.dart';
 import 'package:customer_pesenin/ui/views/customer/orders/choose_product_screen.dart';
 import 'package:customer_pesenin/ui/views/customer/orders/updated_screen.dart';
+import 'package:customer_pesenin/ui/views/customer/reservations/update_screen.dart';
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
 import 'package:customer_pesenin/ui/widgets/label/label_reservation_status.dart';
 import 'package:customer_pesenin/ui/widgets/order/description_tile.dart';
@@ -289,14 +290,13 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: InkWell(
                   onTap: () {
-                    print(DateTime.now().toUtc());
-                    print(DateTime.now().runtimeType);
-                    // print(orderVM.customerOrder.reservation!.datetimePlan.runtimeType);
-                    print(DateTime.parse(orderVM.customerOrder.reservation!.datetimePlan!).toUtc());
-                    print(DateTime.parse(orderVM.customerOrder.reservation!.datetimePlan!).toUtc().runtimeType);
-                    print('=========');
-                    print(DateTime.now().toUtc().difference(DateTime.parse(orderVM.customerOrder.reservation!.datetimePlan!).toUtc()).inMinutes);
-                    print(DateTime.now().toUtc().difference(DateTime.parse(orderVM.customerOrder.reservation!.datetimePlan!).toUtc()).inMinutes < -45);
+                    Navigator.pushNamed(
+                      context, 
+                      CustomerReservationUpdateScreen.routeName,
+                      arguments: ScreenArguments(
+                        id: orderVM.customerOrder.id!,
+                      ),
+                    );
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(vertical: 6.0),
