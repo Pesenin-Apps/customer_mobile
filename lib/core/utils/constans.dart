@@ -30,6 +30,14 @@ const orderItemStatusFinish = 4;
 const orderServingOntime = 1;
 const orderServingByConfirmation = 2;
 
+// Reservation Status
+const reservationCreated = 1;
+const reservationConfirmed = 2;
+
+// Reservation Confirm
+const reservationConfirmWaiting = 1;
+const reservationConfirmStartProcess = 2;
+
 // Theme 
 const dangerTheme = 1;
 const primaryTheme = 2;

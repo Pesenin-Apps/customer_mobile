@@ -366,6 +366,24 @@ class Api {
     }
   }
 
+  Future<bool> patchReservation(String reservationId, Map<String, dynamic> updatedForm) async {
+    try {
+      await _dio.patch(
+        '/orders/reservations/$reservationId',
+        data: updatedForm,
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          },
+        ),
+      );
+      return true;
+    } catch (e) {
+      // print('Something Error (patchCustomerOrderItem) : $e');
+      return false;
+    }
+  }
+
   // [END] Customer //
 
 

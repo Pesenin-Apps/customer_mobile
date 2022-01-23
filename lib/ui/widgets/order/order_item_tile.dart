@@ -15,19 +15,29 @@ class OrderItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
 
     Widget imageUrl() {
-      return Container(
+      return FadeInImage.assetNetwork(
+        placeholder: 'assets/images/placeholder.jpg', 
+        image: baseUrlImage + orderItem.product!.image.toString(),
+        fit: BoxFit.cover,
         width: 60,
         height: 60,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          image: DecorationImage(
-            image: NetworkImage(
-              baseUrlImage + orderItem.product!.image.toString(),
-            ),
-          ),
-        ),
       );
     }
+
+    // Widget imageUrl() {
+    //   return Container(
+    //     width: 60,
+    //     height: 60,
+    //     decoration: BoxDecoration(
+    //       borderRadius: BorderRadius.circular(12),
+    //       image: DecorationImage(
+    //         image: NetworkImage(
+    //           baseUrlImage + orderItem.product!.image.toString(),
+    //         ),
+    //       ),
+    //     ),
+    //   );
+    // }
 
     Widget imagePlaceholder() {
       return Container(

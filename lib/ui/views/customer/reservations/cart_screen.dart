@@ -23,6 +23,8 @@ class CustomerReservationCartScreen extends StatefulWidget {
 
 class _CustomerReservationCartScreenState extends State<CustomerReservationCartScreen> {
 
+  bool _isLoadingSubmit = false;
+
   @override
   void initState() {
     getData();
@@ -31,6 +33,19 @@ class _CustomerReservationCartScreenState extends State<CustomerReservationCartS
 
   void getData() async {
     Provider.of<ConnectionVM>(context, listen: false).startMonitoring();
+  }
+
+  void _onSubmitAddItemInCartReservation(CartVM cartVM) {
+    setState(() => _isLoadingSubmit = true);
+    Future.delayed(const Duration(seconds: 3), () {
+      for (var i = 0; i < cartVM.carts.length; i++) {
+        cartVM.addCartReservation(cartVM.carts[i].product!, cartVM.carts[i].qty!);
+      }
+      int count = 0;
+      Navigator.of(context).popUntil((_) => count++ >= 2);
+      cartVM.carts = [];
+      setState(() => _isLoadingSubmit = false);
+    });
   }
 
   @override
@@ -87,8 +102,7 @@ class _CustomerReservationCartScreenState extends State<CustomerReservationCartS
               ),
               child: TextButton(
                 onPressed: () {
-                  int count = 0;
-                  Navigator.of(context).popUntil((_) => count++ >= 2);
+                  _onSubmitAddItemInCartReservation(cartVM);
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: primaryColor,
@@ -97,7 +111,17 @@ class _CustomerReservationCartScreenState extends State<CustomerReservationCartS
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: Text(
+                child: _isLoadingSubmit ? Container(
+                  width: 16,
+                  height: 16,
+                  margin: EdgeInsets.zero,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation(
+                      backgroundColor3,
+                    ),
+                  ),
+                ) : Text(
                   'Selesai',
                   style: tertiaryTextStyle.copyWith(
                     fontSize: 15,

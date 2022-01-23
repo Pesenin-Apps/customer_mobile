@@ -9,6 +9,7 @@ import 'package:customer_pesenin/ui/views/customer/reservations/update_screen.da
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
 import 'package:customer_pesenin/ui/widgets/label/label_reservation_status.dart';
 import 'package:customer_pesenin/ui/widgets/order/description_tile.dart';
+import 'package:customer_pesenin/ui/widgets/order/order_item_description_tile.dart';
 import 'package:customer_pesenin/ui/widgets/order/order_item_tile.dart';
 import 'package:customer_pesenin/ui/widgets/order/order_payment_status.dart';
 import 'package:customer_pesenin/ui/widgets/order/order_status.dart';
@@ -32,6 +33,7 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
 
   bool _isLoadingPage = false;
   bool _isLoadingCancel = false;
+  bool _isLoadingReservationConfirm = false;
 
    @override
   void initState() {
@@ -76,6 +78,52 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
         setState(() => _isLoadingCancel = false );
       }
     });
+  }
+
+  void onSubmitReservationConfirm(String reservationId) {
+    setState(() => _isLoadingReservationConfirm = true );
+    final OrderVM orderVM = Provider.of<OrderVM>(context, listen: false);
+    if (orderVM.orderItemIsEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: errorColor,
+          content: const Text(
+            'Item Pesanan Anda Kosong, Silahkan Tambah Terlebih Dahulu!',
+          ),
+        ),
+      );
+      setState(() => _isLoadingReservationConfirm = false);
+    } else {
+      Future.delayed(const Duration(seconds: 2), () async {
+        final Map<String, dynamic> formUpdateReservation = {
+          'reservation_confirm': reservationConfirmStartProcess,
+        };
+        final bool response = await orderVM.updateReservation(reservationId, formUpdateReservation);
+        if (response) {
+          await orderVM.fetchCustomerOrderDetail(widget.id!);
+          setState(() { });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: primaryColor,
+              content: const Text(
+                'Berhasil, Reservasi Telah Dikonfirmasi, Silahkan Menunggu Pesanan Anda!',
+              ),
+            ),
+          );
+          setState(() => _isLoadingReservationConfirm = false);
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              backgroundColor: errorColor,
+              content: const Text(
+                'Gagal, Terjadi Kesalahan Pada Sistem!',
+              ),
+            ),
+          );
+          setState(() => _isLoadingReservationConfirm = false);
+        }
+      });
+    }
   }
 
   Future refreshData() async {
@@ -156,6 +204,87 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
                       ),
                       child: Text(
                         'Ya, Batalkan',
+                        style: tertiaryTextStyle.copyWith(
+                          fontSize: 13,
+                          fontWeight: semiBold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        )
+      );
+    }
+
+    Future<void> showConfirmDialogReservationConfirm(String reservationId) async {
+      return showDialog(
+        context: context, 
+        builder: (BuildContext context) => Container(
+          margin: EdgeInsets.zero,
+          width: MediaQuery.of(context).size.width - (2 * defaultMargin),
+          child: AlertDialog(
+            backgroundColor: backgroundColor3,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
+            content: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Icon(
+                        Icons.close,
+                        color: primaryTextColor,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    Icons.error_outline_rounded,
+                    color: primaryColor,
+                    size: 100,
+                  ),
+                  const SizedBox( height: 12),
+                  Text(
+                    'Konfirmasi Reservasi Anda?',
+                    style: primaryTextStyle.copyWith(
+                      fontSize: 18,
+                      fontWeight: semiBold,
+                    ),
+                    textAlign: TextAlign.center
+                  ),
+                  const SizedBox(height: 12),
+                  Text(
+                    'Pesanan anda akan segera diproses, dengan estimasi selesai 25 menit setelah konfirmasi.',
+                    style: secondaryTextStyle.copyWith(
+                      fontSize: 13,
+                    ),
+                    textAlign: TextAlign.center
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    width: 150,
+                    height: 40,
+                    margin: EdgeInsets.zero,
+                    child: TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        onSubmitReservationConfirm(reservationId);
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: infoColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: Text(
+                        'Ya, Konfirmasi',
                         style: tertiaryTextStyle.copyWith(
                           fontSize: 13,
                           fontWeight: semiBold,
@@ -285,6 +414,35 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
                 title: 'Penyajian Pesanan', description: orderVM.customerOrder.reservation!.servingType == orderServingOntime ? 'ON TIME' : 'BY CONFIRMATION'
               ),
               DescriptionTile(title: 'Jumlah Orang', description: orderVM.customerOrder.reservation!.numberOfPeople.toString()),
+              orderVM.reservationInConfirmed && orderVM.reservationMoreThanTimeLimit ? const SizedBox() : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
+                  Text(
+                    'Item Pesanan',
+                    style: primaryTextStyle.copyWith(
+                      fontSize: 13,
+                      fontWeight: semiBold,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  orderVM.customerOrder.orderItem!.isEmpty ? Center(
+                    child: Text(
+                      'Belum Ada Item Pesanan',
+                      style: secondaryTextStyle.copyWith(
+                        fontSize: 12,
+                      ),
+                    ),
+                  ) : Column(
+                    children: [
+                      for (var i = 0; i < orderVM.customerOrder.orderItem!.length; i++) OrderItemDescriptionTile(
+                        title: orderVM.customerOrder.orderItem![i].product!.name,
+                        description: orderVM.customerOrder.orderItem![i].qty.toString()
+                      ),
+                    ],
+                  )
+                ],
+              ),
               const SizedBox(height: 5),
               orderVM.reservationLessThanTimeLimit ? Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -298,27 +456,42 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
                       ),
                     );
                   },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6.0),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.mode_edit_rounded,
-                          color: primaryColor,
-                          size: 20,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6.0),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.mode_edit_rounded,
+                              color: primaryColor,
+                              size: 20,
+                            ),
+                            const SizedBox(width: 3),
+                            Text(
+                              'Ubah Data',
+                              style: themeTextStyle.copyWith(
+                                fontSize: 12,
+                                fontWeight: bold,
+                              ),
+                            )
+                          ],
                         ),
-                        const SizedBox(width: 3),
-                        Text(
-                          'Ubah Data',
-                          style: themeTextStyle.copyWith(
-                            fontSize: 12,
-                            fontWeight: bold,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6.0),
+                        child: Text(
+                          'Dalam 1 jam sebelum waktu reservasi, data tidak dapat diubah lagi.',
+                          style: errorTextStyle.copyWith(
+                            fontSize: 10,
+                            fontWeight: semiBold,
                           ),
-                        )
-                      ],
-                    ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ) : orderVM.reservationMoreThanTimeLimit ? const SizedBox(height: 10) : Padding(
@@ -329,7 +502,7 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 6.0),
                   child: Text(
-                    'Data sudah tidak bisa diubah, waktu reservasi kurang dari 45 menit lagi.',
+                    'Data sudah tidak bisa diubah, waktu reservasi kurang dari 1 jam lagi.',
                     style: errorTextStyle.copyWith(
                       fontSize: 10,
                       fontWeight: semiBold,
@@ -344,13 +517,74 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
       );
     }
 
+    Widget buttonConfirmationReservation() {
+      return Consumer<OrderVM>(
+        builder: (context, orderVM, child) => orderVM.isReservation && orderVM.reservationInConfirmed && orderVM.reservationMoreThanTimeLimit && orderVM.isByConfirmation && orderVM.reservationWaitingConfirmation ? Container(
+          margin: EdgeInsets.only(
+            top: defaultMargin/2,
+          ),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 6.0,
+                  horizontal: 6.0,
+                ),
+                child: Text(
+                  'Penyajian pesanan anda BY CONFIRMATION, konfirmasi jika anda telah ditempat (RM. Kampung Bakau).',
+                  style: subtitleTextStyle.copyWith(
+                    fontSize: 10,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              const SizedBox(height: 3),
+              Container(
+                height: 35,
+                width: double.infinity,
+                margin: EdgeInsets.zero,
+                child: TextButton(
+                  onPressed: () {
+                    showConfirmDialogReservationConfirm(orderVM.customerOrder.reservation!.id!);
+                  },
+                  style: TextButton.styleFrom(
+                    backgroundColor: infoColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    )
+                  ),
+                  child: _isLoadingReservationConfirm ? Container(
+                    width: 16,
+                    height: 16,
+                    margin: EdgeInsets.zero,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation(
+                        backgroundColor3,
+                      ),
+                    ),
+                  ) : Text(
+                    'Konfirmasi',
+                    style: tertiaryTextStyle.copyWith(
+                      fontSize: 12,
+                      fontWeight: semiBold
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ) : const SizedBox(),
+      );
+    }
+
     Widget orderItems() {
-      return Container(
-        margin: EdgeInsets.only(
-          top: defaultMargin/1.5,
-        ),
-        child: Consumer<OrderVM>(
-          builder: (context, orderVM, child) => Column(
+      return Consumer<OrderVM>(
+        builder: (context, orderVM, child) => orderVM.isDineIn || (orderVM.isReservation && orderVM.reservationInConfirmed && orderVM.reservationMoreThanTimeLimit) ? Container(
+          margin: EdgeInsets.only(
+            top: defaultMargin/1.5,
+          ),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
@@ -421,7 +655,7 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
               ),
             ],
           ),
-        ),
+        ) : const SizedBox(height: 10),
       );
     }
 
@@ -500,7 +734,7 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
 
     Widget buttonSubmit() {
       return Consumer<OrderVM>(
-        builder: (context, orderVM, child) => orderVM.canNotChangedCustomerOrderExist ? SizedBox(height: defaultMargin) : Container(
+        builder: (context, orderVM, child) => (orderVM.isDineIn && orderVM.canNotChangedCustomerOrderExist) || (orderVM.isReservation && orderVM.reservationInConfirmed) ? SizedBox(height: defaultMargin) : Container(
           height: 35,
           width: double.infinity,
           margin: EdgeInsets.only(
@@ -551,6 +785,7 @@ class _CustomerOrderDetailScreenState extends State<CustomerOrderDetailScreen> {
           children: [
             orderDetail(),
             reservationDetail(),
+            buttonConfirmationReservation(),
             orderItems(),
             paymentDetail(),
             buttonSubmit(),

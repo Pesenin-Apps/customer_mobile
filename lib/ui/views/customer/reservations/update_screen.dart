@@ -8,7 +8,7 @@ import 'package:customer_pesenin/core/viewmodels/order_vm.dart';
 import 'package:customer_pesenin/ui/views/customer/orders/updated_screen.dart';
 import 'package:customer_pesenin/ui/views/customer/reservations/choose_product_screen.dart';
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
-import 'package:customer_pesenin/ui/widgets/cart/cart_tile.dart';
+import 'package:customer_pesenin/ui/widgets/cart/cart_reservation_tile.dart';
 import 'package:customer_pesenin/ui/widgets/custom_radio.dart';
 import 'package:customer_pesenin/ui/widgets/custom_textfield.dart';
 import 'package:customer_pesenin/ui/widgets/order/order_item_tile.dart';
@@ -37,6 +37,7 @@ class _CustomerReservationUpdateScreenState extends State<CustomerReservationUpd
   TextEditingController _timePlan = TextEditingController();
   TextEditingController _numberOfPeople = TextEditingController();
 
+  DateTime _planDate = DateTime.now();
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
 
@@ -88,6 +89,7 @@ class _CustomerReservationUpdateScreenState extends State<CustomerReservationUpd
     setState(() {
       _orderServingSelected = order.reservation!.servingType == orderServingOntime ? OrderServing.onTime : OrderServing.byConfirmation;
       final dateTimePlan = DateTime.parse(order.reservation!.datetimePlan!).toLocal();
+      _planDate = dateTimePlan;
       _selectedDate = dateTimePlan;
       _selectedTime = TimeOfDay(hour: dateTimePlan.hour, minute: dateTimePlan.minute);
       _countOrderItem = order.orderItem!.length;
@@ -135,29 +137,27 @@ class _CustomerReservationUpdateScreenState extends State<CustomerReservationUpd
 
   void _onSubmitReservation(CartVM cartVM) async {
     setState(() => _isLoadingSubmit = true);
-    // time checking
     final currentDateTime = DateTime.now();
     final dateTimePlan = DateTime.parse('${_datePlan.text} ${_timePlan.text}');
     final minutesBefore = currentDateTime.difference(dateTimePlan).inMinutes;
-    if (minutesBefore > -120) {
+    if (minutesBefore > -300 && _planDate != dateTimePlan) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: errorColor,
           content: const Text(
-            'Periksa kembali waktu reservasi, pemesanan reservasi maksimal 2 jam sebelumnya!',
+            'Periksa kembali waktu reservasi, pemesanan reservasi maksimal 5 jam sebelumnya!',
           ),
         ),
       );
       setState(() => _isLoadingSubmit = false);
     } else {
-      // actions
       final OrderVM orderVM = Provider.of<OrderVM>(context, listen: false);
       Future.delayed(const Duration(seconds: 3), () async {
         final Map<String, dynamic> formUpdateReservation = {
           'datetime_plan': '${_datePlan.text} ${_timePlan.text}',
           'number_of_people': _numberOfPeople.text,
           'serving_type': _orderServingSelected == OrderServing.onTime ? orderServingOntime : orderServingByConfirmation,
-          'orders': cartVM.carts.map((cart) => {
+          'orders': cartVM.cartReservations.map((cart) => {
             'item': cart.product!.id,
             'qty': cart.qty,
           }).toList(),
@@ -175,7 +175,7 @@ class _CustomerReservationUpdateScreenState extends State<CustomerReservationUpd
               ),
             ),
           );
-          cartVM.carts = [];
+          cartVM.cartReservations = [];
           setState(() => _isLoadingSubmit = false);
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -438,7 +438,7 @@ class _CustomerReservationUpdateScreenState extends State<CustomerReservationUpd
                   fontSize: 10,
                   ),
               ) : Text(
-                'Penyajian pesanan akan disiapkan berdasarkan kofirmasi pelanggan.',
+                'Penyajian pesanan akan disiapkan berdasarkan kofirmasi pelanggan, estimasi 25 menit setelah konfirmasi dilakukan.',
                 style: secondaryTextStyle.copyWith(
                   fontSize: 10,
                 ),
@@ -467,14 +467,14 @@ class _CustomerReservationUpdateScreenState extends State<CustomerReservationUpd
             const SizedBox(height: 10),
             Column(
               children: [
-                _orderServingSelected == OrderServing.onTime && cartVM.carts.isEmpty && _countOrderItem == 0 ? Text(
+                _orderServingSelected == OrderServing.onTime && cartVM.cartReservations.isEmpty && _countOrderItem == 0 ? Text(
                   'Karena penyajian Tepat Waktu (On Time) maka anda wajib menambahkan Item.',
                   style: errorTextStyle.copyWith(
                     fontSize: 10,
                   ),
                   textAlign: TextAlign.center,
                 ) : Column(
-                  children: cartVM.carts.map((e) => CartTile(cart: e)).toList(),
+                  children: cartVM.cartReservations.map((e) => CartReservationTile(cart: e)).toList(),
                 ),
                 const SizedBox(height: 5),
                 Center(
@@ -515,13 +515,13 @@ class _CustomerReservationUpdateScreenState extends State<CustomerReservationUpd
         height: 40,
         width: double.infinity,
         margin: EdgeInsets.only(
-          top: defaultMargin,
+          top: defaultMargin/1.5,
         ),
         child: TextButton(
           onPressed: () {
             if (formGlobalKey.currentState!.validate()) {
               formGlobalKey.currentState!.save();
-              if (_orderServingSelected == OrderServing.onTime && cartVM.carts.isEmpty && _countOrderItem == 0) {
+              if (_orderServingSelected == OrderServing.onTime && cartVM.cartReservations.isEmpty && _countOrderItem == 0) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     backgroundColor: errorColor,
@@ -627,7 +627,7 @@ class _CustomerReservationUpdateScreenState extends State<CustomerReservationUpd
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
-                cartVM.carts = [];
+                cartVM.cartReservations = [];
                 Navigator.pop(context);
               },
             ),
