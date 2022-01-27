@@ -211,7 +211,7 @@ class Api {
   
   /* ========= START API ORDER ========= */
 
-  // Guest
+  // Gues
 
 
   // [START] Customer //
