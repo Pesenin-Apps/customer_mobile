@@ -211,8 +211,6 @@ class Api {
   
   /* ========= START API ORDER ========= */
 
-  // Guest //
-
 
   // [START] Customer //
 
@@ -344,6 +342,42 @@ class Api {
       return true;
     } catch (e) {
       // print('Something Error (postCancelCustomerOrder) : $e');
+      return false;
+    }
+  }
+
+  Future<bool> patchCustomerReservation(String orderId, Map<String, dynamic> updateForm) async {
+    try {
+      await _dio.patch(
+        '/customers/reservations/$orderId',
+        data: updateForm,
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          },
+        ),
+      );
+      return true;
+    } catch (e) {
+      // print('Something Error (postCancelCustomerOrder) : $e');
+      return false;
+    }
+  }
+
+  Future<bool> patchReservation(String reservationId, Map<String, dynamic> updatedForm) async {
+    try {
+      await _dio.patch(
+        '/orders/reservations/$reservationId',
+        data: updatedForm,
+        options: Options(
+          headers: {
+            'requiresToken': true,
+          },
+        ),
+      );
+      return true;
+    } catch (e) {
+      // print('Something Error (patchCustomerOrderItem) : $e');
       return false;
     }
   }

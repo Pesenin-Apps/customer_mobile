@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 class OrderVM extends ChangeNotifier {
 
   Api api = locator<Api>();
-  int limitOrderHistory = 1;
+  int limitOrderHistory = 3;
   List<Order> _onGoingCustomerOrders = [];
   List<Order> _historyCustomerOrders = [];
   List<Order> _historyCustomerOrderLimits = [];
@@ -61,13 +61,17 @@ class OrderVM extends ChangeNotifier {
   bool get reservationLessThanTimeLimit {
     final timeNow = DateTime.now().toUtc();
     final timePlanReservation = DateTime.parse(customerOrder.reservation!.datetimePlan!).toUtc();
-    return timeNow.difference(timePlanReservation).inMinutes < -45;
+    return timeNow.difference(timePlanReservation).inMinutes <= -60;
   }
 
   bool get reservationMoreThanTimeLimit {
     final timeNow = DateTime.now().toUtc();
     final timePlanReservation = DateTime.parse(customerOrder.reservation!.datetimePlan!).toUtc();
-    return timeNow.difference(timePlanReservation).inMinutes > 0;
+    return timeNow.difference(timePlanReservation).inMinutes >= 0;
+  }
+
+  bool get orderItemIsEmpty {
+    return customerOrder.orderItem!.isEmpty;
   }
 
   bool get isDineIn {
@@ -76,6 +80,26 @@ class OrderVM extends ChangeNotifier {
 
   bool get isReservation {
     return customerOrder.type! == typeReservation;
+  }
+
+  bool get reservationInCreated {
+    return customerOrder.reservation!.status! == reservationCreated;
+  }
+
+  bool get reservationInConfirmed {
+    return customerOrder.reservation!.status! == reservationConfirmed;
+  }
+
+  bool get isOntime {
+    return customerOrder.reservation!.servingType! == orderServingOntime;
+  }
+
+  bool get isByConfirmation {
+    return customerOrder.reservation!.servingType! == orderServingByConfirmation;
+  }
+
+  bool get reservationWaitingConfirmation {
+    return customerOrder.reservation!.reservationConfirm! == reservationConfirmWaiting;
   }
 
   bool get isExistGuestOrder {
@@ -145,6 +169,16 @@ class OrderVM extends ChangeNotifier {
 
   Future<bool> createCustomerReservation(Map<String, dynamic> createForm) async {
     final bool response = await api.postCustomerReservation(createForm);
+    return response;
+  }
+
+  Future<bool> updateCustomerReservation(String orderId, Map<String, dynamic> updateForm) async {
+    final bool response = await api.patchCustomerReservation(orderId, updateForm);
+    return response;
+  }
+
+  Future<bool> updateReservation(String reservationId, Map<String, dynamic> updateForm) async {
+    final bool response = await api.patchReservation(reservationId, updateForm);
     return response;
   }
 

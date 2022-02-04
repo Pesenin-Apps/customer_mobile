@@ -5,48 +5,69 @@ import 'package:customer_pesenin/core/utils/theme.dart';
 import 'package:customer_pesenin/core/viewmodels/cart_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/connection_vm.dart';
 import 'package:customer_pesenin/core/viewmodels/order_vm.dart';
+import 'package:customer_pesenin/ui/views/customer/orders/updated_screen.dart';
 import 'package:customer_pesenin/ui/views/customer/reservations/choose_product_screen.dart';
 import 'package:customer_pesenin/ui/views/no_inet_screen.dart';
 import 'package:customer_pesenin/ui/widgets/cart/cart_reservation_tile.dart';
 import 'package:customer_pesenin/ui/widgets/custom_radio.dart';
 import 'package:customer_pesenin/ui/widgets/custom_textfield.dart';
+import 'package:customer_pesenin/ui/widgets/order/order_item_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
-class CustomerReservationCreateScreen extends StatefulWidget {
-  static const routeName = '/customer-create-reservation';
-  const CustomerReservationCreateScreen({ Key? key }) : super(key: key);
+class CustomerReservationUpdateScreen extends StatefulWidget {
+  static const routeName = '/customer-update-reservation';
+
+  final String? id;
+
+  const CustomerReservationUpdateScreen({
+    Key? key,
+    required this.id,
+  }) : super(key: key);
 
   @override
-  _CustomerReservationCreateScreenState createState() => _CustomerReservationCreateScreenState();
+  _CustomerReservationUpdateScreenState createState() => _CustomerReservationUpdateScreenState();
 }
 
-class _CustomerReservationCreateScreenState extends State<CustomerReservationCreateScreen> {
+class _CustomerReservationUpdateScreenState extends State<CustomerReservationUpdateScreen> {
 
   final formGlobalKey = GlobalKey<FormState>();
   TextEditingController _datePlan = TextEditingController();
   TextEditingController _timePlan = TextEditingController();
-  final TextEditingController _numberOfPeople = TextEditingController();
+  TextEditingController _numberOfPeople = TextEditingController();
 
+  DateTime _planDate = DateTime.now();
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
 
+  int _countOrderItem = 0;
+  bool _isLoadingPage = false;
   bool _isLoadingSubmit = false;
 
-  OrderServing _orderServingSelected = OrderServing.onTime;
-
-  void onChangeControl() {
-    setState(() { });
-  }
+  OrderServing _orderServingSelected = OrderServing.none;
 
   @override
   void initState() {
     getData();
+    final reservation = Provider.of<OrderVM>(context, listen: false).customerOrder.reservation;
+    _datePlan = TextEditingController(
+      text: formatYearMonthDay.format(DateTime.parse(reservation!.datetimePlan!).toLocal()),
+    );
     _datePlan.addListener(onChangeControl);
+    _timePlan = TextEditingController(
+      text: formatHourMinute.format(DateTime.parse(reservation.datetimePlan!).toLocal()),
+    );
     _timePlan.addListener(onChangeControl);
+    _numberOfPeople = TextEditingController(
+      text: reservation.numberOfPeople.toString(),
+    );
     _numberOfPeople.addListener(onChangeControl);
     super.initState();
+  }
+
+  void onChangeControl() {
+    setState(() { });
   }
 
   @override
@@ -60,8 +81,20 @@ class _CustomerReservationCreateScreenState extends State<CustomerReservationCre
     super.dispose();
   }
 
-  void getData() {
+  void getData() async {
     Provider.of<ConnectionVM>(context, listen: false).startMonitoring();
+    setState(() => _isLoadingPage = true );
+    await Provider.of<OrderVM>(context, listen: false).fetchCustomerOrderDetail(widget.id!);
+    final order = Provider.of<OrderVM>(context, listen: false).customerOrder;
+    setState(() {
+      _orderServingSelected = order.reservation!.servingType == orderServingOntime ? OrderServing.onTime : OrderServing.byConfirmation;
+      final dateTimePlan = DateTime.parse(order.reservation!.datetimePlan!).toLocal();
+      _planDate = dateTimePlan;
+      _selectedDate = dateTimePlan;
+      _selectedTime = TimeOfDay(hour: dateTimePlan.hour, minute: dateTimePlan.minute);
+      _countOrderItem = order.orderItem!.length;
+    });
+    setState(() => _isLoadingPage = false );
   }
 
   Future _selectedBuildDate(BuildContext context) async {
@@ -89,6 +122,7 @@ class _CustomerReservationCreateScreenState extends State<CustomerReservationCre
     final TimeOfDay? picked = await showTimePicker(
       context: context,
       initialTime: _selectedTime,
+      // initialEntryMode: TimePickerEntryMode.input,
       helpText: 'Pilih Jam Reservasi',
       cancelText: 'Batal',
       confirmText: 'Pilih',
@@ -103,16 +137,15 @@ class _CustomerReservationCreateScreenState extends State<CustomerReservationCre
 
   void _onSubmitReservation(CartVM cartVM) async {
     setState(() => _isLoadingSubmit = true);
-    // time checking
     final currentDateTime = DateTime.now();
     final dateTimePlan = DateTime.parse('${_datePlan.text} ${_timePlan.text}');
     final minutesBefore = currentDateTime.difference(dateTimePlan).inMinutes;
-    if (minutesBefore > -300) {
+    if (minutesBefore > -300 && _planDate != dateTimePlan) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: errorColor,
           content: const Text(
-            'Periksa kembali waktu reservasi anda, pemesanan reservasi maksimal 5 jam sebelum waktu yang akan ditentukan!',
+            'Periksa kembali waktu reservasi, pemesanan reservasi maksimal 5 jam sebelumnya!',
           ),
         ),
       );
@@ -120,7 +153,7 @@ class _CustomerReservationCreateScreenState extends State<CustomerReservationCre
     } else {
       final OrderVM orderVM = Provider.of<OrderVM>(context, listen: false);
       Future.delayed(const Duration(seconds: 3), () async {
-        final Map<String, dynamic> formCreateReservation = {
+        final Map<String, dynamic> formUpdateReservation = {
           'datetime_plan': '${_datePlan.text} ${_timePlan.text}',
           'number_of_people': _numberOfPeople.text,
           'serving_type': _orderServingSelected == OrderServing.onTime ? orderServingOntime : orderServingByConfirmation,
@@ -129,16 +162,16 @@ class _CustomerReservationCreateScreenState extends State<CustomerReservationCre
             'qty': cart.qty,
           }).toList(),
         };
-        final bool response = await orderVM.createCustomerReservation(formCreateReservation);
+        final bool response = await orderVM.updateCustomerReservation(widget.id!, formUpdateReservation);
         if (response) {
           Navigator.pop(context);
-          await orderVM.fetchOnGoingCustomerOrders();
-          if (mounted) setState(() { });
+          await orderVM.fetchCustomerOrderDetail(widget.id!);
+          setState(() { });
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               backgroundColor: primaryColor,
               content: const Text(
-                'Berhasil, Reservasi Telah Ditambahkan!',
+                'Berhasil, Data Reservasi Telah Diubah!',
               ),
             ),
           );
@@ -161,10 +194,10 @@ class _CustomerReservationCreateScreenState extends State<CustomerReservationCre
 
   @override
   Widget build(BuildContext context) {
-    
+
     CartVM cartVM = Provider.of<CartVM>(context);
 
-    Future<void> showConfirmDialogCreateReservation() async {
+    Future<void> showConfirmDialogUpdateReservation() async {
       return showDialog(
         context: context, 
         builder: (BuildContext context) => Container(
@@ -206,7 +239,7 @@ class _CustomerReservationCreateScreenState extends State<CustomerReservationCre
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'Pastikan yang anda inputkan data yang valid, apabila telah dikonfirmasi oleh pihak kami data tidak dapat diubah lagi. Mohon periksa kembali sebelum Reservasi.',
+                    'Pastikan yang anda inputkan data yang valid, mohon periksa kembali sebelum Reservasi.',
                     style: secondaryTextStyle.copyWith(
                       fontSize: 13,
                     ),
@@ -410,75 +443,85 @@ class _CustomerReservationCreateScreenState extends State<CustomerReservationCre
                   fontSize: 10,
                 ),
               ),
-              const SizedBox(height: 20),
-              // Option Servings
-               Text(
-                'Item Pesanan',
-                style: primaryTextStyle.copyWith(
-                  fontSize: 13,
-                  fontWeight: semiBold,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Column(
-                children: [
-                  _orderServingSelected == OrderServing.onTime && cartVM.cartReservations.isEmpty ? Text(
-                    'Karena penyajian Tepat Waktu (On Time) maka anda wajib menambahkan Item.',
-                    style: errorTextStyle.copyWith(
-                      fontSize: 10,
-                    ),
-                    textAlign: TextAlign.center,
-                  ) : Column(
-                    children: cartVM.cartReservations.map((e) => CartReservationTile(cart: e)).toList(),
-                  ),
-                  const SizedBox(height: 5),
-                  Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.pushNamed(
-                            context, 
-                            ReservationChooseProductScreen.routeName,
-                            arguments: ScreenArguments(
-                              type: 'reservation-create',
-                            ),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 6.0),
-                          child: Text(
-                            '+ Tambah Item',
-                            style: themeTextStyle.copyWith(
-                              fontSize: 12,
-                              fontWeight: bold,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              )
             ],
           ),
         ),
       );
     }
 
+    Widget orderItemAdditional() {
+      return Container(
+        margin: EdgeInsets.only(
+          top: defaultMargin/1.5,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Tambahan Item Pesanan',
+              style: primaryTextStyle.copyWith(
+                fontSize: 13,
+                fontWeight: semiBold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Column(
+              children: [
+                _orderServingSelected == OrderServing.onTime && cartVM.cartReservations.isEmpty && _countOrderItem == 0 ? Text(
+                  'Karena penyajian Tepat Waktu (On Time) maka anda wajib menambahkan Item.',
+                  style: errorTextStyle.copyWith(
+                    fontSize: 10,
+                  ),
+                  textAlign: TextAlign.center,
+                ) : Column(
+                  children: cartVM.cartReservations.map((e) => CartReservationTile(cart: e)).toList(),
+                ),
+                const SizedBox(height: 5),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(
+                          context, 
+                          ReservationChooseProductScreen.routeName,
+                          arguments: ScreenArguments(
+                            type: 'reservation-additional',
+                          ),
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 6.0),
+                        child: Text(
+                          '+ Tambah Item',
+                          style: themeTextStyle.copyWith(
+                            fontSize: 12,
+                            fontWeight: bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      );
+    }
+
     Widget buttonSubmit() {
       return Container(
-        height: 45,
+        height: 40,
         width: double.infinity,
         margin: EdgeInsets.only(
-          top: defaultMargin,
-          bottom: defaultMargin,
+          top: defaultMargin/1.5,
         ),
         child: TextButton(
           onPressed: () {
             if (formGlobalKey.currentState!.validate()) {
               formGlobalKey.currentState!.save();
-              if (_orderServingSelected == OrderServing.onTime && cartVM.cartReservations.isEmpty) {
+              if (_orderServingSelected == OrderServing.onTime && cartVM.cartReservations.isEmpty && _countOrderItem == 0) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     backgroundColor: errorColor,
@@ -488,14 +531,14 @@ class _CustomerReservationCreateScreenState extends State<CustomerReservationCre
                   ),
                 );
               } else {
-                showConfirmDialogCreateReservation();
+                showConfirmDialogUpdateReservation();
               }
             }
           },
           style: TextButton.styleFrom(
             backgroundColor: primaryColor,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(12),
             )
           ),
           child: _isLoadingSubmit ? Container(
@@ -509,14 +552,68 @@ class _CustomerReservationCreateScreenState extends State<CustomerReservationCre
               ),
             ),
           ) : Text(
-            'Reservasi',
+            'Simpan Perubahan',
             style: tertiaryTextStyle.copyWith(
-              fontSize: 16,
+              fontSize: 14,
               fontWeight: semiBold,
             ),
           ),
         ),
       );
+    }
+
+    Widget orderItemHasOrdered() {
+      return _countOrderItem > 0 ? Container(
+        margin: EdgeInsets.only(
+          top: defaultMargin,
+          bottom: defaultMargin,
+        ),
+        child: Consumer<OrderVM>(
+          builder: (context, orderVM, child) => Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Item Yang Telah Dipesan',
+                    style: primaryTextStyle.copyWith(
+                      fontSize: 13,
+                      fontWeight: semiBold,
+                    ),
+                  ),
+                  orderVM.canChangedCustomerOrderExist ? InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(
+                        context, 
+                        CustomerOrderUpdateScreen.routeName,
+                        arguments: ScreenArguments(
+                          id: widget.id!, 
+                        ),
+                      );
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6.0),
+                      child: Text(
+                        'Ubah Item',
+                        style: themeTextStyle.copyWith(
+                          fontSize: 12,
+                          fontWeight: bold,
+                        ),
+                      ),
+                    ),
+                  ) : const SizedBox(),
+                ],
+              ),
+              Column(
+                children: [
+                  for (var i = 0; i < orderVM.customerOrder.orderItem!.length; i++) OrderItemTile(orderItem : orderVM.customerOrder.orderItem![i]),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ) : const SizedBox(height: 30);
     }
 
     return Consumer<ConnectionVM>(
@@ -526,7 +623,7 @@ class _CustomerReservationCreateScreenState extends State<CustomerReservationCre
           appBar: AppBar(
             backgroundColor: primaryColor,
             elevation: 0,
-            title: const Text('Buat Reservasi'),
+            title: const Text('Ubah Data Reservasi'),
             leading: IconButton(
               icon: const Icon(Icons.arrow_back),
               onPressed: () {
@@ -535,7 +632,15 @@ class _CustomerReservationCreateScreenState extends State<CustomerReservationCre
               },
             ),
           ),
-          body: SingleChildScrollView(
+          body: _isLoadingPage ? Center(
+            child: SizedBox(
+              height: 33,
+              width: 33,
+              child: CircularProgressIndicator(
+                color: primaryColor,
+              ),
+            ),
+          ) : SingleChildScrollView(
             child: Container(
               margin: EdgeInsets.symmetric(
                 horizontal: defaultMargin,
@@ -544,7 +649,9 @@ class _CustomerReservationCreateScreenState extends State<CustomerReservationCre
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   formInput(),
+                  orderItemAdditional(),
                   buttonSubmit(),
+                  orderItemHasOrdered(),
                 ],
               ),
             ),
@@ -552,7 +659,7 @@ class _CustomerReservationCreateScreenState extends State<CustomerReservationCre
         ),
       ) : const NoInternetConnectionScreen(),
     );
-    
+
   }
 
 }

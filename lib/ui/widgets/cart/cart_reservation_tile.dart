@@ -5,19 +5,19 @@ import 'package:customer_pesenin/core/viewmodels/cart_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class CartTile extends StatefulWidget {
+class CartReservationTile extends StatefulWidget {
   final CartModel cart;
-  const CartTile({
+  const CartReservationTile({
     Key? key,
     required this.cart
   }) : super(key: key);
 
   @override
-  _CartTileState createState() => _CartTileState();
+  _CartReservationTileState createState() => _CartReservationTileState();
 }
 
-class _CartTileState extends State<CartTile> {
- @override
+class _CartReservationTileState extends State<CartReservationTile> {
+  @override
   Widget build(BuildContext context) {
 
     CartVM cartVM = Provider.of<CartVM>(context);
@@ -115,7 +115,7 @@ class _CartTileState extends State<CartTile> {
                 children: [
                   InkWell(
                     onTap: () {
-                      if (mounted) cartVM.addQty(widget.cart.id!);
+                      if (mounted) cartVM.addQtyReservation(widget.cart.id!);
                     },
                     child: Image.asset(
                       'assets/icons/icon_cart_add.png',
@@ -132,7 +132,7 @@ class _CartTileState extends State<CartTile> {
                   const SizedBox(height: 2),
                   InkWell(
                     onTap: () {
-                      if (mounted) cartVM.reduceQty(widget.cart.id!);
+                      if (mounted) cartVM.reduceQtyReservation(widget.cart.id!);
                     },
                     child: Image.asset(
                       'assets/icons/icon_cart_minus.png',
@@ -146,7 +146,7 @@ class _CartTileState extends State<CartTile> {
           const SizedBox(height: 12),
           InkWell(
             onTap: () {
-              if (mounted) cartVM.removeCart(widget.cart.id!);
+              if (mounted) cartVM.removeCartReservation(widget.cart.id!);
             },
             child: Row(
               children: [

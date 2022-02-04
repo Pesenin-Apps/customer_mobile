@@ -47,41 +47,70 @@ class OrderTile extends StatelessWidget {
             ),
           );
         },
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                order.table == null ? Text(
-                  'Menunggu Nomor Meja',
-                  style: secondaryTextStyle.copyWith(
-                    fontSize: 12,
-                  ),
-                ) : Text(
-                  '${order.table!.section!.name} No. ${order.table!.number}',
-                  style: secondaryTextStyle.copyWith(
-                    fontSize: 12,
-                  ),
-                ),
-                const SizedBox(height: 5),
                 Text(
-                  order.orderNumber.toString(),
+                  formatDateWithDay.format(
+                    DateTime.parse(order.createdAt!).toLocal(),
+                  ),
                   style: primaryTextStyle.copyWith(
-                    fontSize: 16,
+                    fontSize: 12,
                     fontWeight: semiBold
                   ),
                 ),
-                const SizedBox(height: 5),
                 Text(
-                  formatCurrency.format(order.totalOverall),
-                  style: priceTextStyle.copyWith(
-                    fontWeight: semiBold,
+                  formatTime.format(
+                    DateTime.parse(order.createdAt!).toLocal(),
+                  ),
+                  style: primaryTextStyle.copyWith(
+                    fontSize: 12,
+                    fontWeight: semiBold
                   ),
                 ),
               ],
             ),
-            OrderType(type: order.type!),
+            const SizedBox(height: 5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    order.table == null ? Text(
+                      'Menunggu Nomor Meja',
+                      style: secondaryTextStyle.copyWith(
+                        fontSize: 12,
+                      ),
+                    ) : Text(
+                      '${order.table!.section!.name} No. ${order.table!.number}',
+                      style: secondaryTextStyle.copyWith(
+                        fontSize: 12,
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      order.orderNumber.toString(),
+                      style: primaryTextStyle.copyWith(
+                        fontSize: 16,
+                        fontWeight: semiBold
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Text(
+                      formatCurrency.format(order.totalOverall),
+                      style: priceTextStyle.copyWith(
+                        fontWeight: semiBold,
+                      ),
+                    ),
+                  ],
+                ),
+                OrderType(type: order.type!),
+              ],
+            ),
           ],
         ),
       ),
