@@ -1,4 +1,4 @@
-package com.example.customer_pesenin
+package com.pesenin.customer_pesenin
 
 import io.flutter.embedding.android.FlutterActivity
 
