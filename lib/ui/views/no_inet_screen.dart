@@ -39,7 +39,6 @@ class _NoInternetConnectionScreenState extends State<NoInternetConnectionScreen>
                   image: DecorationImage(
                     image: AssetImage(
                       'assets/images/no_internet_connection.png',
-                      
                     ),
                   ),
                 ),
