@@ -212,7 +212,6 @@ class Api {
   /* ========= START API ORDER ========= */
 
 
-
   // [START] Customer //
 
   Future<List<Order>> getCustomerOrders(Map<String, dynamic> queryParams) async {
