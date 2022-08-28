@@ -266,7 +266,7 @@ class _ScanningScreenState extends State<ScanningScreen> {
         this.qr = qr;
         controller.pauseCamera();
       }); 
-      if (mounted) await Provider.of<UserVM>(context, listen: false).fetchTableDetail(this.qr!.code);
+      if (mounted) await Provider.of<UserVM>(context, listen: false).fetchTableDetail(this.qr!.code!);
       setState(() {
         findCode = true;
       });
